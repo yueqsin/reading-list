@@ -61,6 +61,7 @@ body::before{content:"";position:fixed;inset:0;background:
 .btn-ghost:hover{background:rgba(170,102,87,.06);color:var(--clay);}
 .btn-edit-on{background:var(--clay);color:white;border-color:var(--clay);box-shadow:0 0 0 3px rgba(170,102,87,.22);}
 .btn:disabled{opacity:.5;cursor:not-allowed;}
+.btn svg{display:block;}
 .search-box{flex:1;min-width:160px;position:relative;}
 .search-box input{width:100%;padding:8px 12px 8px 34px;border:1.5px solid var(--border-md);border-radius:8px;font-family:inherit;font-size:.83rem;background:white;color:var(--text);outline:none;transition:border-color .17s;}
 .search-box input:focus{border-color:var(--clay-lt);}
@@ -246,7 +247,7 @@ body::before{content:"";position:fixed;inset:0;background:
 
 <div class="controls">
   <button class="btn btn-out" id="filterBtn" onclick="toggleFilter()">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14" style="vertical-align:middle;margin-right:4px;">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14">
       <defs fill="#aa6657"></defs>
       <path d="m44.68,39.02c2.09-3.16,3.32-6.95,3.32-11.02,0-11.05-8.95-20-20-20S8,16.95,8,28s8.95,20,20,20c4.08,0,7.86-1.23,11.02-3.32l11.32,11.32,5.66-5.66-11.32-11.32Zm-16.68,2.98c-7.73,0-14-6.27-14-14s6.27-14,14-14,14,6.27,14,14-6.27,14-14,14Z" fill="#aa6657"></path>
     </svg>篩選</button>
