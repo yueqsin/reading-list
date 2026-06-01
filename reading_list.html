@@ -309,14 +309,22 @@ body::before{content:"";position:fixed;inset:0;background:
 
 </div><!-- .wrap -->
 
-<!-- PW MODAL -->
+<!-- LOGIN MODAL -->
 <div class="overlay" id="pwOverlay" onclick="overlayClick(event,'pwOverlay')">
   <div class="modal">
-    <h3>🔐 輸入編輯密碼</h3>
-    <p class="sub">請輸入密碼以取得編輯權限</p>
-    <input type="password" id="pwIn" placeholder="••••••" maxlength="24" onkeydown="if(event.key==='Enter')checkPw()">
+    <h3>🔐 編輯模式登入</h3>
+    <p class="sub">請輸入你的帳號密碼</p>
+    <div style="margin-bottom:10px;">
+      <div class="fi-lbl" style="margin-bottom:4px;">Email</div>
+      <input class="fi" type="email" id="loginEmail" placeholder="your@email.com" style="letter-spacing:normal;text-align:left;font-family:inherit;font-size:.88rem;" onkeydown="if(event.key==='Enter')document.getElementById('loginPw').focus()">
+    </div>
+    <div style="margin-bottom:16px;">
+      <div class="fi-lbl" style="margin-bottom:4px;">密碼</div>
+      <input class="fi" type="password" id="loginPw" placeholder="••••••" style="letter-spacing:.15em;" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div id="loginError" style="font-size:.76rem;color:#e74c3c;text-align:center;margin-bottom:10px;display:none;">帳號或密碼錯誤，請再試一次</div>
     <div class="modal-btns">
-      <button class="btn btn-fill" onclick="checkPw()">確認</button>
+      <button class="btn btn-fill" id="loginBtn" onclick="doLogin()">登入</button>
       <button class="btn btn-ghost" onclick="closeOverlay('pwOverlay')">取消</button>
     </div>
   </div>
@@ -457,7 +465,51 @@ const HEADERS={'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authoriz
 const BASE=`${SUPABASE_URL}/rest/v1/books`;
 const SBASE=`${SUPABASE_URL}/rest/v1/settings`;
 
-const PW='taotao520';
+let _authToken = null; // 登入後的 JWT token
+
+function authHeaders(extra){
+  const h = {...HEADERS};
+  if(_authToken) h['Authorization'] = `Bearer ${_authToken}`;
+  return extra ? {...h, ...extra} : h;
+}
+
+async function doLogin(){
+  const email = document.getElementById('loginEmail').value.trim();
+  const pw    = document.getElementById('loginPw').value;
+  const btn   = document.getElementById('loginBtn');
+  const err   = document.getElementById('loginError');
+  err.style.display='none';
+  btn.disabled=true; btn.textContent='登入中…';
+  try{
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY},
+      body: JSON.stringify({email, password:pw})
+    });
+    const data = await res.json();
+    if(!res.ok || !data.access_token) throw new Error(data.error_description||'登入失敗');
+    _authToken = data.access_token;
+    closeOverlay('pwOverlay');
+    enterEdit();
+  } catch(e){
+    err.style.display='block';
+    document.getElementById('loginPw').value='';
+    document.getElementById('loginPw').focus();
+  }
+  btn.disabled=false; btn.textContent='登入';
+}
+
+async function doLogout(){
+  try{
+    await fetch(`${SUPABASE_URL}/auth/v1/logout`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${_authToken}`}
+    });
+  } catch(e){}
+  _authToken = null;
+  exitEdit();
+}
+
 const VIEW_TAGS=['主受','主攻','互攻','反攻','第一人稱','第二人稱'];
 const TIME_TAGS=['現代','古代','未來','西幻','末世','快穿','無限流'];
 const RATING_VALS=['★★★★★','★★★★☆','★★★☆☆','★★☆☆☆','★☆☆☆☆','☆☆☆☆☆'];
@@ -493,17 +545,17 @@ async function dbFetchAll(){
   return all;
 }
 async function dbInsert(book){
-  const res=await fetch(BASE,{method:'POST',headers:HEADERS,body:JSON.stringify(book)});
+  const res=await fetch(BASE,{method:'POST',headers:authHeaders(),body:JSON.stringify(book)});
   if(!res.ok) throw new Error(await res.text());
   return (await res.json())[0];
 }
 async function dbUpdate(id,updates){
-  const res=await fetch(`${BASE}?id=eq.${id}`,{method:'PATCH',headers:HEADERS,body:JSON.stringify(updates)});
+  const res=await fetch(`${BASE}?id=eq.${id}`,{method:'PATCH',headers:authHeaders(),body:JSON.stringify(updates)});
   if(!res.ok) throw new Error(await res.text());
   return (await res.json())[0];
 }
 async function dbDelete(id){
-  const res=await fetch(`${BASE}?id=eq.${id}`,{method:'DELETE',headers:{...HEADERS,'Prefer':'return=minimal'}});
+  const res=await fetch(`${BASE}?id=eq.${id}`,{method:'DELETE',headers:authHeaders({'Prefer':'return=minimal'})});
   if(!res.ok) throw new Error(await res.text());
 }
 async function dbGetSetting(key){
@@ -513,7 +565,7 @@ async function dbGetSetting(key){
   return rows.length?rows[0].value:null;
 }
 async function dbSetSetting(key,value){
-  const res=await fetch(SBASE,{method:'POST',headers:{...HEADERS,'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({key,value})});
+  const res=await fetch(SBASE,{method:'POST',headers:authHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),body:JSON.stringify({key,value})});
   if(!res.ok) throw new Error(await res.text());
 }
 
@@ -854,24 +906,17 @@ async function saveDetailNotes(){
 // ── Edit mode ─────────────────────────────────
 function toggleEdit(){
   if(!editMode){
+    document.getElementById('loginEmail').value='';
+    document.getElementById('loginPw').value='';
+    document.getElementById('loginError').style.display='none';
     document.getElementById('pwOverlay').classList.add('open');
-    document.getElementById('pwIn').value='';
-    document.getElementById('pwIn').classList.remove('wrong');
-    setTimeout(()=>document.getElementById('pwIn').focus(),80);
-  } else { exitEdit(); }
-}
-function checkPw(){
-  if(document.getElementById('pwIn').value===PW){ closeOverlay('pwOverlay'); enterEdit(); }
-  else {
-    const inp=document.getElementById('pwIn');
-    inp.classList.add('wrong'); inp.value='';
-    setTimeout(()=>inp.classList.remove('wrong'),400); inp.focus();
-  }
+    setTimeout(()=>document.getElementById('loginEmail').focus(),80);
+  } else { doLogout(); }
 }
 function enterEdit(){
   editMode=true; document.body.classList.add('edit-mode');
   const btn=document.getElementById('editBtn');
-  btn.textContent='🔒 退出編輯'; btn.classList.replace('btn-out','btn-edit-on');
+  btn.textContent='🔒 登出編輯模式'; btn.classList.replace('btn-out','btn-edit-on');
   render();
 }
 function exitEdit(){
