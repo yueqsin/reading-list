@@ -575,6 +575,9 @@ async function dbSetSetting(key,value){
 
 // ── Init ──────────────────────────────────────
 async function init(){
+  // 儲存篩選按鈕的原始內容（含 SVG）
+  const fb=document.getElementById('filterBtn');
+  if(fb) fb.dataset.orig=fb.innerHTML;
   try{
     books=await dbFetchAll();
     try{ const raw=await dbGetSetting('custom_tags'); customTags=raw?JSON.parse(raw):[]; }catch(e){ customTags=[]; }
@@ -657,10 +660,12 @@ function clearFilters(){
 }
 function toggleFilter(){
   const p=document.getElementById('filterPanel'),open=p.classList.toggle('open');
-  document.getElementById('filterBtn').textContent=open?'✕ 關閉篩選':'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14" style="vertical-align:middle;margin-right:4px;">
-      <defs fill="#aa6657"></defs>
-      <path d="m44.68,39.02c2.09-3.16,3.32-6.95,3.32-11.02,0-11.05-8.95-20-20-20S8,16.95,8,28s8.95,20,20,20c4.08,0,7.86-1.23,11.02-3.32l11.32,11.32,5.66-5.66-11.32-11.32Zm-16.68,2.98c-7.73,0-14-6.27-14-14s6.27-14,14-14,14,6.27,14,14-6.27,14-14,14Z" fill="#aa6657"></path>
-    </svg>篩選';
+  const btn=document.getElementById('filterBtn');
+  if(open){
+    btn.innerHTML='✕ 關閉篩選';
+  } else {
+    btn.innerHTML=document.getElementById('filterBtn').dataset.orig||btn.innerHTML;
+  }
 }
 
 // ── Tag manager ───────────────────────────────
