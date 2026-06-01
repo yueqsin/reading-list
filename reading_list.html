@@ -194,9 +194,16 @@ body::before{content:"";position:fixed;inset:0;background:
 /* 手機端 modal 滿版 */
 @media(max-width:600px){
   .modal,.wide-modal{width:calc(100vw - 24px);padding:20px 16px;border-radius:14px;}
-  .tag-picker{padding:8px 10px;}
+  /* tag picker 跟外層對齊，拿掉自己的 padding 改用 margin */
+  .tag-picker{padding:0;border:none;background:transparent;margin-bottom:10px;}
+  .tag-picker-lbl{padding:0 0 6px 0;}
+  .tag-picker-section{margin-bottom:8px;}
   .tag-picker-row{gap:4px;}
   .tpchip{font-size:.68rem;padding:3px 8px;}
+  .tag-picker-custom{padding-top:8px;border-top:1px solid var(--border);}
+  /* 手機端 modal 按鈕等寬等高 */
+  .wide-modal .modal-btns,.modal .modal-btns{justify-content:stretch;}
+  .wide-modal .modal-btns .btn,.modal .modal-btns .btn{flex:1;justify-content:center;height:44px;font-size:.88rem;}
 }
 
 /* BOOK DETAIL MODAL */
