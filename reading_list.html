@@ -954,7 +954,7 @@ async function saveDetailNotes(){
     const updated=await dbUpdate(id,{notes, read_date:readDate});
     const idx=books.findIndex(b=>String(b.id)===String(id));
     if(idx!==-1) books[idx]={...books[idx],...updated};
-    document.getElementById('dm-notes-text').textContent=notes||'（杏桃貝果沒有心得……）';
+    document.getElementById('dm-notes-text').textContent=notes||'（杏桃貝果沒有心得……⦁֊⦁꧞）';
     document.getElementById('dm-notes-text').style.display='block';
     document.getElementById('dm-notes-edit').style.display='none';
     document.getElementById('dm-readdate-display').textContent=fmtDate(readDate);
