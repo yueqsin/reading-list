@@ -423,11 +423,16 @@ body::before{content:"";position:fixed;inset:0;background:
       <div class="fi-wrap"><span class="fi-lbl">萬字數</span><input class="fi" id="em-chaps"></div>
     </div>
     <div class="tag-picker" style="margin-bottom:12px;">
-      <div class="tag-picker-lbl">標籤（點選選取）</div>
-      <div id="em-tp-content"></div>
-      <div class="tag-picker-custom">
-        <input type="text" id="em-custom-tag" placeholder="直接輸入其他標籤…" onkeydown="if(event.key==='Enter')addInlineTag('em')">
-        <button onclick="addInlineTag('em')">＋ 加入</button>
+      <div class="tag-picker-lbl collapsible-lbl" onclick="toggleTagPicker('em')" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;">
+        <span>標籤（點選選取）</span>
+        <span id="em-tp-arrow" style="font-size:.6rem;color:var(--clay-xlt);transition:transform .2s;">▼</span>
+      </div>
+      <div id="em-tp-collapsible" style="display:none;">
+        <div id="em-tp-content"></div>
+        <div class="tag-picker-custom">
+          <input type="text" id="em-custom-tag" placeholder="直接輸入其他標籤…" onkeydown="if(event.key==='Enter')addInlineTag('em')">
+          <button onclick="addInlineTag('em')">＋ 加入</button>
+        </div>
       </div>
     </div>
     <div class="add-modal-persona">
@@ -1042,6 +1047,9 @@ function openEdit(id){
   document.getElementById('em-gong').value=b.gong||'';
   document.getElementById('em-shou').value=b.shou||'';
   document.getElementById('em-tp-content').innerHTML=buildTagPickerHTML('em',b.tags||[]);
+  // 預設收合標籤區
+  document.getElementById('em-tp-collapsible').style.display='none';
+  document.getElementById('em-tp-arrow').style.transform='rotate(0deg)';
   document.getElementById('editOverlay').classList.add('open');
   setTimeout(()=>document.getElementById('em-title').focus(),80);
 }
@@ -1071,7 +1079,13 @@ async function saveEdit(){
   btn.disabled=false; btn.textContent='儲存';
 }
 
-// ── Tag modal ─────────────────────────────────
+function toggleTagPicker(prefix){
+  const body=document.getElementById(`${prefix}-tp-collapsible`);
+  const arrow=document.getElementById(`${prefix}-tp-arrow`);
+  const open=body.style.display==='none';
+  body.style.display=open?'block':'none';
+  arrow.style.transform=open?'rotate(180deg)':'rotate(0deg)';
+}
 function openTagModal(){
   renderTagManager();
   document.getElementById('tagOverlay').classList.add('open');
