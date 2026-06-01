@@ -140,7 +140,7 @@ body::before{content:"";position:fixed;inset:0;background:
 .book-card:hover{box-shadow:var(--shadow);border-color:var(--clay-xlt);transform:translateY(-1px);}
 .book-main{display:flex;flex-direction:column;gap:5px;}
 .book-title{font-size:.95rem;font-weight:600;color:var(--text);line-height:1.4;}
-.note-icon{display:inline-block;width:13px;height:13px;margin-left:5px;vertical-align:middle;opacity:.85;background:url('chat-ddb8ac.png') center/contain no-repeat;}
+.note-icon{display:inline-block;width:16px;height:16px;margin-left:5px;vertical-align:middle;flex-shrink:0;}
 .book-author{font-size:.76rem;color:var(--text-lt);}
 .book-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:6px;}
 .book-tag{display:inline-block;padding:2px 9px;border-radius:4px;font-size:.68rem;background:rgba(227,191,181,.35);color:var(--clay);cursor:pointer;transition:background .12s;white-space:nowrap;font-family:"Noto Serif TC",serif;}
@@ -466,11 +466,16 @@ body::before{content:"";position:fixed;inset:0;background:
       <div class="fi-wrap"><span class="fi-lbl">萬字</span><input class="fi" id="n-chaps" placeholder="數字"></div>
     </div>
     <div class="tag-picker" style="margin-bottom:12px;">
-      <div class="tag-picker-lbl">標籤（點選選取）</div>
-      <div id="n-tp-content"></div>
-      <div class="tag-picker-custom">
-        <input type="text" id="n-custom-tag" placeholder="直接輸入其他標籤…" onkeydown="if(event.key==='Enter')addInlineTag('n')">
-        <button onclick="addInlineTag('n')">＋ 加入</button>
+      <div class="tag-picker-lbl" onclick="toggleTagPicker('n')" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;">
+        <span>標籤（點選選取）</span>
+        <span id="n-tp-arrow" style="font-size:.6rem;color:var(--clay-xlt);transition:transform .2s;">▼</span>
+      </div>
+      <div id="n-tp-collapsible" style="display:none;">
+        <div id="n-tp-content"></div>
+        <div class="tag-picker-custom">
+          <input type="text" id="n-custom-tag" placeholder="直接輸入其他標籤…" onkeydown="if(event.key==='Enter')addInlineTag('n')">
+          <button onclick="addInlineTag('n')">＋ 加入</button>
+        </div>
       </div>
     </div>
     <div class="add-modal-persona">
@@ -838,7 +843,7 @@ function render(){
         </div>`:'';
       return `<div class="book-card" onclick="openDetail('${b.id}')">
         <div class="book-main">
-          <div class="book-title">${esc(b.title)}${b.notes?'<span class="note-icon" title="有心得"></span>':''}</div>
+          <div class="book-title">${esc(b.title)}${b.notes?'<svg class="note-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" title="有心得"><path d="m32,8c-14.81,0-24,8.43-24,22,0,6.92,2.4,12.49,6.7,16.3l-6.7,6.7,2,3c5.42,0,10.43-1.8,14.45-4.84,2.32.55,4.84.84,7.55.84,14.81,0,24-8.43,24-22s-9.19-22-24-22Zm-12,26c-2.21,0-4-1.79-4-4s1.79-4,4-4,4,1.79,4,4-1.79,4-4,4Zm12,0c-2.21,0-4-1.79-4-4s1.79-4,4-4,4,1.79,4,4-1.79,4-4,4Zm12,0c-2.21,0-4-1.79-4-4s1.79-4,4-4,4,1.79,4,4-1.79,4-4,4Z" fill="#ddb8ac"/></svg>':''}</div>
           <div class="book-author">${esc(b.author)}</div>
           ${persona}
           <div class="book-meta">${tagHtml(b.tags)}</div>
@@ -991,6 +996,8 @@ function openAddModal(){
   ['n-title','n-author','n-chaps','n-gong','n-shou'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('n-rating').value='★★★★☆';
   document.getElementById('n-tp-content').innerHTML=buildTagPickerHTML('n',[]);
+  document.getElementById('n-tp-collapsible').style.display='none';
+  document.getElementById('n-tp-arrow').style.transform='rotate(0deg)';
   document.getElementById('addOverlay').classList.add('open');
   setTimeout(()=>document.getElementById('n-title').focus(),80);
 }
@@ -1018,6 +1025,8 @@ async function addBook(){
     ['n-title','n-author','n-chaps','n-gong','n-shou'].forEach(id=>document.getElementById(id).value='');
     document.getElementById('n-rating').value='★★★★☆';
     document.getElementById('n-tp-content').innerHTML=buildTagPickerHTML('n',[]);
+    document.getElementById('n-tp-collapsible').style.display='none';
+    document.getElementById('n-tp-arrow').style.transform='rotate(0deg)';
     setSyncStatus('ok',`共 ${books.length} 本`);
     saveLastUpdated(); closeOverlay('addOverlay'); curPage=1; render();
   }catch(e){ setSyncStatus('err','儲存失敗'); alert('儲存失敗：'+e.message); }
