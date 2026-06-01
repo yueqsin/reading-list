@@ -251,9 +251,16 @@ body::before{content:"";position:fixed;inset:0;background:
       <defs fill="#aa6657"></defs>
       <path d="m44.68,39.02c2.09-3.16,3.32-6.95,3.32-11.02,0-11.05-8.95-20-20-20S8,16.95,8,28s8.95,20,20,20c4.08,0,7.86-1.23,11.02-3.32l11.32,11.32,5.66-5.66-11.32-11.32Zm-16.68,2.98c-7.73,0-14-6.27-14-14s6.27-14,14-14,14,6.27,14,14-6.27,14-14,14Z" fill="#aa6657"></path>
     </svg>篩選</button>
-  <button class="btn btn-out" id="editBtn" onclick="toggleEdit()">✏️ 編輯模式</button>
+  <button class="btn btn-out" id="editBtn" onclick="toggleEdit()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14">
+      <defs fill="#aa6657"></defs>
+      <path d="m39.17,17.76l7.07,7.07-27.17,27.17-9.66,4-1.41-1.41,4-9.66,27.17-27.17Zm9.76-9.76l-6.93,6.93,7.07,7.07,6.93-6.93-7.07-7.07Z" fill="#aa6657"></path>
+    </svg>編輯模式</button>
   <div class="search-box">
-    <span class="search-icon">🔎</span>
+    <span class="search-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14">
+      <defs fill="#aa6657"></defs>
+      <path d="m44.68,39.02c2.09-3.16,3.32-6.95,3.32-11.02,0-11.05-8.95-20-20-20S8,16.95,8,28s8.95,20,20,20c4.08,0,7.86-1.23,11.02-3.32l11.32,11.32,5.66-5.66-11.32-11.32Zm-16.68,2.98c-7.73,0-14-6.27-14-14s6.27-14,14-14,14,6.27,14,14-6.27,14-14,14Z" fill="#aa6657"></path>
+    </svg></span>
     <input type="text" id="searchQ" placeholder="搜尋書名、作者…" oninput="go()">
   </div>
   <span class="stats" id="stats"></span>
@@ -261,8 +268,16 @@ body::before{content:"";position:fixed;inset:0;background:
 </div>
 
 <div class="edit-bar" id="editBar">
-  <button class="btn btn-fill" onclick="openAddModal()">＋ 新增書目</button>
-  <button class="btn btn-out" onclick="openTagModal()">🏷️ 管理標籤</button>
+  <button class="btn btn-fill" onclick="openAddModal()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14">
+      <defs fill="#fefaf9"></defs>
+      <path d="m54,29v6h-19v19h-6v-19H10v-6h19V10h6v19h19Z" fill="#fefaf9"></path>
+    </svg>新增書目</button>
+  <button class="btn btn-out" onclick="openTagModal()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14">
+      <defs fill="#aa6657"></defs>
+      <path d="m34,10H10v24l24,24,24-24-24-24Zm-13,14c-1.66,0-3-1.34-3-3s1.34-3,3-3,3,1.34,3,3-1.34,3-3,3Z" fill="#aa6657"></path>
+    </svg>管理標籤</button>
 </div>
 
 <div class="filter-panel" id="filterPanel">
@@ -317,7 +332,7 @@ body::before{content:"";position:fixed;inset:0;background:
 <!-- LOGIN MODAL -->
 <div class="overlay" id="pwOverlay" onclick="overlayClick(event,'pwOverlay')">
   <div class="modal">
-    <h3>🔐 編輯模式登入</h3>
+    <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14"><defs fill="#aa6657"></defs><path d="m44,26v-6c0-7.4-4.6-12-12-12s-12,4.6-12,12v6h-8v30h40v-30h-8Zm-18-6c0-4.09,1.91-6,6-6s6,1.91,6,6v6h-12v-6Z" fill="#aa6657"></path></svg>編輯模式登入</h3>
     <p class="sub">請輸入你的帳號密碼</p>
     <div style="margin-bottom:10px;">
       <div class="fi-lbl" style="margin-bottom:4px;">Email</div>
@@ -361,7 +376,7 @@ body::before{content:"";position:fixed;inset:0;background:
     <input type="hidden" id="dm-id">
     <div class="modal-btns" style="margin-top:16px;justify-content:flex-end;">
       <button class="btn btn-ghost" onclick="closeOverlay('detailOverlay')">關閉</button>
-      <button class="btn btn-out edit-only" id="dm-edit-btn" onclick="toggleDetailEdit()" style="display:none">✏️ 編輯心得</button>
+      <button class="btn btn-out edit-only" id="dm-edit-btn" onclick="toggleDetailEdit()" style="display:none">編輯心得</button>
       <button class="btn btn-fill edit-only" id="dm-save-btn" onclick="saveDetailNotes()" style="display:none">儲存心得</button>
     </div>
   </div>
@@ -370,7 +385,7 @@ body::before{content:"";position:fixed;inset:0;background:
 <!-- EDIT BOOK MODAL -->
 <div class="overlay" id="editOverlay" onclick="overlayClick(event,'editOverlay')">
   <div class="modal wide-modal">
-    <h3>✏️ 編輯書目</h3>
+    <h3>編輯書目</h3>
     <input type="hidden" id="em-id">
     <div class="add-modal-grid">
       <div class="fi-wrap"><span class="fi-lbl">書名</span><input class="fi" id="em-title"></div>
@@ -450,7 +465,7 @@ body::before{content:"";position:fixed;inset:0;background:
 <!-- TAG MANAGER MODAL -->
 <div class="overlay" id="tagOverlay" onclick="overlayClick(event,'tagOverlay')">
   <div class="modal wide-modal">
-    <h3>🏷️ 管理標籤</h3>
+    <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14"><defs fill="#aa6657"></defs><path d="m34,10H10v24l24,24,24-24-24-24Zm-13,14c-1.66,0-3-1.34-3-3s1.34-3,3-3,3,1.34,3,3-1.34,3-3,3Z" fill="#aa6657"></path></svg>管理標籤</h3>
     <p class="sub">新增或刪除自訂標籤（不影響已用此標籤的書）</p>
     <div style="display:flex;gap:8px;margin-bottom:14px;">
       <input class="fi" type="text" id="newTagInput" placeholder="輸入新標籤名稱…" onkeydown="if(event.key==='Enter')addCustomTag()" style="flex:1;">
@@ -587,7 +602,7 @@ async function init(){
     setSyncStatus('ok',`共 ${books.length} 本`);
   }catch(e){
     setSyncStatus('err','連線失敗');
-    document.getElementById('bookList').innerHTML=`<div class="empty">⚠️ 無法連線到資料庫<br><small style="opacity:.6">${e.message}</small></div>`;
+    document.getElementById('bookList').innerHTML=`<div class="empty"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14"><defs fill="#aa6657"></defs><path d="m33.73,8h-3.46L5.44,51c.77,1.33.96,1.67,1.73,3h49.65c.77-1.33.96-1.67,1.73-3L33.73,8Zm2.27,42h-8v-6h8v6Zm0-18l-2,8h-4l-2-8v-12h8v12Z" fill="#aa6657"></path></svg>無法連線到資料庫<br><small style="opacity:.6">${e.message}</small></div>`;
   }
 }
 
@@ -663,7 +678,7 @@ function toggleFilter(){
   const p=document.getElementById('filterPanel'),open=p.classList.toggle('open');
   const btn=document.getElementById('filterBtn');
   if(open){
-    btn.innerHTML='✕ 關閉篩選';
+    btn.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14"><defs fill="#aa6657"></defs><path d="m36.24,32l15.76,15.76-4.24,4.24-15.76-15.76-15.76,15.76-4.24-4.24,15.76-15.76-15.76-15.76,4.24-4.24,15.76,15.76,15.76-15.76,4.24,4.24-15.76,15.76Z" fill="#aa6657"></path></svg>關閉篩選';
   } else {
     btn.innerHTML=document.getElementById('filterBtn').dataset.orig||btn.innerHTML;
   }
@@ -790,7 +805,7 @@ function render(){
   document.getElementById('filterCount').textContent=active?`已選 ${active} 個篩選條件`:'尚未篩選';
   const bl=document.getElementById('bookList');
   if(!slice.length){
-    bl.innerHTML=`<div class="empty">沒有符合條件的書目 🍵</div>`;
+    bl.innerHTML=`<div class="empty">沒有符合條件的書目ᶻz ₍^_   ̫ _^₎</div>`;
   } else {
     bl.innerHTML=slice.map(b=>{
       const rc=ratingCls(b.rating);
@@ -889,7 +904,7 @@ function toggleDetailEdit(){
   const editing=edt.style.display==='block';
   if(editing){
     txt.style.display='block'; edt.style.display='none';
-    document.getElementById('dm-edit-btn').textContent='✏️ 編輯心得';
+    document.getElementById('dm-edit-btn').textContent='編輯心得';
     document.getElementById('dm-save-btn').style.display='none';
   } else {
     txt.style.display='none'; edt.style.display='block'; edt.focus();
@@ -908,7 +923,7 @@ async function saveDetailNotes(){
     document.getElementById('dm-notes-text').textContent=notes||'（杏桃貝果沒有心得……）';
     document.getElementById('dm-notes-text').style.display='block';
     document.getElementById('dm-notes-edit').style.display='none';
-    document.getElementById('dm-edit-btn').textContent='✏️ 編輯心得';
+    document.getElementById('dm-edit-btn').textContent='編輯心得';
     document.getElementById('dm-save-btn').style.display='none';
     setSyncStatus('ok','已儲存');
     saveLastUpdated();
@@ -929,13 +944,13 @@ function toggleEdit(){
 function enterEdit(){
   editMode=true; document.body.classList.add('edit-mode');
   const btn=document.getElementById('editBtn');
-  btn.textContent='🔒 登出編輯模式'; btn.classList.replace('btn-out','btn-edit-on');
+  btn.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14"><defs fill="#fefaf9"></defs><path d="m44,26v-6c0-7.4-4.6-12-12-12s-12,4.6-12,12v6h-8v30h40v-30h-8Zm-18-6c0-4.09,1.91-6,6-6s6,1.91,6,6v6h-12v-6Z" fill="#fefaf9"></path></svg>登出編輯模式'; btn.classList.replace('btn-out','btn-edit-on');
   render();
 }
 function exitEdit(){
   editMode=false; document.body.classList.remove('edit-mode');
   const btn=document.getElementById('editBtn');
-  btn.textContent='✏️ 編輯模式'; btn.classList.replace('btn-edit-on','btn-out');
+  btn.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14"><defs fill="#aa6657"></defs><path d="m39.17,17.76l7.07,7.07-27.17,27.17-9.66,4-1.41-1.41,4-9.66,27.17-27.17Zm9.76-9.76l-6.93,6.93,7.07,7.07,6.93-6.93-7.07-7.07Z" fill="#aa6657"></path></svg>編輯模式'; btn.classList.replace('btn-edit-on','btn-out');
   render();
 }
 
