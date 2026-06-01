@@ -171,9 +171,9 @@ body::before{content:"";position:fixed;inset:0;background:
 .pg:disabled{opacity:.38;cursor:not-allowed;}
 
 /* MODALS */
-.overlay{position:fixed;inset:0;background:rgba(40,15,5,.45);backdrop-filter:blur(5px);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .22s;}
+.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(40,15,5,.45);backdrop-filter:blur(5px);z-index:200;display:flex;align-items:center;justify-content:center;box-sizing:border-box;padding:16px;opacity:0;pointer-events:none;transition:opacity .22s;}
 .overlay.open{opacity:1;pointer-events:all;}
-.modal{background:var(--cream);border:1.5px solid var(--border-md);border-radius:18px;padding:32px 36px;width:420px;max-width:100%;box-shadow:var(--shadow-lg);transform:translateY(8px);transition:transform .22s;max-height:90vh;overflow-y:auto;}
+.modal{background:var(--cream);border:1.5px solid var(--border-md);border-radius:18px;padding:32px 36px;width:420px;max-width:calc(100vw - 32px);box-sizing:border-box;box-shadow:var(--shadow-lg);transform:translateY(8px);transition:transform .22s;max-height:calc(100vh - 32px);overflow-y:auto;}
 .overlay.open .modal{transform:translateY(0);}
 .modal h3{font-size:1.05rem;color:var(--clay);margin-bottom:6px;}
 .modal .sub{font-size:.78rem;color:var(--text-lt);margin-bottom:20px;}
@@ -193,7 +193,7 @@ body::before{content:"";position:fixed;inset:0;background:
 .wide-modal textarea.fi{min-height:54px;resize:vertical;}
 /* 手機端 modal 滿版 */
 @media(max-width:600px){
-  .modal,.wide-modal{width:calc(100vw - 24px);padding:20px 16px;border-radius:14px;}
+  .modal,.wide-modal{padding:20px 16px;border-radius:14px;}
   /* tag picker 跟外層對齊，拿掉自己的 padding 改用 margin */
   .tag-picker{padding:0;border:none;background:transparent;margin-bottom:10px;}
   .tag-picker-lbl{padding:0 0 6px 0;}
@@ -387,7 +387,10 @@ body::before{content:"";position:fixed;inset:0;background:
     <div id="dm-persona-row" style="display:none"></div>
     <hr class="detail-divider">
     <div class="detail-meta-row">
-      <div class="detail-meta-item">閱讀日期 <span id="dm-readdate"></span></div>
+      <div class="detail-meta-item">閱讀日期
+        <span id="dm-readdate-display"></span>
+        <input type="text" id="dm-readdate-edit" placeholder="YYYY-MM-DD" style="display:none;width:110px;padding:2px 6px;border:1.5px solid var(--border-md);border-radius:5px;font-family:inherit;font-size:.72rem;color:var(--text);background:white;outline:none;">
+      </div>
       <div class="detail-meta-item" id="dm-updated-wrap">最後編輯 <span id="dm-updated"></span></div>
     </div>
     <div class="detail-notes-lbl">心得</div>
@@ -431,7 +434,6 @@ body::before{content:"";position:fixed;inset:0;background:
       <div class="fi-wrap"><span class="fi-lbl">攻</span><textarea class="fi" id="em-gong"></textarea></div>
       <div class="fi-wrap"><span class="fi-lbl">受</span><textarea class="fi" id="em-shou"></textarea></div>
     </div>
-    <div class="fi-wrap" style="margin-bottom:12px;"><span class="fi-lbl">閱讀日期</span><input class="fi" type="date" id="em-readdate"></div>
     <div class="modal-btns" style="justify-content:flex-end;">
       <button class="btn btn-ghost" onclick="closeOverlay('editOverlay')">取消</button>
       <button class="btn btn-fill" id="saveEditBtn" onclick="saveEdit()">儲存</button>
@@ -470,7 +472,6 @@ body::before{content:"";position:fixed;inset:0;background:
       <div class="fi-wrap"><span class="fi-lbl">攻</span><textarea class="fi" id="n-gong" placeholder="攻的描述"></textarea></div>
       <div class="fi-wrap"><span class="fi-lbl">受</span><textarea class="fi" id="n-shou" placeholder="受的描述"></textarea></div>
     </div>
-    <div class="fi-wrap" style="margin-bottom:12px;"><span class="fi-lbl">閱讀日期</span><input class="fi" type="date" id="n-readdate"></div>
     <div class="modal-btns" style="justify-content:flex-end;">
       <button class="btn btn-ghost" onclick="closeOverlay('addOverlay')">取消</button>
       <button class="btn btn-fill" id="addBtn" onclick="addBook()">新增</button>
@@ -900,7 +901,9 @@ function openDetail(id){
       (b.shou?`<div class="detail-row"><span class="detail-lbl">受</span><span>${esc(b.shou)}</span></div>`:'');
   } else { personaRow.style.display='none'; personaRow.innerHTML=''; }
   // dates
-  document.getElementById('dm-readdate').textContent=fmtDate(b.read_date);
+  document.getElementById('dm-readdate-display').textContent=fmtDate(b.read_date);
+  document.getElementById('dm-readdate-edit').value=b.read_date||'';
+  document.getElementById('dm-readdate-edit').style.display='none';
   const upd=b.updated_at?fmtDatetime(b.updated_at):'—';
   document.getElementById('dm-updated').textContent=upd;
   // notes
@@ -917,13 +920,17 @@ function openDetail(id){
 function toggleDetailEdit(){
   const txt=document.getElementById('dm-notes-text');
   const edt=document.getElementById('dm-notes-edit');
+  const rdDisplay=document.getElementById('dm-readdate-display');
+  const rdEdit=document.getElementById('dm-readdate-edit');
   const editing=edt.style.display==='block';
   if(editing){
     txt.style.display='block'; edt.style.display='none';
+    rdDisplay.style.display=''; rdEdit.style.display='none';
     document.getElementById('dm-edit-btn').textContent='編輯心得';
     document.getElementById('dm-save-btn').style.display='none';
   } else {
     txt.style.display='none'; edt.style.display='block'; edt.focus();
+    rdDisplay.style.display='none'; rdEdit.style.display='inline-block';
     document.getElementById('dm-edit-btn').textContent='取消';
     document.getElementById('dm-save-btn').style.display='inline-flex';
   }
@@ -931,14 +938,18 @@ function toggleDetailEdit(){
 async function saveDetailNotes(){
   const id=document.getElementById('dm-id').value;
   const notes=document.getElementById('dm-notes-edit').value;
+  const readDate=document.getElementById('dm-readdate-edit').value.trim()||null;
   setSyncStatus('busy','儲存中…');
   try{
-    const updated=await dbUpdate(id,{notes});
+    const updated=await dbUpdate(id,{notes, read_date:readDate});
     const idx=books.findIndex(b=>String(b.id)===String(id));
     if(idx!==-1) books[idx]={...books[idx],...updated};
     document.getElementById('dm-notes-text').textContent=notes||'（杏桃貝果沒有心得……）';
     document.getElementById('dm-notes-text').style.display='block';
     document.getElementById('dm-notes-edit').style.display='none';
+    document.getElementById('dm-readdate-display').textContent=fmtDate(readDate);
+    document.getElementById('dm-readdate-display').style.display='';
+    document.getElementById('dm-readdate-edit').style.display='none';
     document.getElementById('dm-edit-btn').textContent='編輯心得';
     document.getElementById('dm-save-btn').style.display='none';
     setSyncStatus('ok','已儲存');
@@ -974,8 +985,6 @@ function exitEdit(){
 function openAddModal(){
   ['n-title','n-author','n-chaps','n-gong','n-shou'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('n-rating').value='★★★★☆';
-  // 預設今天日期
-  document.getElementById('n-readdate').value=new Date().toISOString().slice(0,10);
   document.getElementById('n-tp-content').innerHTML=buildTagPickerHTML('n',[]);
   document.getElementById('addOverlay').classList.add('open');
   setTimeout(()=>document.getElementById('n-title').focus(),80);
@@ -992,7 +1001,7 @@ async function addBook(){
     chapters:document.getElementById('n-chaps').value.trim(),
     tags, gong:document.getElementById('n-gong').value.trim(),
     shou:document.getElementById('n-shou').value.trim(),
-    read_date:document.getElementById('n-readdate').value||null
+    read_date:new Date().toISOString().slice(0,10)
   };
   const btn=document.getElementById('addBtn');
   btn.disabled=true; btn.textContent='儲存中…';
@@ -1032,7 +1041,6 @@ function openEdit(id){
   document.getElementById('em-chaps').value=b.chapters||'';
   document.getElementById('em-gong').value=b.gong||'';
   document.getElementById('em-shou').value=b.shou||'';
-  document.getElementById('em-readdate').value=b.read_date||'';
   document.getElementById('em-tp-content').innerHTML=buildTagPickerHTML('em',b.tags||[]);
   document.getElementById('editOverlay').classList.add('open');
   setTimeout(()=>document.getElementById('em-title').focus(),80);
@@ -1048,8 +1056,7 @@ async function saveEdit(){
     rating:document.getElementById('em-rating').value,
     chapters:document.getElementById('em-chaps').value.trim(),
     tags, gong:document.getElementById('em-gong').value.trim(),
-    shou:document.getElementById('em-shou').value.trim(),
-    read_date:document.getElementById('em-readdate').value||null
+    shou:document.getElementById('em-shou').value.trim()
   };
   const btn=document.getElementById('saveEditBtn');
   btn.disabled=true; btn.textContent='儲存中…';
