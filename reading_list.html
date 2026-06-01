@@ -473,7 +473,7 @@ body::before{content:"";position:fixed;inset:0;background:
     </div>
     <div class="modal-btns" style="justify-content:flex-end;">
       <button class="btn btn-ghost" onclick="closeOverlay('addOverlay')">取消</button>
-      <button class="btn btn-fill" id="addBtn" onclick="addBook()">＋ 新增</button>
+      <button class="btn btn-fill" id="addBtn" onclick="addBook()">新增</button>
     </div>
   </div>
 </div>
@@ -485,7 +485,7 @@ body::before{content:"";position:fixed;inset:0;background:
     <p class="sub">新增或刪除自訂標籤（不影響已用此標籤的書）</p>
     <div style="display:flex;gap:8px;margin-bottom:14px;">
       <input class="fi" type="text" id="newTagInput" placeholder="輸入新標籤名稱…" onkeydown="if(event.key==='Enter')addCustomTag()" style="flex:1;">
-      <button class="btn btn-fill" onclick="addCustomTag()">＋ 新增</button>
+      <button class="btn btn-fill" onclick="addCustomTag()">新增</button>
     </div>
     <div class="tag-list" id="tagList" style="max-height:300px;overflow-y:auto;"></div>
     <div class="modal-btns" style="margin-top:16px;">
@@ -1007,7 +1007,7 @@ async function addBook(){
     setSyncStatus('ok',`共 ${books.length} 本`);
     saveLastUpdated(); closeOverlay('addOverlay'); curPage=1; render();
   }catch(e){ setSyncStatus('err','儲存失敗'); alert('儲存失敗：'+e.message); }
-  btn.disabled=false; btn.textContent='＋ 新增';
+  btn.disabled=false; btn.textContent='新增';
 }
 
 // ── Delete ────────────────────────────────────
