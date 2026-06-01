@@ -187,7 +187,17 @@ body::before{content:"";position:fixed;inset:0;background:
 .wide-modal .modal-btns{justify-content:flex-end;}
 .add-modal-grid{display:grid;grid-template-columns:2fr 1.2fr 1fr 0.8fr;gap:10px;margin-bottom:12px;}
 @media(max-width:640px){.add-modal-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:400px){.add-modal-grid{grid-template-columns:1fr;}}
+.add-modal-persona{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+@media(max-width:500px){.add-modal-persona{grid-template-columns:1fr;}}
 .wide-modal textarea.fi{min-height:54px;resize:vertical;}
+/* 手機端 modal 滿版 */
+@media(max-width:600px){
+  .modal,.wide-modal{width:calc(100vw - 24px);padding:20px 16px;border-radius:14px;}
+  .tag-picker{padding:8px 10px;}
+  .tag-picker-row{gap:4px;}
+  .tpchip{font-size:.68rem;padding:3px 8px;}
+}
 
 /* BOOK DETAIL MODAL */
 .detail-modal{width:560px;}
