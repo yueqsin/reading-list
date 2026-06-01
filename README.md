@@ -1,3 +1,5 @@
+[前往書單](https://yueqsin.github.io/reading-list/reading_list.html)
+
 #### 2026-6-1 更新功能
 1. 排序新增時間選項，字數排序支援遞增。
 2. 篩選新增年份及月份選項。
