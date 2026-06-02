@@ -1361,7 +1361,7 @@ function randomPick(){
   if(forceEgg) count = 0; // 重置
   localStorage.setItem(EASTER_EGG_KEY, count);
 
-  // 0.1 % 機率或第1000次必出
+  // 0.1 % 機率或第100次必出
   if(forceEgg || Math.random() < 0.001){
     showEasterEgg();
     return;
@@ -1386,6 +1386,10 @@ const EASTER_EGGS = [
   {
     content: `抽到黛玉貝果對你播放<a href="https://www.youtube.com/watch?v=urfRz8G4-Ec" target="_blank" style="color:var(--clay);text-decoration:underline;font-weight:700;">同道殊途</a>了。`,
     btn: '靈氣也是氣……'
+  }
+  {
+    content: `被你發現杏桃貝果又在偷偷課金了⦁֊⦁꧞`,
+    btn: '嚴厲斥責'
   }
 ];
 
