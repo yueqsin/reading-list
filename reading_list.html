@@ -1361,8 +1361,8 @@ function randomPick(){
   if(forceEgg) count = 0; // 重置
   localStorage.setItem(EASTER_EGG_KEY, count);
 
-  // 0.1% 機率或第1000次必出
-  if(forceEgg || Math.random() < 0.001){
+  // 0.1 % 機率或第1000次必出
+  if(forceEgg || Math.random() < 0.2){
     showEasterEgg();
     return;
   }
@@ -1372,22 +1372,18 @@ function randomPick(){
 
 const EASTER_EGGS = [
   {
-    emoji: '🍓',
     content: `抽到草莓貝果的<a href="https://kohane1127.lofter.com" target="_blank" style="color:var(--clay);text-decoration:underline;font-weight:700;">同人文</a>了！`,
     btn: '哇！'
   },
   {
-    emoji: '🌸',
     content: `桂花貝果什麼都沒有聽見……`,
     btn: '你說什麼？'
   },
   {
-    emoji: '🍵',
     content: `抹茶貝果：各位親愛的原住民同胞大家好！`,
     btn: '馬英九還我牛！'
   },
   {
-    emoji: '📚',
     content: `抽到黛玉貝果對你播放<a href="https://www.youtube.com/watch?v=urfRz8G4-Ec" target="_blank" style="color:var(--clay);text-decoration:underline;font-weight:700;">同道殊途</a>了。`,
     btn: '靈氣也是氣……'
   }
