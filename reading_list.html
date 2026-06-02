@@ -1067,19 +1067,13 @@ function toggleEdit(){
 function enterEdit(){
   editMode=true; document.body.classList.add('edit-mode');
   const btn=document.getElementById('editBtn');
-  btn.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14">
-    <defs fill="#fefaf9"></defs>
-    <path d="m44,26v-6c0-7.4-4.6-12-12-12s-12,4.6-12,12v6h-8v30h40v-30h-8Zm-18-6c0-4.09,1.91-6,6-6s6,1.91,6,6v6h-12v-6Z" fill="#fefaf9"></path>
-    </svg>登出'; btn.classList.replace('btn-out','btn-edit-on');
+  btn.innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14"><defs fill="#fefaf9"></defs><path d="m44,26v-6c0-7.4-4.6-12-12-12s-12,4.6-12,12v6h-8v30h40v-30h-8Zm-18-6c0-4.09,1.91-6,6-6s6,1.91,6,6v6h-12v-6Z" fill="#fefaf9"></path></svg>登出`; btn.classList.replace('btn-out','btn-edit-on');
   render();
 }
 function exitEdit(){
   editMode=false; document.body.classList.remove('edit-mode');
   const btn=document.getElementById('editBtn');
-  btn.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14">
-    <defs fill="#aa6657"></defs>
-    <path d="m39.17,17.76l7.07,7.07-27.17,27.17-9.66,4-1.41-1.41,4-9.66,27.17-27.17Zm9.76-9.76l-6.93,6.93,7.07,7.07,6.93-6.93-7.07-7.07Z" fill="#aa6657"></path>
-    </svg>編輯'; btn.classList.replace('btn-edit-on','btn-out');
+  btn.innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14"><defs fill="#aa6657"></defs><path d="m39.17,17.76l7.07,7.07-27.17,27.17-9.66,4-1.41-1.41,4-9.66,27.17-27.17Zm9.76-9.76l-6.93,6.93,7.07,7.07,6.93-6.93-7.07-7.07Z" fill="#aa6657"></path></svg>編輯`; btn.classList.replace('btn-edit-on','btn-out');
   render();
 }
 
@@ -1389,7 +1383,7 @@ const EASTER_EGGS = [
   {
     content: `抽到黛玉貝果對你播放<a href="https://www.youtube.com/watch?v=urfRz8G4-Ec" target="_blank" style="color:var(--clay);text-decoration:underline;font-weight:700;">同道殊途</a>了。`,
     btn: '靈氣也是氣……'
-  }
+  },
   {
     content: `被你發現杏桃貝果又在偷偷課金了⦁֊⦁꧞`,
     btn: '嚴厲斥責'
