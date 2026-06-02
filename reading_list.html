@@ -1093,11 +1093,11 @@ function openDetail(id, fromRandom=false){
     const skip = document.createElement('button');
     skip.className = 'btn btn-ghost';
     skip.textContent = '不想吃';
-    skip.onclick = () => { skipSet.add(String(id)); closeOverlay('detailOverlay'); randomPick(true); };
+    skip.onclick = () => { skipSet.add(String(id)); closeOverlay('detailOverlay'); setTimeout(()=>randomPick(true), 250); };
     const again = document.createElement('button');
     again.className = 'btn btn-ghost';
     again.textContent = '再抽一次';
-    again.onclick = () => { closeOverlay('detailOverlay'); randomPick(true); };
+    again.onclick = () => { closeOverlay('detailOverlay'); setTimeout(()=>randomPick(true), 250); };
     ra.appendChild(skip);
     ra.appendChild(again);
   }
@@ -1463,14 +1463,15 @@ function randomPick(fromRandom=false){
   }
   let count = parseInt(localStorage.getItem(EASTER_EGG_KEY)||'0') + 1;
   const forceEgg = count >= 100;
-  if(forceEgg) count = 0;
-  localStorage.setItem(EASTER_EGG_KEY, count);
+  localStorage.setItem(EASTER_EGG_KEY, forceEgg ? 0 : count);
   if(forceEgg || Math.random() < 0.001){
-    showEasterEgg();
+    // 稍微延遲確保前一個彈窗已完全關閉
+    setTimeout(()=>showEasterEgg(), 250);
     return;
   }
   const book = list[Math.floor(Math.random()*list.length)];
-  openDetail(book.id, true);
+  // 延遲開啟，確保前一個彈窗 CSS transition 結束
+  setTimeout(()=>openDetail(book.id, true), fromRandom ? 250 : 0);
 }
 
 const EASTER_EGGS = [
