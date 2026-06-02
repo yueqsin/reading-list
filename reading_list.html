@@ -297,7 +297,7 @@ body::before{content:"";position:fixed;inset:0;background:
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14">
       <defs fill="#aa6657"></defs>
       <path d="m39.17,17.76l7.07,7.07-27.17,27.17-9.66,4-1.41-1.41,4-9.66,27.17-27.17Zm9.76-9.76l-6.93,6.93,7.07,7.07,6.93-6.93-7.07-7.07Z" fill="#aa6657"></path>
-    </svg>編輯模式</button>
+    </svg>編輯</button>
   <button class="btn btn-out" id="filterBtn" onclick="toggleFilter()">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14">
       <defs fill="#aa6657"></defs>
@@ -381,11 +381,8 @@ body::before{content:"";position:fixed;inset:0;background:
 <!-- LOGIN MODAL -->
 <div class="overlay" id="pwOverlay" onclick="overlayClick(event,'pwOverlay')">
   <div class="modal">
-    <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="16" height="16">
-      <defs fill="#aa6657"></defs>
-      <path d="m44,26v-6c0-7.4-4.6-12-12-12s-12,4.6-12,12v6h-8v30h40v-30h-8Zm-18-6c0-4.09,1.91-6,6-6s6,1.91,6,6v6h-12v-6Z" fill="#aa6657"></path>
-    </svg> 編輯模式登入</h3>
-    <p class="sub">請輸入你的帳號密碼</p>
+    <h3>杏桃貝果正在登入……</h3>
+    <p class="sub">請輸入帳號密碼</p>
     <div style="margin-bottom:10px;">
       <div class="fi-lbl" style="margin-bottom:4px;">Email</div>
       <input class="fi" type="email" id="loginEmail" placeholder="your@email.com" style="letter-spacing:normal;text-align:center;font-family:inherit;font-size:.88rem;" onkeydown="if(event.key==='Enter')document.getElementById('loginPw').focus()">
@@ -394,7 +391,7 @@ body::before{content:"";position:fixed;inset:0;background:
       <div class="fi-lbl" style="margin-bottom:4px;">密碼</div>
       <input class="fi" type="password" id="loginPw" placeholder="••••••" style="letter-spacing:.15em;" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
-    <div id="loginError" style="font-size:.76rem;color:#e74c3c;text-align:center;margin-bottom:10px;display:none;">帳號或密碼錯誤，請再試一次</div>
+    <div id="loginError" style="font-size:.76rem;color:#e74c3c;text-align:center;margin-bottom:10px;display:none;">你又打錯帳號密碼了！</div>
     <div class="modal-btns">
       <button class="btn btn-fill" id="loginBtn" onclick="doLogin()">登入</button>
       <button class="btn btn-ghost" onclick="closeOverlay('pwOverlay')">取消</button>
@@ -1070,13 +1067,19 @@ function toggleEdit(){
 function enterEdit(){
   editMode=true; document.body.classList.add('edit-mode');
   const btn=document.getElementById('editBtn');
-  btn.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14"><defs fill="#fefaf9"></defs><path d="m44,26v-6c0-7.4-4.6-12-12-12s-12,4.6-12,12v6h-8v30h40v-30h-8Zm-18-6c0-4.09,1.91-6,6-6s6,1.91,6,6v6h-12v-6Z" fill="#fefaf9"></path></svg>登出編輯模式'; btn.classList.replace('btn-out','btn-edit-on');
+  btn.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14">
+    <defs fill="#fefaf9"></defs>
+    <path d="m44,26v-6c0-7.4-4.6-12-12-12s-12,4.6-12,12v6h-8v30h40v-30h-8Zm-18-6c0-4.09,1.91-6,6-6s6,1.91,6,6v6h-12v-6Z" fill="#fefaf9"></path>
+    </svg>登出編輯模式'; btn.classList.replace('btn-out','btn-edit-on');
   render();
 }
 function exitEdit(){
   editMode=false; document.body.classList.remove('edit-mode');
   const btn=document.getElementById('editBtn');
-  btn.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14"><defs fill="#aa6657"></defs><path d="m39.17,17.76l7.07,7.07-27.17,27.17-9.66,4-1.41-1.41,4-9.66,27.17-27.17Zm9.76-9.76l-6.93,6.93,7.07,7.07,6.93-6.93-7.07-7.07Z" fill="#aa6657"></path></svg>編輯模式'; btn.classList.replace('btn-edit-on','btn-out');
+  btn.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14">
+    <defs fill="#aa6657"></defs>
+    <path d="m39.17,17.76l7.07,7.07-27.17,27.17-9.66,4-1.41-1.41,4-9.66,27.17-27.17Zm9.76-9.76l-6.93,6.93,7.07,7.07,6.93-6.93-7.07-7.07Z" fill="#aa6657"></path>
+    </svg>編輯'; btn.classList.replace('btn-edit-on','btn-out');
   render();
 }
 
