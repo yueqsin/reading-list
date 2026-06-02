@@ -1357,12 +1357,12 @@ function randomPick(){
   }
   // 讀取並更新計數
   let count = parseInt(localStorage.getItem(EASTER_EGG_KEY)||'0') + 1;
-  const forceEgg = count >= 1000;
+  const forceEgg = count >= 100;
   if(forceEgg) count = 0; // 重置
   localStorage.setItem(EASTER_EGG_KEY, count);
 
   // 0.1 % 機率或第1000次必出
-  if(forceEgg || Math.random() < 1.0){
+  if(forceEgg || Math.random() < 0.001){
     showEasterEgg();
     return;
   }
