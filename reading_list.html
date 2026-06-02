@@ -267,7 +267,7 @@ body::before{content:"";position:fixed;inset:0;background:
 
 <header class="site-header">
   <h1>Reading List</h1>
-  <p class="by">製作人 @yzhtaotao</p>
+  <p class="by">製作人 杏桃貝果@yzhtaotao</p>
   <p class="last-updated" id="lastUpdated"></p>
 </header>
 <div class="divider">୨୧ --- ･ --- ･ --- ୨୧ --- ･ --- ･ --- ୨୧</div>
@@ -276,19 +276,18 @@ body::before{content:"";position:fixed;inset:0;background:
   <div class="rating-card" style="margin-bottom:0">
     <div class="rating-card-head">評分標準</div>
     <div class="rating-grid">
-      <div class="rating-row"><span class="stars r5">★★★★★</span><span class="sep">❘</span><span class="rdesc">珍饐佳餚饌玉炊金</span></div>
+      <div class="rating-row"><span class="stars r5">★★★★★</span><span class="sep">❘</span><span class="rdesc">珍饈佳餚</span></div>
       <div class="rating-row"><span class="stars r4">★★★★☆</span><span class="sep">❘</span><span class="rdesc">不用手剝的蝦</span></div>
-      <div class="rating-row"><span class="stars r3">★★★☆☆</span><span class="sep">❘</span><span class="rdesc">餓狠了才吃幾口</span></div>
+      <div class="rating-row"><span class="stars r3">★★★☆☆</span><span class="sep">❘</span><span class="rdesc">餓了才吃</span></div>
       <div class="rating-row"><span class="stars r2">★★☆☆☆</span><span class="sep">❘</span><span class="rdesc">難吃</span></div>
-      <div class="rating-row"><span class="stars r1">★☆☆☆☆</span><span class="sep">❘</span><span class="rdesc">不吃廚餘</span></div>
+      <div class="rating-row"><span class="stars r1">★☆☆☆☆</span><span class="sep">❘</span><span class="rdesc">廚餘</span></div>
       <div class="rating-row"><span class="stars r0">☆☆☆☆☆</span><span class="sep">❘</span><span class="rdesc">端上桌都不配</span></div>
     </div>
   </div>
   <div class="rating-card stats-card">
-    <div class="rating-card-head" style="border-bottom:none;padding-bottom:0;margin-bottom:0;text-align:center;">字數統計</div>
-    <div id="totalWordsDisplay" style="font-size:1.5rem;font-weight:900;color:var(--clay);line-height:1;text-align:center;">—</div>
+    <div class="rating-card-head" style="border-bottom:none;padding-bottom:0;margin-bottom:0;text-align:center;">目前已閱讀</div>
+    <div id="totalWordsDisplay" style="font-size:1.2rem;font-weight:900;color:var(--clay);line-height:1;text-align:center;">—</div>
     <div style="font-size:.72rem;color:var(--text-lt);text-align:center;">萬字</div>
-    <div style="font-size:.68rem;color:var(--clay-xlt);text-align:center;">目前已閱讀</div>
   </div>
 </div>
 
@@ -363,7 +362,7 @@ body::before{content:"";position:fixed;inset:0;background:
 
 <div class="sort-bar">
   <span class="sort-lbl">排序：</span>
-  <button class="sort-btn on" onclick="setSort('default')" id="sb-default">書單順序</button>
+  <button class="sort-btn on" onclick="setSort('default')" id="sb-default">一般</button>
   <button class="sort-btn" onclick="setSort('rd')" id="sb-rd">評分 ↓</button>
   <button class="sort-btn" onclick="setSort('ra')" id="sb-ra">評分 ↑</button>
   <button class="sort-btn" onclick="setSort('chd')" id="sb-chd">字數 ↓</button>
@@ -372,7 +371,7 @@ body::before{content:"";position:fixed;inset:0;background:
   <button class="sort-btn" onclick="setSort('datea')" id="sb-datea">時間 ↑</button>
 </div>
 
-<div class="book-list" id="bookList"><div class="loading-bar"><div class="spinner"></div><br>載入書單中…</div></div>
+<div class="book-list" id="bookList"><div class="loading-bar"><div class="spinner"></div><br>載入MENU中…</div></div>
 <div class="pager" id="pager"></div>
 
 </div><!-- .wrap -->
@@ -452,7 +451,7 @@ body::before{content:"";position:fixed;inset:0;background:
     </div>
     <div class="tag-picker" style="margin-bottom:12px;">
       <div class="tag-picker-lbl collapsible-lbl" onclick="toggleTagPicker('em')" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;">
-        <span>標籤（點選選取）</span>
+        <span>標籤</span>
         <span id="em-tp-arrow" style="font-size:.6rem;color:var(--clay-xlt);transition:transform .2s;">▼</span>
       </div>
       <div id="em-tp-collapsible" style="display:none;">
@@ -495,7 +494,7 @@ body::before{content:"";position:fixed;inset:0;background:
     </div>
     <div class="tag-picker" style="margin-bottom:12px;">
       <div class="tag-picker-lbl" onclick="toggleTagPicker('n')" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;">
-        <span>標籤（點選選取）</span>
+        <span>標籤</span>
         <span id="n-tp-arrow" style="font-size:.6rem;color:var(--clay-xlt);transition:transform .2s;">▼</span>
       </div>
       <div id="n-tp-collapsible" style="display:none;">
@@ -1007,7 +1006,7 @@ function openDetail(id){
   const upd=b.updated_at?fmtDatetime(b.updated_at):'—';
   document.getElementById('dm-updated').textContent=upd;
   // notes
-  document.getElementById('dm-notes-text').textContent=b.notes||'杏桃貝果沒有心得……⦁֊⦁꧞';
+  document.getElementById('dm-notes-text').textContent=b.notes||'杏桃貝果沒有心得……';
   document.getElementById('dm-notes-edit').value=b.notes||'';
   document.getElementById('dm-notes-text').style.display='block';
   document.getElementById('dm-notes-edit').style.display='none';
@@ -1236,7 +1235,7 @@ function generateReview(){
   const divider2=document.getElementById('rv-divider2');
 
   if(!filtered.length){
-    body.innerHTML=`<div class="review-empty">這段時間杏桃貝果什麼都沒有閱讀……⦁֊⦁꧞</div>`;
+    body.innerHTML=`<div class="review-empty">這段時間杏桃貝果什麼都沒有吃……</div>`;
     divider2.style.display='none';
     booklist.innerHTML='';
     document.getElementById('reviewOutput').classList.add('show');
@@ -1430,13 +1429,6 @@ function launchConfetti(){
     else canvas.remove();
   }
   draw();
-}
-
-function closeEasterEgg(){
-  if(confirm('確定要關閉彩蛋嗎？')){
-    const ov = document.getElementById('easterEggOverlay');
-    if(ov) ov.classList.remove('open');
-  }
 }
 
 function showEasterEgg(){
