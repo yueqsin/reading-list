@@ -86,7 +86,7 @@ body::before{content:"";position:fixed;inset:0;background:
 .review-picker select:focus{border-color:var(--clay-lt);}
 .review-output{display:none;}
 .review-output.show{display:block;}
-.review-card{background:#F8F1F1;border:none;border-radius:var(--r);padding:28px 28px 24px;width:600px;max-width:100%;margin:0 auto;}
+.review-card{background:#F8F1F1;border:none;border-radius:var(--r);padding:28px 28px 24px;width:700px;max-width:100%;margin:0 auto;}
 .review-title{font-size:1.3rem;font-weight:900;color:var(--clay);letter-spacing:.06em;text-align:center;margin-bottom:6px;}
 .review-subtitle{font-size:.85rem;color:var(--text-mid);text-align:center;margin-bottom:10px;letter-spacing:.04em;}
 .review-divider{font-family:"Google Sans",sans-serif;font-size:.7rem;color:var(--clay-xlt);text-align:center;margin:10px 0;letter-spacing:.1em;}
@@ -1234,7 +1234,7 @@ function generateReview(){
     if(low>0) html+=`還有 <span class="review-highlight">${low}</span> 本低於 <span class="review-highlight">★★★☆☆</span>。<br><br>`;
     else html+=`<br>`;
     if(topTags.length){
-      html+=`這段時間你閱讀最多的種類是<br>`;
+      html+=`這段時間閱讀最多的種類是<br>`;
       html+=topTags.map(t=>`<span class="review-tag">#${esc(t)}</span>`).join(' ');
     } else {
       html+=`……咦？杏桃貝果到底閱讀了什麼？`;
