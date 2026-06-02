@@ -1285,7 +1285,7 @@ async function exportReviewImage(){
         document.head.appendChild(s);
       });
     }
-    const scale=600/card.offsetWidth;
+    const scale=700/card.offsetWidth;
     const canvas=await html2canvas(card,{
       scale: window.devicePixelRatio*scale,
       useCORS:true,
