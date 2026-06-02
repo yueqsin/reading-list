@@ -245,6 +245,7 @@ body::before{content:"";position:fixed;inset:0;background:
 /* BOOK DETAIL MODAL */
 .detail-modal{width:560px;}
 .detail-modal h3{margin-bottom:4px;}
+@media(max-width:600px){.detail-modal{padding:28px 28px;}}
 .detail-author{font-size:.8rem;color:var(--text-lt);margin-bottom:14px;}
 .detail-row{display:flex;align-items:baseline;gap:8px;margin-bottom:8px;font-size:.84rem;}
 .detail-lbl{font-size:.68rem;color:var(--clay-lt);font-weight:700;letter-spacing:.05em;min-width:56px;flex-shrink:0;}
@@ -430,10 +431,16 @@ body::before{content:"";position:fixed;inset:0;background:
     <div class="detail-notes-text" id="dm-notes-text"></div>
     <textarea class="detail-notes-edit" id="dm-notes-edit" placeholder="寫下心得…" style="display:none"></textarea>
     <input type="hidden" id="dm-id">
-    <div class="modal-btns" style="margin-top:16px;justify-content:flex-end;">
-      <button class="btn btn-ghost" onclick="closeOverlay('detailOverlay')">關閉</button>
-      <button class="btn btn-out edit-only" id="dm-edit-btn" onclick="toggleDetailEdit()" style="display:none">編輯心得</button>
-      <button class="btn btn-fill edit-only" id="dm-save-btn" onclick="saveDetailNotes()" style="display:none">儲存心得</button>
+    <div class="modal-btns" style="margin-top:16px;justify-content:space-between;align-items:center;">
+      <div class="edit-only" style="display:none;gap:8px;" id="dm-book-actions">
+        <button class="btn btn-out" id="dm-open-edit" onclick="openEditFromDetail()">編輯書目</button>
+        <button class="btn" id="dm-delete" onclick="delBookFromDetail()" style="background:transparent;color:#c0392b;border:1.5px solid #c0392b;">刪除</button>
+      </div>
+      <div style="display:flex;gap:8px;margin-left:auto;">
+        <button class="btn btn-ghost" onclick="closeOverlay('detailOverlay')">關閉</button>
+        <button class="btn btn-out edit-only" id="dm-edit-btn" onclick="toggleDetailEdit()" style="display:none">編輯心得</button>
+        <button class="btn btn-fill edit-only" id="dm-save-btn" onclick="saveDetailNotes()" style="display:none">儲存心得</button>
+      </div>
     </div>
   </div>
 </div>
@@ -982,10 +989,6 @@ function render(){
           <div class="book-rating ${rc}">${b.rating||''}</div>
           ${b.chapters?`<div class="book-chaps">${esc(b.chapters)} 萬字</div>`:''}
           ${b.read_date?`<div class="book-date">${fmtDate(b.read_date)}</div>`:''}
-          <div class="book-actions" onclick="event.stopPropagation()">
-            <button class="act-btn" onclick="openEdit('${b.id}')">編輯</button>
-            <button class="act-btn del" onclick="delBook('${b.id}','${esc(b.title)}')">刪除</button>
-          </div>
         </div>
       </div>`;
     }).join('');
@@ -1054,6 +1057,7 @@ function openDetail(id){
   // edit buttons: only show in edit mode
   const showEdit=editMode;
   document.getElementById('dm-edit-btn').style.display=showEdit?'inline-flex':'none';
+  document.getElementById('dm-book-actions').style.display=showEdit?'flex':'none';
   document.getElementById('dm-save-btn').style.display='none';
   document.getElementById('detailOverlay').classList.add('open');
 }
@@ -1173,6 +1177,19 @@ async function delBook(id,title){
     buildOtherTags(); initFilters(); renderTagManager(); renderTotalWords();
     setSyncStatus('ok',`共 ${books.length} 本`); saveLastUpdated(); render();
   }catch(e){ setSyncStatus('err','刪除失敗'); alert('刪除失敗：'+e.message); }
+}
+
+function openEditFromDetail(){
+  const id = document.getElementById('dm-id').value;
+  closeOverlay('detailOverlay');
+  openEdit(id);
+}
+
+async function delBookFromDetail(){
+  const id = document.getElementById('dm-id').value;
+  const title = document.getElementById('dm-title').textContent;
+  closeOverlay('detailOverlay');
+  await delBook(id, title);
 }
 
 // ── Edit book ─────────────────────────────────
