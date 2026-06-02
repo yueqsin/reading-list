@@ -977,7 +977,7 @@ function openDetail(id){
   const upd=b.updated_at?fmtDatetime(b.updated_at):'—';
   document.getElementById('dm-updated').textContent=upd;
   // notes
-  document.getElementById('dm-notes-text').textContent=b.notes||'（杏桃貝果沒有心得……）';
+  document.getElementById('dm-notes-text').textContent=b.notes||'杏桃貝果沒有心得……⦁֊⦁꧞';
   document.getElementById('dm-notes-edit').value=b.notes||'';
   document.getElementById('dm-notes-text').style.display='block';
   document.getElementById('dm-notes-edit').style.display='none';
@@ -1014,7 +1014,7 @@ async function saveDetailNotes(){
     const updated=await dbUpdate(id,{notes, read_date:readDate});
     const idx=books.findIndex(b=>String(b.id)===String(id));
     if(idx!==-1) books[idx]={...books[idx],...updated};
-    document.getElementById('dm-notes-text').textContent=notes||'（杏桃貝果沒有心得……⦁֊⦁꧞）';
+    document.getElementById('dm-notes-text').textContent=notes||'杏桃貝果沒有心得……⦁֊⦁꧞';
     document.getElementById('dm-notes-text').style.display='block';
     document.getElementById('dm-notes-edit').style.display='none';
     document.getElementById('dm-readdate-display').textContent=fmtDate(readDate);
@@ -1206,7 +1206,7 @@ function generateReview(){
   const divider2=document.getElementById('rv-divider2');
 
   if(!filtered.length){
-    body.innerHTML=`<div class="review-empty">（這段時間杏桃貝果什麼都沒有閱讀……）</div>`;
+    body.innerHTML=`<div class="review-empty">這段時間杏桃貝果什麼都沒有閱讀……⦁֊⦁꧞</div>`;
     divider2.style.display='none';
     booklist.innerHTML='';
     document.getElementById('reviewOutput').classList.add('show');
