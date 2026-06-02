@@ -303,9 +303,9 @@ body::before{content:"";position:fixed;inset:0;background:
   <div class="rating-card" style="margin-bottom:0">
     <div class="rating-card-head" id="usageHead" onclick="toggleUsageCard()" style="font-size:.88rem;text-align:center;">使用說明</div>
     <div id="usageGrid">
-      <div class="rating-row" style="color:var(--text-mid);">✦ 隨機點菜重新整理後會刷新</div>
       <div class="rating-row" style="color:var(--text-mid);">✦ 卡片點開可查看詳細資訊</div>
-      <div class="rating-row" style="color:var(--text-mid);">✦ 僅代表個人立場請勿那個 ⦁-⦁꧞</div>
+      <div class="rating-row" style="color:var(--text-mid);">✦ 僅代表個人立場 ⦁-⦁꧞</div>
+      <div class="rating-row" style="color:var(--text-mid);">✦ 好像有彩蛋？</div>
     </div>
   </div>
   <div class="rating-card stats-card">
@@ -1458,7 +1458,7 @@ const skipSet = new Set();
 function randomPick(fromRandom=false){
   const list = getFiltered().filter(b => !skipSet.has(String(b.id)));
   if(!list.length){
-    alert(skipSet.size ? '所有書都被你吃掉了！' : '目前篩選範圍內沒有可以吃的！');
+    alert(skipSet.size ? '所有書都被你吃掉了！重新整理可以刷新。' : '目前篩選範圍內沒有可以吃的！');
     return;
   }
   let count = parseInt(localStorage.getItem(EASTER_EGG_KEY)||'0') + 1;
