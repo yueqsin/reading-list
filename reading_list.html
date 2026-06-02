@@ -1458,7 +1458,7 @@ const skipSet = new Set();
 function randomPick(fromRandom=false){
   const list = getFiltered().filter(b => !skipSet.has(String(b.id)));
   if(!list.length){
-    alert(skipSet.size ? '所有書都被你吃掉了！重新整理頁面可以重置不想吃清單。' : '目前篩選範圍內沒有可以吃的！');
+    alert(skipSet.size ? '所有書都被你吃掉了！' : '目前篩選範圍內沒有可以吃的！');
     return;
   }
   let count = parseInt(localStorage.getItem(EASTER_EGG_KEY)||'0') + 1;
