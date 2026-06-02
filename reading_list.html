@@ -36,15 +36,21 @@ body::before{content:"";position:fixed;inset:0;background:
 
 /* TOP CARDS */
 .rating-card{background:var(--card);border:1.5px solid var(--border-md);border-radius:var(--r);padding:20px 24px;box-shadow:var(--shadow-sm);backdrop-filter:blur(6px);margin-bottom:18px;}
-.rating-card-head{font-size:.78rem;font-weight:700;letter-spacing:.06em;color:var(--clay);border-bottom:1px solid var(--border);padding-bottom:9px;margin-bottom:13px;}
-.rating-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px 0;}
+.rating-card-head{font-size:.78rem;font-weight:700;letter-spacing:.06em;color:var(--clay);padding-bottom:9px;margin-bottom:10px;cursor:default;}
+.rating-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px 0;}
 @media(max-width:600px){.rating-grid{grid-template-columns:1fr;}}
+@media(max-width:500px){
+  .rating-card-head{cursor:pointer;user-select:none;margin-bottom:0;}
+  .rating-card-head.collapsed{margin-bottom:0;}
+  .rating-grid{overflow:hidden;transition:max-height .25s ease;}
+  .rating-grid.collapsed{max-height:0!important;}
+}
 .top-cards{display:grid;grid-template-columns:1fr auto;gap:16px;margin-bottom:18px;align-items:stretch;}
 @media(max-width:500px){.top-cards{grid-template-columns:1fr;}}
 .stats-card{margin-bottom:0;width:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;}
 @media(max-width:500px){.stats-card{width:100%;flex-direction:row;justify-content:center;gap:16px;padding:14px 20px;}}
 @media(max-width:500px){.stats-card #totalWordsDisplay{font-size:.92rem !important;}}
-.rating-row{display:flex;align-items:baseline;gap:9px;font-size:.84rem;margin:4px 0;line-height:1.6;}
+.rating-row{display:flex;align-items:baseline;gap:9px;font-size:.84rem;margin:2px 0;line-height:1.4;}
 .stars{font-size:.75rem;min-width:80px;white-space:nowrap;}
 .sep{color:var(--clay-xlt);}
 .rdesc{color:var(--text-mid);font-size:.8rem;}
@@ -274,8 +280,8 @@ body::before{content:"";position:fixed;inset:0;background:
 
 <div class="top-cards">
   <div class="rating-card" style="margin-bottom:0">
-    <div class="rating-card-head">評分標準</div>
-    <div class="rating-grid">
+    <div class="rating-card-head" id="ratingHead" onclick="toggleRatingCard()">評分標準</div>
+    <div class="rating-grid" id="ratingGrid">
       <div class="rating-row"><span class="stars r5">★★★★★</span><span class="sep">❘</span><span class="rdesc">珍饈佳餚</span></div>
       <div class="rating-row"><span class="stars r4">★★★★☆</span><span class="sep">❘</span><span class="rdesc">不用手剝的蝦</span></div>
       <div class="rating-row"><span class="stars r3">★★★☆☆</span><span class="sep">❘</span><span class="rdesc">餓了才吃</span></div>
@@ -683,6 +689,40 @@ async function dbSetSetting(key,value){
   if(!res.ok) throw new Error(await res.text());
 }
 
+// ── 評分標準折疊（手機端）─────────────────────
+function toggleRatingCard(){
+  if(window.innerWidth > 500) return;
+  const grid = document.getElementById('ratingGrid');
+  const head = document.getElementById('ratingHead');
+  if(grid.classList.contains('collapsed')){
+    grid.style.maxHeight = grid.scrollHeight + 'px';
+    grid.classList.remove('collapsed');
+    head.classList.remove('collapsed');
+    // 動畫結束後移除固定高度，讓內容可以自由伸縮
+    grid.addEventListener('transitionend', ()=>{ grid.style.maxHeight = ''; }, {once:true});
+  } else {
+    grid.style.maxHeight = grid.scrollHeight + 'px';
+    requestAnimationFrame(()=>{
+      grid.classList.add('collapsed');
+      head.classList.add('collapsed');
+    });
+  }
+}
+
+// 手機端預設折疊
+function initRatingCard(){
+  if(window.innerWidth <= 500){
+    const grid = document.getElementById('ratingGrid');
+    const head = document.getElementById('ratingHead');
+    grid.style.maxHeight = '0';
+    grid.style.transition = 'none'; // 初始不要動畫
+    grid.classList.add('collapsed');
+    head.classList.add('collapsed');
+    // 之後再啟用動畫
+    requestAnimationFrame(()=>{ grid.style.transition = ''; });
+  }
+}
+
 // ── Init ──────────────────────────────────────
 async function init(){
   // 儲存篩選按鈕的原始內容（含 SVG）
@@ -694,6 +734,7 @@ async function init(){
     try{ const ts=await dbGetSetting('last_updated'); renderLastUpdated(ts); }catch(e){}
     buildOtherTags(); initFilters(); renderTagManager(); renderTotalWords(); render();
     setSyncStatus('ok',`共 ${books.length} 本`);
+    initRatingCard();
   }catch(e){
     setSyncStatus('err','連線失敗');
     document.getElementById('bookList').innerHTML=`<div class="empty"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14"><defs fill="#aa6657"></defs><path d="m33.73,8h-3.46L5.44,51c.77,1.33.96,1.67,1.73,3h49.65c.77-1.33.96-1.67,1.73-3L33.73,8Zm2.27,42h-8v-6h8v6Zm0-18l-2,8h-4l-2-8v-12h8v12Z" fill="#aa6657"></path></svg>無法連線到資料庫<br><small style="opacity:.6">${e.message}</small></div>`;
