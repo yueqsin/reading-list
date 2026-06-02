@@ -54,7 +54,7 @@ body::before{content:"";position:fixed;inset:0;background:
   .rating-grid{overflow:hidden;transition:max-height .25s ease;}
   .rating-grid.collapsed{max-height:0!important;}
 }
-.top-cards{display:grid;grid-template-columns:400px minmax(130px,1fr) 130px;gap:16px;margin-bottom:18px;align-items:stretch;overflow-x:auto;}
+.top-cards{display:grid;grid-template-columns:480px minmax(130px,1fr) 130px;gap:16px;margin-bottom:18px;align-items:stretch;overflow-x:auto;}
 @media(max-width:700px){.top-cards{grid-template-columns:1fr;overflow-x:visible;}}
 .stats-card{margin-bottom:0;width:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;}
 @media(max-width:700px){.stats-card{width:100%;flex-direction:row;justify-content:center;gap:16px;padding:14px 20px;}}
@@ -303,8 +303,8 @@ body::before{content:"";position:fixed;inset:0;background:
   <div class="rating-card" style="margin-bottom:0">
     <div class="rating-card-head" id="usageHead" onclick="toggleUsageCard()" style="font-size:.88rem;text-align:center;">使用說明</div>
     <div id="usageGrid">
-      <div class="rating-row" style="color:var(--text-mid);">杏桃貝果還沒想到第一條說明</div>
-      <div class="rating-row" style="color:var(--text-mid);">第二條說明也沒想到</div>
+      <div class="rating-row" style="color:var(--text-mid);">隨機點菜重新整理後會刷新</div>
+      <div class="rating-row" style="color:var(--text-mid);">想到再補</div>
     </div>
   </div>
   <div class="rating-card stats-card">
