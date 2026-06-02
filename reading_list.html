@@ -33,8 +33,8 @@ body::before{content:"";position:fixed;inset:0;background:
 @media(max-width:700px){
   .rating-card-head{cursor:pointer;user-select:none;}
   .rating-grid{grid-template-columns:1fr !important;}
-  .rating-grid,#usageGrid{overflow:hidden;transition:max-height .25s ease;}
-  .rating-grid.collapsed,#usageGrid.collapsed{max-height:0 !important;margin-bottom:0;}
+  .rating-grid{overflow:hidden;transition:max-height .25s ease;}
+  .rating-grid.collapsed{max-height:0 !important;margin-bottom:0;}
   .rating-card-head.collapsed{margin-bottom:0;}
   /* 評分內容置中但文字靠左 */
   #ratingGrid{display:flex;flex-direction:column;align-items:center;}
@@ -54,7 +54,7 @@ body::before{content:"";position:fixed;inset:0;background:
   .rating-grid{overflow:hidden;transition:max-height .25s ease;}
   .rating-grid.collapsed{max-height:0!important;}
 }
-.top-cards{display:grid;grid-template-columns:480px minmax(130px,1fr) 130px;gap:16px;margin-bottom:18px;align-items:stretch;overflow-x:auto;}
+.top-cards{display:grid;grid-template-columns:1fr auto;gap:16px;margin-bottom:18px;align-items:stretch;}
 @media(max-width:700px){.top-cards{grid-template-columns:1fr;overflow-x:visible;}}
 .stats-card{margin-bottom:0;width:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;}
 @media(max-width:700px){.stats-card{width:100%;flex-direction:row;justify-content:center;gap:16px;padding:14px 20px;}}
@@ -298,14 +298,6 @@ body::before{content:"";position:fixed;inset:0;background:
       <div class="rating-row"><span class="stars r2">★★☆☆☆</span><span class="sep">❘</span><span class="rdesc">難吃</span></div>
       <div class="rating-row"><span class="stars r1">★☆☆☆☆</span><span class="sep">❘</span><span class="rdesc">廚餘</span></div>
       <div class="rating-row"><span class="stars r0">☆☆☆☆☆</span><span class="sep">❘</span><span class="rdesc">不配上桌</span></div>
-    </div>
-  </div>
-  <div class="rating-card" style="margin-bottom:0">
-    <div class="rating-card-head" id="usageHead" onclick="toggleUsageCard()" style="font-size:.88rem;text-align:center;">使用說明</div>
-    <div id="usageGrid">
-      <div class="rating-row" style="color:var(--text-mid);">✦ 卡片點開可查看詳細資訊</div>
-      <div class="rating-row" style="color:var(--text-mid);">✦ 一切僅代表個人立場</div>
-      <div class="rating-row" style="color:var(--text-mid);">✦ 好像有彩蛋？</div>
     </div>
   </div>
   <div class="rating-card stats-card">
@@ -750,21 +742,14 @@ function toggleUsageCard(){
 // 手機端預設折疊
 function initRatingCard(){
   if(window.innerWidth <= 700){
-    ['ratingGrid','usageGrid'].forEach(gid=>{
-      const grid = document.getElementById(gid);
-      const head = document.getElementById(gid.replace('Grid','Head'));
-      if(!grid) return;
-      grid.style.maxHeight = '0';
-      grid.style.transition = 'none';
-      grid.classList.add('collapsed');
-      if(head) head.classList.add('collapsed');
-    });
-    requestAnimationFrame(()=>{
-      ['ratingGrid','usageGrid'].forEach(gid=>{
-        const g = document.getElementById(gid);
-        if(g) g.style.transition = '';
-      });
-    });
+    const grid = document.getElementById('ratingGrid');
+    const head = document.getElementById('ratingHead');
+    if(!grid) return;
+    grid.style.maxHeight = '0';
+    grid.style.transition = 'none';
+    grid.classList.add('collapsed');
+    if(head) head.classList.add('collapsed');
+    requestAnimationFrame(()=>{ grid.style.transition = ''; });
   }
 }
 
@@ -1455,10 +1440,41 @@ async function exportReviewImage(){
 const EASTER_EGG_KEY = 'rl_pick_count';
 const skipSet = new Set();
 
+function showInfoModal(content, btnText){
+  const existing = document.getElementById('infoModalOverlay');
+  if(existing) existing.remove();
+  const overlay = document.createElement('div');
+  overlay.id = 'infoModalOverlay';
+  overlay.className = 'overlay';
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.style.textAlign = 'center';
+  const msgP = document.createElement('p');
+  msgP.style.cssText = 'font-size:.95rem;color:var(--text);line-height:1.8;margin-bottom:20px;';
+  msgP.textContent = content;
+  const btnWrap = document.createElement('div');
+  btnWrap.className = 'modal-btns';
+  const btn = document.createElement('button');
+  btn.className = 'btn btn-fill';
+  btn.textContent = btnText;
+  btn.onclick = () => overlay.classList.remove('open');
+  btnWrap.appendChild(btn);
+  modal.appendChild(msgP);
+  modal.appendChild(btnWrap);
+  overlay.appendChild(modal);
+  overlay.onclick = e => { if(e.target===overlay) overlay.classList.remove('open'); };
+  document.body.appendChild(overlay);
+  requestAnimationFrame(()=>overlay.classList.add('open'));
+}
+
 function randomPick(fromRandom=false){
   const list = getFiltered().filter(b => !skipSet.has(String(b.id)));
   if(!list.length){
-    alert(skipSet.size ? '所有書都被你吃掉了！重新整理可以刷新。' : '目前篩選範圍內沒有可以吃的！');
+    if(skipSet.size){
+      showInfoModal('所有書都被你吃掉了！重新整理可以刷新。', '好吧');
+    } else {
+      showInfoModal('目前篩選範圍內沒有可以吃的！', '我沒吃過…');
+    }
     return;
   }
   let count = parseInt(localStorage.getItem(EASTER_EGG_KEY)||'0') + 1;
