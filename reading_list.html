@@ -30,29 +30,38 @@ body::before{content:"";position:fixed;inset:0;background:
 .site-header{text-align:center;padding:52px 0 6px;}
 .site-header h1{font-size:2.8rem;font-weight:900;color:var(--clay);letter-spacing:.06em;line-height:1;}
 @media(max-width:500px){.site-header h1{font-size:1.9rem;}}
+@media(max-width:700px){
+  .rating-card-head{cursor:pointer;user-select:none;}
+  .rating-grid{grid-template-columns:1fr !important;}
+  .rating-grid,#usageGrid{overflow:hidden;transition:max-height .25s ease;}
+  .rating-grid.collapsed,#usageGrid.collapsed{max-height:0 !important;margin-bottom:0;}
+  .rating-card-head.collapsed{margin-bottom:0;}
+  /* 評分內容置中但文字靠左 */
+  #ratingGrid{display:flex;flex-direction:column;align-items:center;}
+  #ratingGrid .rating-row{width:fit-content;min-width:140px;}
+}
 .site-header .by{font-size:.82rem;color:var(--text-lt);margin-top:10px;letter-spacing:.06em;}
 .site-header .last-updated{font-size:.74rem;color:var(--clay-xlt);margin-top:5px;letter-spacing:.04em;}
 .divider{font-family:"Google Sans",sans-serif;font-size:.75rem;color:var(--clay-xlt);text-align:center;margin:14px 0 28px;letter-spacing:.1em;user-select:none;}
 
 /* TOP CARDS */
-.rating-card{background:var(--card);border:1.5px solid var(--border-md);border-radius:var(--r);padding:20px 24px;box-shadow:var(--shadow-sm);backdrop-filter:blur(6px);margin-bottom:18px;}
+.rating-card{background:var(--card);border:1.5px solid var(--border-md);border-radius:var(--r);padding:20px 24px;box-shadow:var(--shadow-sm);backdrop-filter:blur(6px);margin-bottom:18px;overflow:hidden;}
 .rating-card-head{font-size:.78rem;font-weight:700;letter-spacing:.06em;color:var(--clay);padding-bottom:9px;margin-bottom:10px;cursor:default;}
-.rating-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px 0;}
-@media(max-width:600px){.rating-grid{grid-template-columns:1fr;}}
+.rating-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px 0;}
 @media(max-width:500px){
   .rating-card-head{cursor:pointer;user-select:none;margin-bottom:0;}
   .rating-card-head.collapsed{margin-bottom:0;}
   .rating-grid{overflow:hidden;transition:max-height .25s ease;}
   .rating-grid.collapsed{max-height:0!important;}
 }
-.top-cards{display:grid;grid-template-columns:1fr auto;gap:16px;margin-bottom:18px;align-items:stretch;}
-@media(max-width:500px){.top-cards{grid-template-columns:1fr;}}
+.top-cards{display:grid;grid-template-columns:400px minmax(130px,1fr) 130px;gap:16px;margin-bottom:18px;align-items:stretch;overflow-x:auto;}
+@media(max-width:700px){.top-cards{grid-template-columns:1fr;overflow-x:visible;}}
 .stats-card{margin-bottom:0;width:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;}
-@media(max-width:500px){.stats-card{width:100%;flex-direction:row;justify-content:center;gap:16px;padding:14px 20px;}}
-@media(max-width:500px){.stats-card #totalWordsDisplay{font-size:.92rem !important;}}
+@media(max-width:700px){.stats-card{width:100%;flex-direction:row;justify-content:center;gap:16px;padding:14px 20px;}}
+@media(max-width:700px){.stats-card #totalWordsDisplay{font-size:.92rem !important;}}
 .rating-row{display:flex;align-items:baseline;gap:9px;font-size:.84rem;margin:2px 0;line-height:1.4;}
 .stars{font-size:.75rem;min-width:80px;white-space:nowrap;}
-.sep{color:var(--clay-xlt);}
+.sep{display:none;}
 .rdesc{color:var(--text-mid);font-size:.8rem;}
 .r5{color:#b8460b}.r4{color:var(--clay)}.r3{color:var(--clay-lt)}.r2{color:#c0a090}.r1{color:#cdb8b0}.r0{color:#d5c8c0}
 
@@ -291,6 +300,13 @@ body::before{content:"";position:fixed;inset:0;background:
       <div class="rating-row"><span class="stars r0">☆☆☆☆☆</span><span class="sep">❘</span><span class="rdesc">不配上桌</span></div>
     </div>
   </div>
+  <div class="rating-card" style="margin-bottom:0">
+    <div class="rating-card-head" id="usageHead" onclick="toggleUsageCard()" style="font-size:.88rem;text-align:center;">使用說明</div>
+    <div id="usageGrid">
+      <div class="rating-row" style="color:var(--text-mid);">杏桃貝果還沒想到第一條說明</div>
+      <div class="rating-row" style="color:var(--text-mid);">第二條說明也沒想到</div>
+    </div>
+  </div>
   <div class="rating-card stats-card">
     <div class="rating-card-head" style="border-bottom:none;padding-bottom:0;margin-bottom:0;text-align:center;">目前已閱讀</div>
     <div id="totalWordsDisplay" style="font-size:1.2rem;font-weight:900;color:var(--clay);line-height:1;text-align:center;">—</div>
@@ -431,15 +447,14 @@ body::before{content:"";position:fixed;inset:0;background:
     <div class="detail-notes-text" id="dm-notes-text"></div>
     <textarea class="detail-notes-edit" id="dm-notes-edit" placeholder="寫下心得…" style="display:none"></textarea>
     <input type="hidden" id="dm-id">
-    <div class="modal-btns" style="margin-top:16px;justify-content:space-between;align-items:center;">
-      <div class="edit-only" style="display:none;gap:8px;" id="dm-book-actions">
-        <button class="btn btn-out" id="dm-open-edit" onclick="openEditFromDetail()">編輯書目</button>
-        <button class="btn" id="dm-delete" onclick="delBookFromDetail()" style="background:transparent;color:#c0392b;border:1.5px solid #c0392b;">刪除</button>
-      </div>
+    <div class="modal-btns" style="margin-top:16px;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+      <!-- 左側：隨機觸發的按鈕 -->
+      <div style="display:flex;gap:8px;" id="dm-random-actions"></div>
+      <!-- 右側：一般按鈕 -->
       <div style="display:flex;gap:8px;margin-left:auto;">
+        <button class="btn btn-ghost" id="dm-delete" onclick="delBookFromDetail()" style="display:none;color:#c0392b;border-color:#c0392b;">刪除</button>
+        <button class="btn btn-ghost" id="dm-open-edit" onclick="openEditFromDetail()" style="display:none;">編輯</button>
         <button class="btn btn-ghost" onclick="closeOverlay('detailOverlay')">關閉</button>
-        <button class="btn btn-out edit-only" id="dm-edit-btn" onclick="toggleDetailEdit()" style="display:none">編輯心得</button>
-        <button class="btn btn-fill edit-only" id="dm-save-btn" onclick="saveDetailNotes()" style="display:none">儲存心得</button>
       </div>
     </div>
   </div>
@@ -476,8 +491,12 @@ body::before{content:"";position:fixed;inset:0;background:
       </div>
     </div>
     <div class="add-modal-persona">
-      <div class="fi-wrap"><span class="fi-lbl">攻</span><textarea class="fi" id="em-gong"></textarea></div>
-      <div class="fi-wrap"><span class="fi-lbl">受</span><textarea class="fi" id="em-shou"></textarea></div>
+      <div class="fi-wrap"><span class="fi-lbl">攻</span><input class="fi" id="em-gong"></div>
+      <div class="fi-wrap"><span class="fi-lbl">受</span><input class="fi" id="em-shou"></div>
+    </div>
+    <div class="fi-wrap" style="margin-bottom:12px;">
+      <span class="fi-lbl">心得</span>
+      <textarea class="fi" id="em-notes" rows="3" style="resize:vertical;min-height:60px;" placeholder="寫下心得…"></textarea>
     </div>
     <div class="modal-btns" style="justify-content:flex-end;">
       <button class="btn btn-ghost" onclick="closeOverlay('editOverlay')">取消</button>
@@ -698,35 +717,53 @@ async function dbSetSetting(key,value){
 
 // ── 評分標準折疊（手機端）─────────────────────
 function toggleRatingCard(){
-  if(window.innerWidth > 500) return;
+  if(window.innerWidth > 700) return;
   const grid = document.getElementById('ratingGrid');
   const head = document.getElementById('ratingHead');
   if(grid.classList.contains('collapsed')){
     grid.style.maxHeight = grid.scrollHeight + 'px';
     grid.classList.remove('collapsed');
     head.classList.remove('collapsed');
-    // 動畫結束後移除固定高度，讓內容可以自由伸縮
     grid.addEventListener('transitionend', ()=>{ grid.style.maxHeight = ''; }, {once:true});
   } else {
     grid.style.maxHeight = grid.scrollHeight + 'px';
-    requestAnimationFrame(()=>{
-      grid.classList.add('collapsed');
-      head.classList.add('collapsed');
-    });
+    requestAnimationFrame(()=>{ grid.classList.add('collapsed'); head.classList.add('collapsed'); });
+  }
+}
+
+function toggleUsageCard(){
+  if(window.innerWidth > 700) return;
+  const grid = document.getElementById('usageGrid');
+  const head = document.getElementById('usageHead');
+  if(grid.classList.contains('collapsed')){
+    grid.style.maxHeight = grid.scrollHeight + 'px';
+    grid.classList.remove('collapsed');
+    head.classList.remove('collapsed');
+    grid.addEventListener('transitionend', ()=>{ grid.style.maxHeight = ''; }, {once:true});
+  } else {
+    grid.style.maxHeight = grid.scrollHeight + 'px';
+    requestAnimationFrame(()=>{ grid.classList.add('collapsed'); head.classList.add('collapsed'); });
   }
 }
 
 // 手機端預設折疊
 function initRatingCard(){
-  if(window.innerWidth <= 500){
-    const grid = document.getElementById('ratingGrid');
-    const head = document.getElementById('ratingHead');
-    grid.style.maxHeight = '0';
-    grid.style.transition = 'none'; // 初始不要動畫
-    grid.classList.add('collapsed');
-    head.classList.add('collapsed');
-    // 之後再啟用動畫
-    requestAnimationFrame(()=>{ grid.style.transition = ''; });
+  if(window.innerWidth <= 700){
+    ['ratingGrid','usageGrid'].forEach(gid=>{
+      const grid = document.getElementById(gid);
+      const head = document.getElementById(gid.replace('Grid','Head'));
+      if(!grid) return;
+      grid.style.maxHeight = '0';
+      grid.style.transition = 'none';
+      grid.classList.add('collapsed');
+      if(head) head.classList.add('collapsed');
+    });
+    requestAnimationFrame(()=>{
+      ['ratingGrid','usageGrid'].forEach(gid=>{
+        const g = document.getElementById(gid);
+        if(g) g.style.transition = '';
+      });
+    });
   }
 }
 
@@ -1021,21 +1058,18 @@ function renderTotalWords(){
 }
 
 // ── Book detail modal ─────────────────────────
-function openDetail(id){
+function openDetail(id, fromRandom=false){
   const b=books.find(x=>String(x.id)===String(id)); if(!b) return;
   document.getElementById('dm-id').value=id;
   document.getElementById('dm-title').textContent=b.title;
   document.getElementById('dm-author').textContent=b.author||'';
   document.getElementById('dm-rating').textContent=b.rating||'';
   document.getElementById('dm-rating').className=ratingCls(b.rating);
-  // tags
   document.getElementById('dm-tags').innerHTML=(b.tags||[]).map(t=>`<span class="detail-tag">${esc(t)}</span>`).join('');
-  // chaps
   if(b.chapters){
     document.getElementById('dm-chaps-row').style.display='flex';
     document.getElementById('dm-chaps').textContent=b.chapters+' 萬字';
   } else { document.getElementById('dm-chaps-row').style.display='none'; }
-  // persona — 攻受各自獨立一行
   const personaRow=document.getElementById('dm-persona-row');
   if(b.gong||b.shou){
     personaRow.style.display='block';
@@ -1043,22 +1077,32 @@ function openDetail(id){
       (b.gong?`<div class="detail-row"><span class="detail-lbl">攻</span><span>${esc(b.gong)}</span></div>`:'') +
       (b.shou?`<div class="detail-row"><span class="detail-lbl">受</span><span>${esc(b.shou)}</span></div>`:'');
   } else { personaRow.style.display='none'; personaRow.innerHTML=''; }
-  // dates
   document.getElementById('dm-readdate-display').textContent=fmtDate(b.read_date);
   document.getElementById('dm-readdate-edit').value=b.read_date||'';
   document.getElementById('dm-readdate-edit').style.display='none';
-  const upd=b.updated_at?fmtDatetime(b.updated_at):'—';
-  document.getElementById('dm-updated').textContent=upd;
-  // notes
+  document.getElementById('dm-updated').textContent=b.updated_at?fmtDatetime(b.updated_at):'—';
   document.getElementById('dm-notes-text').textContent=b.notes||'杏桃貝果沒有心得……';
   document.getElementById('dm-notes-edit').value=b.notes||'';
   document.getElementById('dm-notes-text').style.display='block';
   document.getElementById('dm-notes-edit').style.display='none';
-  // edit buttons: only show in edit mode
-  const showEdit=editMode;
-  document.getElementById('dm-edit-btn').style.display=showEdit?'inline-flex':'none';
-  document.getElementById('dm-book-actions').style.display=showEdit?'flex':'none';
-  document.getElementById('dm-save-btn').style.display='none';
+  // 隨機觸發按鈕
+  const ra = document.getElementById('dm-random-actions');
+  ra.innerHTML = '';
+  if(fromRandom){
+    const skip = document.createElement('button');
+    skip.className = 'btn btn-ghost';
+    skip.textContent = '不想吃';
+    skip.onclick = () => { skipSet.add(String(id)); closeOverlay('detailOverlay'); randomPick(true); };
+    const again = document.createElement('button');
+    again.className = 'btn btn-ghost';
+    again.textContent = '再抽一次';
+    again.onclick = () => { closeOverlay('detailOverlay'); randomPick(true); };
+    ra.appendChild(skip);
+    ra.appendChild(again);
+  }
+  // 編輯模式按鈕
+  document.getElementById('dm-open-edit').style.display = editMode ? 'inline-flex' : 'none';
+  document.getElementById('dm-delete').style.display = editMode ? 'inline-flex' : 'none';
   document.getElementById('detailOverlay').classList.add('open');
 }
 function toggleDetailEdit(){
@@ -1202,6 +1246,7 @@ function openEdit(id){
   document.getElementById('em-chaps').value=b.chapters||'';
   document.getElementById('em-gong').value=b.gong||'';
   document.getElementById('em-shou').value=b.shou||'';
+  document.getElementById('em-notes').value=b.notes||'';
   document.getElementById('em-tp-content').innerHTML=buildTagPickerHTML('em',b.tags||[]);
   // 預設收合標籤區
   document.getElementById('em-tp-collapsible').style.display='none';
@@ -1220,7 +1265,8 @@ async function saveEdit(){
     rating:document.getElementById('em-rating').value,
     chapters:document.getElementById('em-chaps').value.trim(),
     tags, gong:document.getElementById('em-gong').value.trim(),
-    shou:document.getElementById('em-shou').value.trim()
+    shou:document.getElementById('em-shou').value.trim(),
+    notes:document.getElementById('em-notes').value
   };
   const btn=document.getElementById('saveEditBtn');
   btn.disabled=true; btn.textContent='儲存中…';
@@ -1406,26 +1452,24 @@ async function exportReviewImage(){
 
 // ── 隨機抽取 ──────────────────────────────────
 const EASTER_EGG_KEY = 'rl_pick_count';
+const skipSet = new Set();
 
-function randomPick(){
-  const list = getFiltered();
+function randomPick(fromRandom=false){
+  const list = getFiltered().filter(b => !skipSet.has(String(b.id)));
   if(!list.length){
-    alert('目前篩選範圍內沒有可以吃的！');
+    alert(skipSet.size ? '所有書都被你吃掉了！重新整理頁面可以重置不想吃清單。' : '目前篩選範圍內沒有可以吃的！');
     return;
   }
-  // 讀取並更新計數
   let count = parseInt(localStorage.getItem(EASTER_EGG_KEY)||'0') + 1;
   const forceEgg = count >= 100;
-  if(forceEgg) count = 0; // 重置
+  if(forceEgg) count = 0;
   localStorage.setItem(EASTER_EGG_KEY, count);
-
-  // 0.1 % 機率或第100次必出
   if(forceEgg || Math.random() < 0.001){
     showEasterEgg();
     return;
   }
   const book = list[Math.floor(Math.random()*list.length)];
-  openDetail(book.id);
+  openDetail(book.id, true);
 }
 
 const EASTER_EGGS = [
