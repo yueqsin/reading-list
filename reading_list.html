@@ -303,6 +303,7 @@ body::before{content:"";position:fixed;inset:0;background:
       <defs fill="#aa6657"></defs>
       <path d="m44.68,39.02c2.09-3.16,3.32-6.95,3.32-11.02,0-11.05-8.95-20-20-20S8,16.95,8,28s8.95,20,20,20c4.08,0,7.86-1.23,11.02-3.32l11.32,11.32,5.66-5.66-11.32-11.32Zm-16.68,2.98c-7.73,0-14-6.27-14-14s6.27-14,14-14,14,6.27,14,14-6.27,14-14,14Z" fill="#aa6657"></path>
     </svg>篩選</button>
+  <button class="btn btn-out" onclick="randomPick()" style="white-space:nowrap;">隨機點菜</button>
   <div class="search-box">
     <span class="search-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14">
       <defs fill="#aa6657"></defs>
@@ -310,9 +311,7 @@ body::before{content:"";position:fixed;inset:0;background:
     </svg></span>
     <input type="text" id="searchQ" placeholder="搜尋書名、作者…" oninput="go()">
   </div>
-  <span class="stats" id="stats"></span>
-  <button class="btn btn-ghost" onclick="randomPick()" style="white-space:nowrap;">隨機點菜</button>
-  <span class="sync-bar"><span class="sync-dot" id="syncDot"></span><span id="syncMsg">連線中…</span></span>
+  <span class="sync-bar" style="margin-left:auto;"><span class="sync-dot" id="syncDot"></span><span class="stats" id="stats">連線中…</span></span>
 </div>
 
 <div class="edit-bar" id="editBar">
@@ -643,7 +642,7 @@ const PER=40;
 // ── Sync status ───────────────────────────────
 function setSyncStatus(state,msg){
   document.getElementById('syncDot').className='sync-dot '+state;
-  document.getElementById('syncMsg').textContent=msg;
+  document.getElementById('stats').textContent=msg;
 }
 
 // ── Supabase ──────────────────────────────────
@@ -914,7 +913,12 @@ function render(){
   const slice=list.slice((curPage-1)*PER,curPage*PER);
   const f=activeFilters;
   const active=Object.values(f).reduce((s,v)=>s+v.inc.size+v.exc.size,0);
-  document.getElementById('stats').textContent=`共 ${total.toLocaleString()} / ${books.length.toLocaleString()} 本`;
+  // 只在有篩選時顯示 x/x，否則只顯示總數
+  if(total < books.length){
+    document.getElementById('stats').textContent=`共 ${total.toLocaleString()} / ${books.length.toLocaleString()} 本`;
+  } else {
+    document.getElementById('stats').textContent=`共 ${books.length.toLocaleString()} 本`;
+  }
   document.getElementById('filterCount').textContent=active?`已選 ${active} 個篩選條件`:'尚未篩選';
   const bl=document.getElementById('bookList');
   if(!slice.length){
