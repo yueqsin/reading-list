@@ -143,6 +143,7 @@ body::before{content:"";position:fixed;inset:0;background:
 .chip{display:inline-flex;align-items:center;padding:5px 12px;border-radius:20px;font-size:.76rem;cursor:pointer;border:1.5px solid var(--border-md);background:white;color:var(--text-mid);transition:all .14s;user-select:none;font-family:"Noto Serif TC",serif;}
 .chip:hover{border-color:var(--clay-lt);color:var(--clay);background:rgba(170,102,87,.05);}
 .chip.on{background:var(--clay);color:white;border-color:var(--clay);}
+.chip.ex{background:#f8e8e8;color:#c0392b;border-color:#e8a0a0;text-decoration:line-through;}
 .rating-chip{font-size:.75rem;min-width:88px;justify-content:center;}
 .rating-chip.r5.on{background:#b8460b;border-color:#b8460b;}
 .rating-chip.r4.on{background:var(--clay);border-color:var(--clay);}
@@ -150,6 +151,7 @@ body::before{content:"";position:fixed;inset:0;background:
 .rating-chip.r2.on{background:#c0a090;border-color:#c0a090;}
 .rating-chip.r1.on{background:#cdb8b0;border-color:#cdb8b0;}
 .rating-chip.r0.on{background:#d5c8c0;border-color:#d5c8c0;}
+.rating-chip.ex{background:#f8e8e8;color:#c0392b;border-color:#e8a0a0;text-decoration:line-through;}
 .filter-footer{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid var(--border);}
 .active-count{font-size:.76rem;color:var(--clay);}
 
@@ -173,6 +175,7 @@ body::before{content:"";position:fixed;inset:0;background:
 .book-tag{display:inline-block;padding:2px 9px;border-radius:4px;font-size:.68rem;background:rgba(227,191,181,.35);color:var(--clay);cursor:pointer;transition:background .12s;white-space:nowrap;font-family:"Noto Serif TC",serif;}
 .book-tag:hover{background:var(--blush);}
 .book-tag.on{background:var(--clay);color:white;}
+.book-tag.ex{background:#f8e8e8;color:#c0392b;text-decoration:line-through;}
 .book-persona{font-size:.72rem;color:var(--text-lt);margin-top:2px;line-height:1.5;display:flex;gap:8px;flex-wrap:wrap;}
 .persona-item{display:flex;gap:3px;align-items:baseline;}
 .persona-label{font-size:.65rem;color:var(--clay-xlt);font-weight:600;letter-spacing:.04em;}
@@ -290,16 +293,16 @@ body::before{content:"";position:fixed;inset:0;background:
 </div>
 
 <div class="controls">
-  <button class="btn btn-out" id="filterBtn" onclick="toggleFilter()">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14">
-      <defs fill="#aa6657"></defs>
-      <path d="m44.68,39.02c2.09-3.16,3.32-6.95,3.32-11.02,0-11.05-8.95-20-20-20S8,16.95,8,28s8.95,20,20,20c4.08,0,7.86-1.23,11.02-3.32l11.32,11.32,5.66-5.66-11.32-11.32Zm-16.68,2.98c-7.73,0-14-6.27-14-14s6.27-14,14-14,14,6.27,14,14-6.27,14-14,14Z" fill="#aa6657"></path>
-    </svg>篩選</button>
   <button class="btn btn-out" id="editBtn" onclick="toggleEdit()">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14">
       <defs fill="#aa6657"></defs>
       <path d="m39.17,17.76l7.07,7.07-27.17,27.17-9.66,4-1.41-1.41,4-9.66,27.17-27.17Zm9.76-9.76l-6.93,6.93,7.07,7.07,6.93-6.93-7.07-7.07Z" fill="#aa6657"></path>
     </svg>編輯模式</button>
+  <button class="btn btn-out" id="filterBtn" onclick="toggleFilter()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14">
+      <defs fill="#aa6657"></defs>
+      <path d="m44.68,39.02c2.09-3.16,3.32-6.95,3.32-11.02,0-11.05-8.95-20-20-20S8,16.95,8,28s8.95,20,20,20c4.08,0,7.86-1.23,11.02-3.32l11.32,11.32,5.66-5.66-11.32-11.32Zm-16.68,2.98c-7.73,0-14-6.27-14-14s6.27-14,14-14,14,6.27,14,14-6.27,14-14,14Z" fill="#aa6657"></path>
+    </svg>篩選</button>
   <div class="search-box">
     <span class="search-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14">
       <defs fill="#aa6657"></defs>
@@ -308,6 +311,7 @@ body::before{content:"";position:fixed;inset:0;background:
     <input type="text" id="searchQ" placeholder="搜尋書名、作者…" oninput="go()">
   </div>
   <span class="stats" id="stats"></span>
+  <button class="btn btn-ghost" onclick="randomPick()" style="white-space:nowrap;">🎲 隨機抽取</button>
   <span class="sync-bar"><span class="sync-dot" id="syncDot"></span><span id="syncMsg">連線中…</span></span>
 </div>
 
@@ -627,7 +631,15 @@ const MONTHS=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10
 
 let books=[], customTags=[], allOtherTags=[];
 let editMode=false;
-let activeFilters={ratings:new Set(),view:new Set(),time:new Set(),other:new Set(),years:new Set(),months:new Set()};
+// 每個類別都有 inc（包含）和 exc（排除）兩個 Set
+let activeFilters={
+  ratings:{inc:new Set(),exc:new Set()},
+  view:{inc:new Set(),exc:new Set()},
+  time:{inc:new Set(),exc:new Set()},
+  other:{inc:new Set(),exc:new Set()},
+  years:{inc:new Set(),exc:new Set()},
+  months:{inc:new Set(),exc:new Set()}
+};
 let curSort='default', curPage=1;
 const PER=40;
 
@@ -745,21 +757,20 @@ function initFilters(){
   document.getElementById('monthChips').innerHTML=
     MONTHS.map((m,i)=>`<span class="chip" onclick="toggleDateChip('months',${i+1},this)">${m}</span>`).join('');
 }
-function toggleRating(r,el){
-  if(activeFilters.ratings.has(r)) activeFilters.ratings.delete(r); else activeFilters.ratings.add(r);
-  el.classList.toggle('on',activeFilters.ratings.has(r)); go();
+// 三態循環：空→包含→排除→空
+function triCycle(cat, key, el){
+  const f=activeFilters[cat];
+  if(f.exc.has(key)){ f.exc.delete(key); el.classList.remove('on','ex'); }
+  else if(f.inc.has(key)){ f.inc.delete(key); f.exc.add(key); el.classList.remove('on'); el.classList.add('ex'); }
+  else { f.inc.add(key); el.classList.add('on'); el.classList.remove('ex'); }
+  go();
 }
-function toggleChip(cat,tag,el){
-  const s=activeFilters[cat]; if(s.has(tag)) s.delete(tag); else s.add(tag);
-  el.classList.toggle('on',s.has(tag)); go();
-}
-function toggleDateChip(cat,val,el){
-  const s=activeFilters[cat]; if(s.has(val)) s.delete(val); else s.add(val);
-  el.classList.toggle('on',s.has(val)); go();
-}
+function toggleRating(r,el){ triCycle('ratings',r,el); }
+function toggleChip(cat,tag,el){ triCycle(cat,tag,el); }
+function toggleDateChip(cat,val,el){ triCycle(cat,val,el); }
 function clearFilters(){
-  activeFilters={ratings:new Set(),view:new Set(),time:new Set(),other:new Set(),years:new Set(),months:new Set()};
-  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on')); go();
+  Object.keys(activeFilters).forEach(k=>{ activeFilters[k]={inc:new Set(),exc:new Set()}; });
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on','ex')); go();
 }
 function toggleFilter(){
   const p=document.getElementById('filterPanel'),open=p.classList.toggle('open');
@@ -839,13 +850,25 @@ function getFiltered(){
   const q=document.getElementById('searchQ').value.toLowerCase().trim();
   let list=[...books];
   if(q) list=list.filter(b=>b.title?.toLowerCase().includes(q)||b.author?.toLowerCase().includes(q));
-  const {ratings,view,time,other,years,months}=activeFilters;
-  if(ratings.size) list=list.filter(b=>ratings.has(b.rating));
-  if(view.size) list=list.filter(b=>(b.tags||[]).some(t=>view.has(t)));
-  if(time.size) list=list.filter(b=>(b.tags||[]).some(t=>time.has(t)));
-  if(other.size) list=list.filter(b=>[...other].every(t=>(b.tags||[]).includes(t)));
-  if(years.size) list=list.filter(b=>years.has(getYear(b)));
-  if(months.size) list=list.filter(b=>months.has(getMonth(b)));
+  const f=activeFilters;
+  // 評分
+  if(f.ratings.inc.size) list=list.filter(b=>f.ratings.inc.has(b.rating));
+  if(f.ratings.exc.size) list=list.filter(b=>!f.ratings.exc.has(b.rating));
+  // 視角
+  if(f.view.inc.size) list=list.filter(b=>(b.tags||[]).some(t=>f.view.inc.has(t)));
+  if(f.view.exc.size) list=list.filter(b=>![...f.view.exc].some(t=>(b.tags||[]).includes(t)));
+  // 時代
+  if(f.time.inc.size) list=list.filter(b=>(b.tags||[]).some(t=>f.time.inc.has(t)));
+  if(f.time.exc.size) list=list.filter(b=>![...f.time.exc].some(t=>(b.tags||[]).includes(t)));
+  // 其他標籤（包含要全部符合，排除要全部不符合）
+  if(f.other.inc.size) list=list.filter(b=>[...f.other.inc].every(t=>(b.tags||[]).includes(t)));
+  if(f.other.exc.size) list=list.filter(b=>![...f.other.exc].some(t=>(b.tags||[]).includes(t)));
+  // 年份
+  if(f.years.inc.size) list=list.filter(b=>f.years.inc.has(getYear(b)));
+  if(f.years.exc.size) list=list.filter(b=>!f.years.exc.has(getYear(b)));
+  // 月份
+  if(f.months.inc.size) list=list.filter(b=>f.months.inc.has(getMonth(b)));
+  if(f.months.exc.size) list=list.filter(b=>!f.months.exc.has(getMonth(b)));
   if(curSort==='rd') list.sort((a,b)=>ratingNum(b.rating)-ratingNum(a.rating));
   else if(curSort==='ra') list.sort((a,b)=>ratingNum(a.rating)-ratingNum(b.rating));
   else if(curSort==='chd') list.sort((a,b)=>parseFloat(b.chapters||0)-parseFloat(a.chapters||0));
@@ -862,22 +885,28 @@ function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').repla
 
 function tagHtml(tags){
   return (tags||[]).map(t=>{
-    const on=activeFilters.view.has(t)||activeFilters.time.has(t)||activeFilters.other.has(t);
-    return `<span class="book-tag${on?' on':''}" onclick="event.stopPropagation();quickTag(this)">${esc(t)}</span>`;
+    const f=activeFilters;
+    const isOn=f.view.inc.has(t)||f.time.inc.has(t)||f.other.inc.has(t);
+    const isEx=f.view.exc.has(t)||f.time.exc.has(t)||f.other.exc.has(t);
+    return `<span class="book-tag${isOn?' on':isEx?' ex':''}" onclick="event.stopPropagation();quickTag(this)">${esc(t)}</span>`;
   }).join('');
 }
 function quickTag(el){
   const tag=el.textContent.trim();
-  if(VIEW_TAGS.includes(tag)){
-    const s=activeFilters.view; s.has(tag)?s.delete(tag):s.add(tag);
-    document.querySelectorAll(`[onclick="toggleChip('view','${tag}',this)"]`).forEach(c=>c.classList.toggle('on',s.has(tag)));
-  } else if(TIME_TAGS.includes(tag)){
-    const s=activeFilters.time; s.has(tag)?s.delete(tag):s.add(tag);
-    document.querySelectorAll(`[onclick="toggleChip('time','${tag}',this)"]`).forEach(c=>c.classList.toggle('on',s.has(tag)));
-  } else {
-    const s=activeFilters.other; s.has(tag)?s.delete(tag):s.add(tag);
-    document.querySelectorAll(`[data-o="${esc(tag)}"]`).forEach(c=>c.classList.toggle('on',s.has(tag)));
-  }
+  let cat='other';
+  if(VIEW_TAGS.includes(tag)) cat='view';
+  else if(TIME_TAGS.includes(tag)) cat='time';
+  const f=activeFilters[cat];
+  // 三態循環
+  if(f.exc.has(tag)){ f.exc.delete(tag); }
+  else if(f.inc.has(tag)){ f.inc.delete(tag); f.exc.add(tag); }
+  else { f.inc.add(tag); }
+  // 同步篩選面板的 chip 狀態
+  const selector=cat==='other'?`[data-o="${esc(tag)}"]`:`[onclick="toggleChip('${cat}','${tag}',this)"]`;
+  document.querySelectorAll(selector).forEach(c=>{
+    c.classList.toggle('on',f.inc.has(tag));
+    c.classList.toggle('ex',f.exc.has(tag));
+  });
   go();
 }
 
@@ -886,8 +915,8 @@ function render(){
   const pages=Math.max(1,Math.ceil(total/PER));
   curPage=Math.min(curPage,pages);
   const slice=list.slice((curPage-1)*PER,curPage*PER);
-  const af=activeFilters;
-  const active=af.ratings.size+af.view.size+af.time.size+af.other.size+af.years.size+af.months.size;
+  const f=activeFilters;
+  const active=Object.values(f).reduce((s,v)=>s+v.inc.size+v.exc.size,0);
   document.getElementById('stats').textContent=`共 ${total.toLocaleString()} / ${books.length.toLocaleString()} 本`;
   document.getElementById('filterCount').textContent=active?`已選 ${active} 個篩選條件`:'尚未篩選';
   const bl=document.getElementById('bookList');
@@ -1248,7 +1277,7 @@ function generateReview(){
     booklist.innerHTML=filtered.map(b=>{
       const rc=ratingCls(b.rating);
       const persona=(b.gong||b.shou)?
-        `<div class="review-book-persona">${b.gong?'攻　'+esc(b.gong)+'<br>':''}${b.shou?'受　'+esc(b.shou):''}</div>`:'';
+        `<div class="review-book-persona">${[b.gong?esc(b.gong):'', b.shou?esc(b.shou):''].filter(Boolean).join(' × ')}</div>`:'';
       return `<div class="review-book-card">
         <div>
           <div class="review-book-title">${esc(b.title)}</div>
@@ -1315,6 +1344,53 @@ async function exportReviewImage(){
     alert('匯出失敗：'+e.message);
   }
   btn.disabled=false; btn.textContent='匯出圖片';
+}
+
+// ── 隨機抽取 ──────────────────────────────────
+const EASTER_EGG_KEY = 'rl_pick_count';
+
+function randomPick(){
+  const list = getFiltered();
+  if(!list.length){
+    alert('目前篩選範圍內沒有書目！');
+    return;
+  }
+  // 讀取並更新計數
+  let count = parseInt(localStorage.getItem(EASTER_EGG_KEY)||'0') + 1;
+  const forceEgg = count >= 1000;
+  if(forceEgg) count = 0; // 重置
+  localStorage.setItem(EASTER_EGG_KEY, count);
+
+  // 0.1% 機率或第1000次必出
+  if(forceEgg || Math.random() < 0.001){
+    showEasterEgg();
+    return;
+  }
+  const book = list[Math.floor(Math.random()*list.length)];
+  openDetail(book.id);
+}
+
+function showEasterEgg(){
+  // 建立臨時彈窗
+  const existing = document.getElementById('easterEggOverlay');
+  if(existing) existing.remove();
+  const overlay = document.createElement('div');
+  overlay.id = 'easterEggOverlay';
+  overlay.className = 'overlay';
+  overlay.style.cssText = 'opacity:0;pointer-events:none;';
+  overlay.innerHTML = `
+    <div class="modal" style="text-align:center;">
+      <div style="font-size:2rem;margin-bottom:12px;">🍓</div>
+      <p style="font-size:.95rem;color:var(--text);line-height:1.8;margin-bottom:20px;">
+        抽到草莓貝果的<a href="https://kohane1127.lofter.com" target="_blank" style="color:var(--clay);text-decoration:underline;font-weight:700;">同人文</a>了！
+      </p>
+      <div class="modal-btns">
+        <button class="btn btn-fill" onclick="document.getElementById('easterEggOverlay').classList.remove('open')">哇！</button>
+      </div>
+    </div>`;
+  overlay.onclick = e => { if(e.target===overlay) overlay.classList.remove('open'); };
+  document.body.appendChild(overlay);
+  requestAnimationFrame(()=>overlay.classList.add('open'));
 }
 
 // ── Modal utils ───────────────────────────────
