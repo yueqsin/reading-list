@@ -57,7 +57,7 @@ body::before{content:"";position:fixed;inset:0;background:
 .btn-fill:hover{background:var(--clay-dk);}
 .btn-out{background:transparent;color:var(--clay);border-color:var(--clay);}
 .btn-out:hover{background:rgba(170,102,87,.08);}
-.btn-ghost{background:transparent;color:var(--text-lt);border-color:var(--border-md);font-size:.78rem;padding:0 12px;height:32px;}
+.btn-ghost{background:transparent;color:var(--text-lt);border-color:var(--border-md);font-size:.78rem;padding:0 12px;height:36px;}
 .btn-ghost:hover{background:rgba(170,102,87,.06);color:var(--clay);}
 .btn-edit-on{background:var(--clay);color:white;border-color:var(--clay);box-shadow:0 0 0 3px rgba(170,102,87,.22);}
 .btn:disabled{opacity:.5;cursor:not-allowed;}
@@ -1314,7 +1314,7 @@ async function exportReviewImage(){
   } catch(e){
     alert('匯出失敗：'+e.message);
   }
-  btn.disabled=false; btn.textContent='匯出圖片';
+  btn.disabled=false; btn.textContent='💾 匯出圖片';
 }
 
 // ── Modal utils ───────────────────────────────
