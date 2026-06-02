@@ -1370,8 +1370,31 @@ function randomPick(){
   openDetail(book.id);
 }
 
+const EASTER_EGGS = [
+  {
+    emoji: '🍓',
+    content: `抽到草莓貝果的<a href="https://kohane1127.lofter.com" target="_blank" style="color:var(--clay);text-decoration:underline;font-weight:700;">同人文</a>了！`,
+    btn: '哇！'
+  },
+  {
+    emoji: '🌸',
+    content: `桂花貝果什麼都沒有聽見……`,
+    btn: '你說什麼？'
+  },
+  {
+    emoji: '🍵',
+    content: `抹茶貝果：各位親愛的原住民同胞大家好！`,
+    btn: '馬英九還我牛！'
+  },
+  {
+    emoji: '📚',
+    content: `抽到黛玉貝果對你播放<a href="https://www.youtube.com/watch?v=urfRz8G4-Ec" target="_blank" style="color:var(--clay);text-decoration:underline;font-weight:700;">同道殊途</a>了。`,
+    btn: '靈氣也是氣……'
+  }
+];
+
 function showEasterEgg(){
-  // 建立臨時彈窗
+  const egg = EASTER_EGGS[Math.floor(Math.random()*EASTER_EGGS.length)];
   const existing = document.getElementById('easterEggOverlay');
   if(existing) existing.remove();
   const overlay = document.createElement('div');
@@ -1380,12 +1403,10 @@ function showEasterEgg(){
   overlay.style.cssText = 'opacity:0;pointer-events:none;';
   overlay.innerHTML = `
     <div class="modal" style="text-align:center;">
-      <div style="font-size:2rem;margin-bottom:12px;">🍓</div>
-      <p style="font-size:.95rem;color:var(--text);line-height:1.8;margin-bottom:20px;">
-        抽到草莓貝果的<a href="https://kohane1127.lofter.com" target="_blank" style="color:var(--clay);text-decoration:underline;font-weight:700;">同人文</a>了！
-      </p>
+      <div style="font-size:2rem;margin-bottom:12px;">${egg.emoji}</div>
+      <p style="font-size:.95rem;color:var(--text);line-height:1.8;margin-bottom:20px;">${egg.content}</p>
       <div class="modal-btns">
-        <button class="btn btn-fill" onclick="document.getElementById('easterEggOverlay').classList.remove('open')">哇！</button>
+        <button class="btn btn-fill" onclick="document.getElementById('easterEggOverlay').classList.remove('open')">${egg.btn}</button>
       </div>
     </div>`;
   overlay.onclick = e => { if(e.target===overlay) overlay.classList.remove('open'); };
