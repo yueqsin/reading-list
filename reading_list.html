@@ -1078,11 +1078,11 @@ function openDetail(id, fromRandom=false){
     const skip = document.createElement('button');
     skip.className = 'btn btn-ghost';
     skip.textContent = '不想吃';
-    skip.onclick = () => { skipSet.add(String(id)); closeOverlay('detailOverlay'); setTimeout(()=>randomPick(true), 250); };
+    skip.onclick = () => { skipSet.add(String(id)); closeOverlay('detailOverlay'); setTimeout(()=>randomPick(true), 230); };
     const again = document.createElement('button');
     again.className = 'btn btn-ghost';
     again.textContent = '再抽一次';
-    again.onclick = () => { closeOverlay('detailOverlay'); setTimeout(()=>randomPick(true), 250); };
+    again.onclick = () => { closeOverlay('detailOverlay'); setTimeout(()=>randomPick(true), 230); };
     ra.appendChild(skip);
     ra.appendChild(again);
   }
@@ -1479,15 +1479,17 @@ function randomPick(fromRandom=false){
   }
   let count = parseInt(localStorage.getItem(EASTER_EGG_KEY)||'0') + 1;
   const forceEgg = count >= 100;
-  localStorage.setItem(EASTER_EGG_KEY, forceEgg ? 0 : count);
   if(forceEgg || Math.random() < 0.001){
+    // 重設計數器，確保彩蛋觸發後從頭開始
+    localStorage.setItem(EASTER_EGG_KEY, '0');
     // 稍微延遲確保前一個彈窗已完全關閉
-    setTimeout(()=>showEasterEgg(), 250);
+    setTimeout(()=>showEasterEgg(), fromRandom ? 230 : 250);
     return;
   }
+  localStorage.setItem(EASTER_EGG_KEY, String(count));
   const book = list[Math.floor(Math.random()*list.length)];
   // 延遲開啟，確保前一個彈窗 CSS transition 結束
-  setTimeout(()=>openDetail(book.id, true), fromRandom ? 250 : 0);
+  setTimeout(()=>openDetail(book.id, true), fromRandom ? 230 : 0);
 }
 
 const EASTER_EGGS = [
@@ -1549,6 +1551,13 @@ function launchConfetti(){
     else canvas.remove();
   }
   draw();
+}
+
+function closeEasterEgg(){
+  const overlay = document.getElementById('easterEggOverlay');
+  if(!overlay) return;
+  overlay.classList.remove('open');
+  setTimeout(()=>{ if(overlay.parentNode) overlay.remove(); }, 230);
 }
 
 function showEasterEgg(){
