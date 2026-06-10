@@ -531,8 +531,12 @@ body::before{content:"";position:fixed;inset:0;background:
       </div>
     </div>
     <div class="add-modal-persona">
-      <div class="fi-wrap"><span class="fi-lbl">攻</span><textarea class="fi" id="n-gong" placeholder="攻的描述"></textarea></div>
-      <div class="fi-wrap"><span class="fi-lbl">受</span><textarea class="fi" id="n-shou" placeholder="受的描述"></textarea></div>
+      <div class="fi-wrap"><span class="fi-lbl">攻</span><input class="fi" id="n-gong"></div>
+      <div class="fi-wrap"><span class="fi-lbl">受</span><input class="fi" id="n-shou"></div>
+    </div>
+    <div class="fi-wrap" style="margin-bottom:12px;">
+      <span class="fi-lbl">心得</span>
+      <textarea class="fi" id="n-notes" rows="3" style="resize:vertical;min-height:60px;" placeholder="寫下心得…"></textarea>
     </div>
     <div class="modal-btns" style="justify-content:flex-end;">
       <button class="btn btn-ghost" onclick="closeOverlay('addOverlay')">取消</button>
@@ -1157,7 +1161,7 @@ function exitEdit(){
 
 // ── Add book ──────────────────────────────────
 function openAddModal(){
-  ['n-title','n-author','n-chaps','n-gong','n-shou'].forEach(id=>document.getElementById(id).value='');
+  ['n-title','n-author','n-chaps','n-gong','n-shou','n-notes'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('n-rating').value='★★★★☆';
   document.getElementById('n-tp-content').innerHTML=buildTagPickerHTML('n',[]);
   document.getElementById('n-tp-collapsible').style.display='none';
@@ -1177,6 +1181,7 @@ async function addBook(){
     chapters:document.getElementById('n-chaps').value.trim(),
     tags, gong:document.getElementById('n-gong').value.trim(),
     shou:document.getElementById('n-shou').value.trim(),
+    notes:document.getElementById('n-notes').value.trim(),
     read_date:new Date().toISOString().slice(0,10)
   };
   const btn=document.getElementById('addBtn');
@@ -1186,7 +1191,7 @@ async function addBook(){
     const saved=await dbInsert(book);
     books.unshift(saved);
     buildOtherTags(); initFilters(); renderTagManager(); renderTotalWords();
-    ['n-title','n-author','n-chaps','n-gong','n-shou'].forEach(id=>document.getElementById(id).value='');
+    ['n-title','n-author','n-chaps','n-gong','n-shou','n-notes'].forEach(id=>document.getElementById(id).value='');
     document.getElementById('n-rating').value='★★★★☆';
     document.getElementById('n-tp-content').innerHTML=buildTagPickerHTML('n',[]);
     document.getElementById('n-tp-collapsible').style.display='none';
