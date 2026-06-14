@@ -230,6 +230,7 @@ body::before{content:"";position:fixed;inset:0;background:
 .wide-modal{width:860px;max-width:calc(100vw - 32px);}
 .wide-modal h3{margin-bottom:16px;}
 .wide-modal .modal-btns{justify-content:flex-end;}
+.wide-modal .modal-btns .btn{min-width:96px;font-size:.83rem;padding:0 16px;}
 .add-modal-grid{display:grid;grid-template-columns:2fr 1.2fr 1fr 0.8fr;gap:10px;margin-bottom:12px;}
 @media(max-width:640px){.add-modal-grid{grid-template-columns:1fr 1fr;}}
 @media(max-width:400px){.add-modal-grid{grid-template-columns:1fr;}}
@@ -477,10 +478,6 @@ body::before{content:"";position:fixed;inset:0;background:
       </div>
       <div id="em-tp-collapsible" style="display:none;">
         <div id="em-tp-content"></div>
-        <div class="tag-picker-custom">
-          <input type="text" id="em-custom-tag" placeholder="直接輸入其他標籤…" onkeydown="if(event.key==='Enter')addInlineTag('em')">
-          <button onclick="addInlineTag('em')">＋ 加入</button>
-        </div>
       </div>
     </div>
     <div class="add-modal-persona">
@@ -524,10 +521,6 @@ body::before{content:"";position:fixed;inset:0;background:
       </div>
       <div id="n-tp-collapsible" style="display:none;">
         <div id="n-tp-content"></div>
-        <div class="tag-picker-custom">
-          <input type="text" id="n-custom-tag" placeholder="直接輸入其他標籤…" onkeydown="if(event.key==='Enter')addInlineTag('n')">
-          <button onclick="addInlineTag('n')">＋ 加入</button>
-        </div>
       </div>
     </div>
     <div class="add-modal-persona">
@@ -893,19 +886,6 @@ function getPickerSelected(prefix){
   return [...document.querySelectorAll(`.tpchip[data-tp="${prefix}"].on`)].map(el=>el.dataset.tag);
 }
 function toggleTpChip(el){ el.classList.toggle('on'); }
-function addInlineTag(prefix){
-  const inp=document.getElementById(`${prefix}-custom-tag`),tag=inp.value.trim();
-  if(!tag){inp.value='';return;}
-  const existing=document.querySelector(`.tpchip[data-tp="${prefix}"][data-tag="${esc(tag)}"]`);
-  if(existing){existing.classList.add('on');inp.value='';return;}
-  const row=document.querySelector(`#${prefix}-tp-content .tag-picker-row:last-child`)||document.querySelector(`#${prefix}-tp-content .tag-picker-row`);
-  if(row){
-    const chip=document.createElement('span');
-    chip.className='tpchip on'; chip.dataset.tp=prefix; chip.dataset.tag=tag; chip.textContent=tag;
-    chip.onclick=()=>chip.classList.toggle('on'); row.appendChild(chip);
-  }
-  inp.value='';
-}
 
 // ── Sort ──────────────────────────────────────
 function setSort(s){
@@ -1172,6 +1152,14 @@ function openAddModal(){
 async function addBook(){
   const title=document.getElementById('n-title').value.trim();
   if(!title){ document.getElementById('n-title').focus(); return; }
+  const dup=books.some(b=>(b.title||'').trim().toLowerCase()===title.toLowerCase());
+  if(dup){
+    showConfirmModal('你好像吃過了！確定要新增嗎？', '是', '否', ()=>doAddBook(title));
+    return;
+  }
+  doAddBook(title);
+}
+async function doAddBook(title){
   let tags=getPickerSelected('n');
   const ALL_VIEW=new Set([...VIEW_SET,'主受']);
   if(!tags.some(t=>ALL_VIEW.has(t))) tags.unshift('主受');
@@ -1468,6 +1456,39 @@ function showInfoModal(content, btnText){
   modal.appendChild(btnWrap);
   overlay.appendChild(modal);
   overlay.onclick = e => { if(e.target===overlay) overlay.classList.remove('open'); };
+  document.body.appendChild(overlay);
+  requestAnimationFrame(()=>overlay.classList.add('open'));
+}
+
+function showConfirmModal(content, yesText, noText, onYes){
+  const existing = document.getElementById('confirmModalOverlay');
+  if(existing) existing.remove();
+  const overlay = document.createElement('div');
+  overlay.id = 'confirmModalOverlay';
+  overlay.className = 'overlay';
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.style.textAlign = 'center';
+  const msgP = document.createElement('p');
+  msgP.style.cssText = 'font-size:.95rem;color:var(--text);line-height:1.8;margin-bottom:20px;';
+  msgP.textContent = content;
+  const btnWrap = document.createElement('div');
+  btnWrap.className = 'modal-btns';
+  const close = () => overlay.classList.remove('open');
+  const noBtn = document.createElement('button');
+  noBtn.className = 'btn btn-ghost';
+  noBtn.textContent = noText;
+  noBtn.onclick = close;
+  const yesBtn = document.createElement('button');
+  yesBtn.className = 'btn btn-fill';
+  yesBtn.textContent = yesText;
+  yesBtn.onclick = () => { close(); onYes(); };
+  btnWrap.appendChild(noBtn);
+  btnWrap.appendChild(yesBtn);
+  modal.appendChild(msgP);
+  modal.appendChild(btnWrap);
+  overlay.appendChild(modal);
+  overlay.onclick = e => { if(e.target===overlay) close(); };
   document.body.appendChild(overlay);
   requestAnimationFrame(()=>overlay.classList.add('open'));
 }
