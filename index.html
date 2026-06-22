@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reading List</title>
+<link rel="icon" href="rose.gif" type="image/gif">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700;900&family=Google+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:#F8F1F1; --blush:#E3BFB5; --clay:#AA6657; --clay-dk:#8B4F3F;
+  --clay-lt:#C4897A; --clay-xlt:#DDB8AC; --text:#3D2318; --text-mid:#6B3D31;
+  --text-lt:#A07060; --border:rgba(170,102,87,0.2); --border-md:rgba(170,102,87,0.35);
+  --card:rgba(255,252,250,0.9); --shadow-sm:0 1px 6px rgba(100,40,20,0.07);
+  --shadow:0 4px 20px rgba(100,40,20,0.1); --shadow-lg:0 12px 40px rgba(100,40,20,0.15); --r:14px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--cream);font-family:"Noto Serif TC",serif;color:var(--text);min-height:100vh;}
+body::before{content:"";position:fixed;inset:0;background:
+  radial-gradient(ellipse 70% 40% at 15% 5%,rgba(227,191,181,.35) 0%,transparent 55%),
+  radial-gradient(ellipse 50% 35% at 85% 90%,rgba(170,102,87,.12) 0%,transparent 55%),
+  radial-gradient(ellipse 40% 30% at 60% 40%,rgba(248,241,241,.6) 0%,transparent 60%);
+  pointer-events:none;z-index:0;}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px 80px;position:relative;z-index:1;}
+
+/* HEADER */
+.site-header{text-align:center;padding:52px 0 6px;}
+.site-header h1{font-size:2.8rem;font-weight:900;color:var(--clay);letter-spacing:.06em;line-height:1;}
+@media(max-width:500px){.site-header h1{font-size:1.9rem;}}
+@media(max-width:700px){
+  .rating-card-head{cursor:pointer;user-select:none;}
+  .rating-grid{grid-template-columns:1fr !important;}
+  .rating-grid{overflow:hidden;transition:max-height .25s ease;}
+  .rating-grid.collapsed{max-height:0 !important;margin-bottom:0;}
+  .rating-card-head.collapsed{margin-bottom:0;}
+  /* 評分內容置中但文字靠左 */
+  #ratingGrid{display:flex;flex-direction:column;align-items:center;}
+  #ratingGrid .rating-row{width:fit-content;min-width:140px;}
+}
+.site-header .by{font-size:.82rem;color:var(--text-lt);margin-top:10px;letter-spacing:.06em;}
+.site-header .last-updated{font-size:.74rem;color:var(--clay-xlt);margin-top:5px;letter-spacing:.04em;}
+.divider{font-family:"Google Sans",sans-serif;font-size:.75rem;color:var(--clay-xlt);text-align:center;margin:14px 0 28px;letter-spacing:.1em;user-select:none;}
+
+/* TOP CARDS */
+.rating-card{background:var(--card);border:1.5px solid var(--border-md);border-radius:var(--r);padding:20px 24px;box-shadow:var(--shadow-sm);backdrop-filter:blur(6px);margin-bottom:18px;overflow:hidden;}
+.rating-card-head{font-size:.78rem;font-weight:700;letter-spacing:.06em;color:var(--clay);padding-bottom:9px;margin-bottom:10px;cursor:default;}
+.rating-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px 0;}
+@media(max-width:500px){
+  .rating-card-head{cursor:pointer;user-select:none;margin-bottom:0;}
+  .rating-card-head.collapsed{margin-bottom:0;}
+  .rating-grid{overflow:hidden;transition:max-height .25s ease;}
+  .rating-grid.collapsed{max-height:0!important;}
+}
+.top-cards{display:grid;grid-template-columns:1fr auto;gap:16px;margin-bottom:18px;align-items:stretch;}
+@media(max-width:700px){.top-cards{grid-template-columns:1fr;overflow-x:visible;}}
+.stats-card{margin-bottom:0;width:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;}
+@media(max-width:700px){.stats-card{width:100%;flex-direction:row;justify-content:center;gap:16px;padding:14px 20px;}}
+@media(max-width:700px){.stats-card #totalWordsDisplay{font-size:.92rem !important;}}
+.rating-row{display:flex;align-items:baseline;gap:9px;font-size:.84rem;margin:2px 0;line-height:1.4;}
+.stars{font-size:.75rem;min-width:80px;white-space:nowrap;}
+.sep{display:none;}
+.rdesc{color:var(--text-mid);font-size:.8rem;}
+.r5{color:#b8460b}.r4{color:var(--clay)}.r3{color:var(--clay-lt)}.r2{color:#c0a090}.r1{color:#cdb8b0}.r0{color:#d5c8c0}
+
+/* CONTROLS */
+.controls{background:var(--card);border:1.5px solid var(--border-md);border-radius:var(--r);padding:14px 18px;margin-bottom:14px;box-shadow:var(--shadow-sm);display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:0 16px;height:36px;border-radius:8px;font-family:"Noto Serif TC",serif;font-size:.83rem;font-weight:500;cursor:pointer;transition:all .17s;border:1.5px solid transparent;white-space:nowrap;line-height:1;}
+.btn-fill{background:var(--clay);color:white;border-color:var(--clay);}
+.btn-fill:hover{background:var(--clay-dk);}
+.btn-out{background:transparent;color:var(--clay);border-color:var(--clay);}
+.btn-out:hover{background:rgba(170,102,87,.08);}
+.btn-ghost{background:transparent;color:var(--text-lt);border-color:var(--border-md);font-size:.78rem;padding:0 12px;height:36px;}
+.btn-ghost:hover{background:rgba(170,102,87,.06);color:var(--clay);}
+.btn-edit-on{background:var(--clay);color:white;border-color:var(--clay);box-shadow:0 0 0 3px rgba(170,102,87,.22);}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+.btn svg{display:block;flex-shrink:0;}
+.search-box{flex:1;min-width:160px;position:relative;}
+.search-box input{width:100%;padding:8px 12px 8px 34px;border:1.5px solid var(--border-md);border-radius:8px;font-family:inherit;font-size:.83rem;background:white;color:var(--text);outline:none;transition:border-color .17s;}
+.search-box input:focus{border-color:var(--clay-lt);}
+.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--clay-lt);pointer-events:none;font-size:.9rem;}
+.stats{font-size:.76rem;color:var(--text-lt);margin-left:auto;white-space:nowrap;}
+.sync-bar{font-size:.72rem;color:var(--text-lt);display:flex;align-items:center;gap:6px;}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--clay-lt);flex-shrink:0;}
+.sync-dot.ok{background:#4caf50;}.sync-dot.err{background:#e74c3c;}
+.sync-dot.busy{background:var(--clay-lt);animation:pulse .8s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* EDIT BAR */
+.edit-bar{display:none;gap:8px;margin-bottom:14px;animation:fadeDown .2s ease;}
+.edit-mode .edit-bar{display:flex;}
+@media(max-width:750px){.review-only{display:none!important;}}
+
+/* REVIEW MODAL */
+.review-modal{width:750px;}
+.review-picker{display:flex;gap:10px;align-items:center;margin-bottom:18px;flex-wrap:wrap;}
+.review-picker select{padding:7px 10px;border:1.5px solid var(--border-md);border-radius:7px;font-family:inherit;font-size:.83rem;color:var(--text);background:white;outline:none;cursor:pointer;}
+.review-picker select:focus{border-color:var(--clay-lt);}
+.review-output{display:none;}
+.review-output.show{display:block;}
+.review-card{background:#F8F1F1;border:none;border-radius:var(--r);padding:28px 28px 24px;width:750px;max-width:100%;margin:0 auto;}
+.review-title{font-size:1.3rem;font-weight:900;color:var(--clay);letter-spacing:.06em;text-align:center;margin-bottom:6px;}
+.review-subtitle{font-size:.85rem;color:var(--text-mid);text-align:center;margin-bottom:10px;letter-spacing:.04em;}
+.review-divider{font-family:"Google Sans",sans-serif;font-size:.7rem;color:var(--clay-xlt);text-align:center;margin:10px 0;letter-spacing:.1em;}
+.review-body{font-size:.8rem;color:var(--text);line-height:2.1;padding-left:16px;}
+.review-tag{color:var(--clay);font-size:.82rem;margin:0 1px;font-weight:600;}
+.review-highlight{color:#C4897A;font-weight:700;}
+.review-empty{text-align:center;padding:20px 0;color:var(--text-lt);font-size:.85rem;}
+.review-book-list{display:flex;flex-direction:column;gap:8px;margin-top:4px;}
+.review-book-card{background:#FEFBF9;border:none;border-radius:10px;padding:10px 14px;display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:start;box-shadow:0 1px 6px rgba(100,40,20,0.07);}
+.review-book-title{font-size:.88rem;font-weight:600;color:var(--text);line-height:1.4;}
+.review-book-author{font-size:.72rem;color:var(--text-lt);}
+.review-book-meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px;}
+.review-book-tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.64rem;background:rgba(227,191,181,.35);color:var(--clay);}
+.review-book-persona{font-size:.68rem;color:var(--text-lt);margin-top:2px;}
+.review-book-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px;}
+.review-book-rating{font-size:.78rem;font-weight:500;white-space:nowrap;}
+.review-book-chaps{font-size:.68rem;color:var(--text-lt);white-space:nowrap;}
+
+/* FORM FIELDS */
+.fi{padding:8px 10px;border:1.5px solid var(--border-md);border-radius:7px;font-family:inherit;font-size:.8rem;color:var(--text);background:white;outline:none;width:100%;transition:border-color .15s;}
+.fi:focus{border-color:var(--clay-lt);}
+.fi-lbl{font-size:.67rem;color:var(--clay-lt);margin-bottom:3px;font-weight:600;letter-spacing:.04em;}
+.fi-wrap{display:flex;flex-direction:column;}
+.tag-list{display:flex;flex-wrap:wrap;gap:6px;}
+.tag-manage-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px 4px 12px;border-radius:20px;font-size:.75rem;border:1.5px solid var(--border-md);background:white;color:var(--text-mid);font-family:"Noto Serif TC",serif;}
+.tag-manage-chip .del-tag{cursor:pointer;color:var(--clay-lt);font-size:.8rem;line-height:1;padding:0 2px;transition:color .12s;}
+.tag-manage-chip .del-tag:hover{color:#c0392b;}
+
+/* TAG PICKER */
+.tag-picker{border:1.5px solid var(--border-md);border-radius:8px;padding:10px 12px;background:white;margin-bottom:10px;}
+.tag-picker-lbl{font-size:.67rem;color:var(--clay-lt);margin-bottom:8px;font-weight:600;letter-spacing:.04em;}
+.tag-picker-section{margin-bottom:8px;}
+.tag-picker-section:last-child{margin-bottom:0;}
+.tag-picker-section-lbl{font-size:.62rem;color:var(--clay-xlt);font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:5px;}
+.tag-picker-row{display:flex;flex-wrap:wrap;gap:5px;}
+.tpchip{display:inline-flex;align-items:center;padding:3px 10px;border-radius:14px;font-size:.72rem;cursor:pointer;border:1.5px solid var(--border-md);background:white;color:var(--text-mid);transition:all .13s;user-select:none;font-family:"Noto Serif TC",serif;}
+.tpchip:hover{border-color:var(--clay-lt);color:var(--clay);}
+.tpchip.on{background:var(--clay);color:white;border-color:var(--clay);}
+.tag-picker-custom{display:flex;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);}
+.tag-picker-custom input{flex:1;padding:5px 8px;border:1.5px solid var(--border-md);border-radius:6px;font-family:inherit;font-size:.76rem;color:var(--text);background:white;outline:none;}
+.tag-picker-custom input:focus{border-color:var(--clay-lt);}
+.tag-picker-custom button{padding:5px 10px;border-radius:6px;font-size:.72rem;cursor:pointer;border:1.5px solid var(--clay-lt);background:transparent;color:var(--clay);font-family:inherit;white-space:nowrap;}
+.tag-picker-custom button:hover{background:var(--clay);color:white;}
+.add-modal-persona{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+
+/* FILTER */
+.filter-panel{background:var(--card);border:1.5px solid var(--border-md);border-radius:var(--r);padding:18px 20px;margin-bottom:14px;box-shadow:var(--shadow-sm);display:none;animation:fadeDown .2s ease;}
+.filter-panel.open{display:block;}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+.filter-section{margin-bottom:16px;}
+.filter-section:last-child{margin-bottom:0;}
+.filter-section-label{font-size:.72rem;font-weight:700;letter-spacing:.08em;color:var(--clay-lt);text-transform:uppercase;margin-bottom:9px;}
+.chip-row{display:flex;flex-wrap:wrap;gap:6px;}
+.chip{display:inline-flex;align-items:center;padding:5px 12px;border-radius:20px;font-size:.76rem;cursor:pointer;border:1.5px solid var(--border-md);background:white;color:var(--text-mid);transition:all .14s;user-select:none;font-family:"Noto Serif TC",serif;}
+.chip:hover{border-color:var(--clay-lt);color:var(--clay);background:rgba(170,102,87,.05);}
+.chip.on{background:var(--clay);color:white;border-color:var(--clay);}
+.chip.ex{background:#f8e8e8;color:#c0392b;border-color:#e8a0a0;text-decoration:line-through;}
+.rating-chip{font-size:.75rem;min-width:88px;justify-content:center;}
+.rating-chip.r5.on{background:#b8460b;border-color:#b8460b;}
+.rating-chip.r4.on{background:var(--clay);border-color:var(--clay);}
+.rating-chip.r3.on{background:var(--clay-lt);border-color:var(--clay-lt);}
+.rating-chip.r2.on{background:#c0a090;border-color:#c0a090;}
+.rating-chip.r1.on{background:#cdb8b0;border-color:#cdb8b0;}
+.rating-chip.r0.on{background:#d5c8c0;border-color:#d5c8c0;}
+.rating-chip.ex{background:#f8e8e8;color:#c0392b;border-color:#e8a0a0;text-decoration:line-through;}
+.filter-footer{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid var(--border);}
+.active-count{font-size:.76rem;color:var(--clay);}
+
+/* SORT */
+.sort-bar{display:flex;align-items:center;gap:7px;margin-bottom:14px;flex-wrap:wrap;}
+.sort-lbl{font-size:.74rem;color:var(--text-lt);}
+.sort-btn{padding:5px 11px;border-radius:6px;font-size:.74rem;cursor:pointer;border:1.5px solid var(--border-md);background:white;color:var(--text-mid);font-family:"Noto Serif TC",serif;transition:all .14s;}
+.sort-btn:hover{border-color:var(--clay-lt);color:var(--clay);}
+.sort-btn.on{background:var(--clay);color:white;border-color:var(--clay);}
+
+/* BOOK LIST */
+.book-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:750px){.book-list{grid-template-columns:1fr;}}
+.book-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:14px 18px;box-shadow:var(--shadow-sm);display:grid;grid-template-columns:1fr auto;gap:6px 16px;align-items:start;transition:box-shadow .17s,border-color .17s,transform .17s;cursor:pointer;}
+.book-card:hover{box-shadow:var(--shadow);border-color:var(--clay-xlt);transform:translateY(-1px);}
+.book-main{display:flex;flex-direction:column;gap:5px;}
+.book-title{font-size:.95rem;font-weight:600;color:var(--text);line-height:1.4;}
+.note-icon{display:inline-block;width:16px;height:16px;margin-left:3px;vertical-align:middle;position:relative;top:-3px;flex-shrink:0;}
+.book-author{font-size:.76rem;color:var(--text-lt);}
+.book-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:6px;}
+.book-tag{display:inline-block;padding:2px 9px;border-radius:4px;font-size:.68rem;background:rgba(227,191,181,.35);color:var(--clay);cursor:pointer;transition:background .12s;white-space:nowrap;font-family:"Noto Serif TC",serif;}
+.book-tag:hover{background:var(--blush);}
+.book-tag.on{background:var(--clay);color:white;}
+.book-tag.ex{background:#f8e8e8;color:#c0392b;text-decoration:line-through;}
+.book-persona{font-size:.72rem;color:var(--text-lt);margin-top:2px;line-height:1.5;display:flex;gap:8px;flex-wrap:wrap;}
+.persona-item{display:flex;gap:3px;align-items:baseline;}
+.persona-label{font-size:.65rem;color:var(--clay-xlt);font-weight:600;letter-spacing:.04em;}
+.book-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;min-width:fit-content;}
+.book-rating{font-size:.82rem;white-space:nowrap;font-weight:500;letter-spacing:.02em;}
+.book-chaps{font-size:.72rem;color:var(--text-lt);white-space:nowrap;}
+.book-date{font-size:.68rem;color:var(--clay-xlt);white-space:nowrap;}
+.book-actions{display:none;gap:5px;flex-direction:column;align-items:flex-end;margin-top:2px;}
+.edit-mode .book-actions{display:flex;}
+.act-btn{padding:3px 9px;border-radius:5px;font-size:.68rem;cursor:pointer;border:1px solid var(--clay-lt);background:transparent;color:var(--clay);font-family:inherit;transition:all .13s;white-space:nowrap;}
+.act-btn:hover{background:var(--clay);color:white;}
+.act-btn.del{border-color:#c0392b;color:#c0392b;}
+.act-btn.del:hover{background:#c0392b;color:white;}
+.empty{text-align:center;padding:48px 20px;color:var(--text-lt);font-size:.88rem;grid-column:1/-1;}
+.loading-bar{text-align:center;padding:60px 20px;color:var(--text-lt);font-size:.88rem;grid-column:1/-1;}
+.loading-bar .spinner{display:inline-block;width:28px;height:28px;border:3px solid var(--blush);border-top-color:var(--clay);border-radius:50%;animation:spin .7s linear infinite;margin-bottom:12px;}
+
+/* PAGINATION */
+.pager{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:24px;flex-wrap:wrap;}
+.pg{padding:6px 12px;border-radius:7px;font-size:.78rem;cursor:pointer;border:1.5px solid var(--border-md);background:white;color:var(--text-mid);font-family:inherit;transition:all .14s;min-width:36px;text-align:center;}
+.pg:hover:not(:disabled){border-color:var(--clay-lt);color:var(--clay);}
+.pg.on{background:var(--clay);color:white;border-color:var(--clay);}
+.pg:disabled{opacity:.38;cursor:not-allowed;}
+
+/* MODALS */
+.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(40,15,5,.45);backdrop-filter:blur(5px);z-index:200;display:flex;align-items:center;justify-content:center;box-sizing:border-box;padding:16px;opacity:0;pointer-events:none;transition:opacity .22s;}
+.overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--cream);border:1.5px solid var(--border-md);border-radius:18px;padding:32px 36px;width:420px;max-width:calc(100vw - 32px);box-sizing:border-box;box-shadow:var(--shadow-lg);transform:translateY(8px);transition:transform .22s;max-height:calc(100vh - 32px);overflow-y:auto;}
+.overlay.open .modal{transform:translateY(0);}
+.modal h3{font-size:1.05rem;color:var(--clay);margin-bottom:6px;}
+.modal .sub{font-size:.78rem;color:var(--text-lt);margin-bottom:20px;}
+.modal input[type=password]{width:100%;padding:11px 14px;border:1.5px solid var(--border-md);border-radius:8px;font-size:1rem;font-family:monospace;letter-spacing:.2em;text-align:center;color:var(--text);outline:none;transition:border-color .17s;margin-bottom:14px;background:white;}
+.modal input[type=password]:focus{border-color:var(--clay-lt);}
+.modal input[type=password].wrong{border-color:#e74c3c;animation:shake .3s ease;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.modal-btns{display:flex;gap:10px;justify-content:center;}
+.wide-modal{width:860px;max-width:calc(100vw - 32px);}
+.wide-modal h3{margin-bottom:16px;}
+.wide-modal .modal-btns{justify-content:flex-end;}
+.wide-modal .modal-btns .btn{min-width:96px;font-size:.83rem;padding:0 16px;}
+.add-modal-grid{display:grid;grid-template-columns:2fr 1.2fr 1fr 0.8fr;gap:10px;margin-bottom:12px;}
+@media(max-width:640px){.add-modal-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:400px){.add-modal-grid{grid-template-columns:1fr;}}
+.add-modal-persona{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+@media(max-width:500px){.add-modal-persona{grid-template-columns:1fr;}}
+.wide-modal textarea.fi{min-height:54px;resize:vertical;}
+/* 手機端 modal 滿版 */
+@media(max-width:600px){
+  .modal,.wide-modal{padding:20px 16px;border-radius:14px;}
+  /* tag picker 跟外層對齊，拿掉自己的 padding 改用 margin */
+  .tag-picker{padding:0;border:none;background:transparent;margin-bottom:10px;}
+  .tag-picker-lbl{padding:0 0 6px 0;}
+  .tag-picker-section{margin-bottom:8px;}
+  .tag-picker-row{gap:4px;}
+  .tpchip{font-size:.68rem;padding:3px 8px;}
+  .tag-picker-custom{padding-top:8px;border-top:1px solid var(--border);}
+  /* 手機端 modal 按鈕等寬等高 */
+  .wide-modal .modal-btns,.modal .modal-btns{justify-content:stretch;}
+  .wide-modal .modal-btns .btn,.modal .modal-btns .btn{flex:1;justify-content:center;height:44px;font-size:.88rem;}
+}
+
+/* BOOK DETAIL MODAL */
+.detail-modal{width:560px;}
+.detail-modal h3{margin-bottom:4px;}
+@media(max-width:600px){.detail-modal{padding:28px 28px;}}
+.detail-author{font-size:.8rem;color:var(--text-lt);margin-bottom:14px;}
+.detail-row{display:flex;align-items:baseline;gap:8px;margin-bottom:8px;font-size:.84rem;}
+.detail-lbl{font-size:.68rem;color:var(--clay-lt);font-weight:700;letter-spacing:.05em;min-width:56px;flex-shrink:0;}
+.detail-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px;}
+.detail-tag{display:inline-block;padding:2px 9px;border-radius:4px;font-size:.7rem;background:rgba(227,191,181,.35);color:var(--clay);}
+.detail-divider{border:none;border-top:1px solid var(--border);margin:14px 0;}
+.detail-meta-row{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:12px;}
+.detail-meta-item{font-size:.72rem;color:var(--text-lt);}
+.detail-meta-item span{color:var(--clay);font-weight:600;}
+.detail-notes-lbl{font-size:.72rem;font-weight:700;color:var(--clay-lt);letter-spacing:.05em;margin-bottom:6px;}
+.detail-notes-text{font-size:.82rem;color:var(--text-mid);line-height:1.85;white-space:pre-wrap;min-height:24px;}
+.detail-notes-edit{width:100%;min-height:80px;resize:vertical;padding:8px 10px;border:1.5px solid var(--border-md);border-radius:7px;font-family:inherit;font-size:.82rem;color:var(--text);background:white;outline:none;line-height:1.8;}
+.detail-notes-edit:focus{border-color:var(--clay-lt);}
+
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--blush);border-radius:4px;}
+@media(max-width:500px){
+  .book-card{grid-template-columns:1fr;}
+  .book-right{flex-direction:row;align-items:center;justify-content:space-between;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="site-header">
+  <h1>Reading List</h1>
+  <p class="by">製作人 杏桃貝果@yzhtaotao</p>
+  <p class="last-updated" id="lastUpdated"></p>
+</header>
+<div class="divider">୨୧ --- ･ --- ･ --- ୨୧ --- ･ --- ･ --- ୨୧</div>
+
+<div class="top-cards">
+  <div class="rating-card" style="margin-bottom:0">
+    <div class="rating-card-head" id="ratingHead" onclick="toggleRatingCard()" style="font-size:.88rem;text-align:center;">評分標準</div>
+    <div class="rating-grid" id="ratingGrid">
+      <div class="rating-row"><span class="stars r5">★★★★★</span><span class="sep">❘</span><span class="rdesc">珍饈佳餚</span></div>
+      <div class="rating-row"><span class="stars r4">★★★★☆</span><span class="sep">❘</span><span class="rdesc">好吃</span></div>
+      <div class="rating-row"><span class="stars r3">★★★☆☆</span><span class="sep">❘</span><span class="rdesc">餓了才吃</span></div>
+      <div class="rating-row"><span class="stars r2">★★☆☆☆</span><span class="sep">❘</span><span class="rdesc">難吃</span></div>
+      <div class="rating-row"><span class="stars r1">★☆☆☆☆</span><span class="sep">❘</span><span class="rdesc">廚餘</span></div>
+      <div class="rating-row"><span class="stars r0">☆☆☆☆☆</span><span class="sep">❘</span><span class="rdesc">不配上桌</span></div>
+    </div>
+  </div>
+  <div class="rating-card stats-card">
+    <div class="rating-card-head" style="border-bottom:none;padding-bottom:0;margin-bottom:0;text-align:center;">目前已閱讀</div>
+    <div id="totalWordsDisplay" style="font-size:1.2rem;font-weight:900;color:var(--clay);line-height:1;text-align:center;">—</div>
+    <div style="font-size:.72rem;color:var(--text-lt);text-align:center;">萬字</div>
+  </div>
+</div>
+
+<div class="controls">
+  <button class="btn btn-out" id="editBtn" onclick="toggleEdit()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14">
+      <defs fill="#aa6657"></defs>
+      <path d="m39.17,17.76l7.07,7.07-27.17,27.17-9.66,4-1.41-1.41,4-9.66,27.17-27.17Zm9.76-9.76l-6.93,6.93,7.07,7.07,6.93-6.93-7.07-7.07Z" fill="#aa6657"></path>
+    </svg>編輯</button>
+  <button class="btn btn-out" id="filterBtn" onclick="toggleFilter()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14">
+      <defs fill="#aa6657"></defs>
+      <path d="m44.68,39.02c2.09-3.16,3.32-6.95,3.32-11.02,0-11.05-8.95-20-20-20S8,16.95,8,28s8.95,20,20,20c4.08,0,7.86-1.23,11.02-3.32l11.32,11.32,5.66-5.66-11.32-11.32Zm-16.68,2.98c-7.73,0-14-6.27-14-14s6.27-14,14-14,14,6.27,14,14-6.27,14-14,14Z" fill="#aa6657"></path>
+    </svg>篩選</button>
+  <button class="btn btn-out" onclick="randomPick()" style="white-space:nowrap;">隨機點菜</button>
+  <div class="search-box">
+    <span class="search-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14">
+      <defs fill="#aa6657"></defs>
+      <path d="m44.68,39.02c2.09-3.16,3.32-6.95,3.32-11.02,0-11.05-8.95-20-20-20S8,16.95,8,28s8.95,20,20,20c4.08,0,7.86-1.23,11.02-3.32l11.32,11.32,5.66-5.66-11.32-11.32Zm-16.68,2.98c-7.73,0-14-6.27-14-14s6.27-14,14-14,14,6.27,14,14-6.27,14-14,14Z" fill="#aa6657"></path>
+    </svg></span>
+    <input type="text" id="searchQ" placeholder="搜尋書名、作者…" oninput="go()">
+  </div>
+  <span class="sync-bar" style="margin-left:auto;"><span class="sync-dot" id="syncDot"></span><span class="stats" id="stats">連線中…</span></span>
+</div>
+
+<div class="edit-bar" id="editBar">
+  <button class="btn btn-fill" onclick="openAddModal()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14">
+      <defs fill="#fefaf9"></defs>
+      <path d="m54,29v6h-19v19h-6v-19H10v-6h19V10h6v19h19Z" fill="#fefaf9"></path>
+    </svg>新增書目</button>
+  <button class="btn btn-out" onclick="openTagModal()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14">
+      <defs fill="#aa6657"></defs>
+      <path d="m34,10H10v24l24,24,24-24-24-24Zm-13,14c-1.66,0-3-1.34-3-3s1.34-3,3-3,3,1.34,3,3-1.34,3-3,3Z" fill="#aa6657"></path>
+    </svg>管理標籤</button>
+  <button class="btn btn-out review-only" onclick="openReviewModal()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14"><path d="m48,12v-6h-6v6h-20v-6h-6v6h-8v40h48V12h-8Zm2,35H14v-19h36v19Z" fill="#aa6657"/></svg>閱讀回顧</button>
+</div>
+
+<div class="filter-panel" id="filterPanel">
+  <div class="filter-section">
+    <div class="filter-section-label">評分</div>
+    <div class="chip-row" id="ratingChips"></div>
+  </div>
+  <div class="filter-section">
+    <div class="filter-section-label">視角</div>
+    <div class="chip-row" id="viewChips"></div>
+  </div>
+  <div class="filter-section">
+    <div class="filter-section-label">時代</div>
+    <div class="chip-row" id="timeChips"></div>
+  </div>
+  <div class="filter-section">
+    <div class="filter-section-label">標籤</div>
+    <div class="chip-row" id="otherChips"></div>
+  </div>
+  <div class="filter-section">
+    <div class="filter-section-label">年份</div>
+    <div class="chip-row" id="yearChips"></div>
+  </div>
+  <div class="filter-section">
+    <div class="filter-section-label">月份</div>
+    <div class="chip-row" id="monthChips"></div>
+  </div>
+  <div class="filter-footer">
+    <span class="active-count" id="filterCount"></span>
+    <button class="btn btn-ghost" onclick="clearFilters()">清除所有篩選</button>
+  </div>
+</div>
+
+<div class="divider">୨୧ --- ･ --- ･ --- ୨୧ --- ･ --- ･ --- ୨୧</div>
+
+<div class="sort-bar">
+  <span class="sort-lbl">排序：</span>
+  <button class="sort-btn on" onclick="setSort('default')" id="sb-default">一般</button>
+  <button class="sort-btn" onclick="setSort('rd')" id="sb-rd">評分 ↓</button>
+  <button class="sort-btn" onclick="setSort('ra')" id="sb-ra">評分 ↑</button>
+  <button class="sort-btn" onclick="setSort('chd')" id="sb-chd">字數 ↓</button>
+  <button class="sort-btn" onclick="setSort('cha')" id="sb-cha">字數 ↑</button>
+  <button class="sort-btn" onclick="setSort('dated')" id="sb-dated">時間 ↓</button>
+  <button class="sort-btn" onclick="setSort('datea')" id="sb-datea">時間 ↑</button>
+</div>
+
+<div class="book-list" id="bookList"><div class="loading-bar"><div class="spinner"></div><br>載入MENU中…</div></div>
+<div class="pager" id="pager"></div>
+
+</div><!-- .wrap -->
+
+<!-- LOGIN MODAL -->
+<div class="overlay" id="pwOverlay" onclick="overlayClick(event,'pwOverlay')">
+  <div class="modal">
+    <h3>杏桃貝果正在登入……</h3>
+    <p class="sub">請輸入帳號密碼</p>
+    <div style="margin-bottom:10px;">
+      <div class="fi-lbl" style="margin-bottom:4px;">Email</div>
+      <input class="fi" type="email" id="loginEmail" placeholder="your@email.com" style="letter-spacing:normal;text-align:center;font-family:inherit;font-size:.88rem;" onkeydown="if(event.key==='Enter')document.getElementById('loginPw').focus()">
+    </div>
+    <div style="margin-bottom:16px;">
+      <div class="fi-lbl" style="margin-bottom:4px;">密碼</div>
+      <input class="fi" type="password" id="loginPw" placeholder="••••••" style="letter-spacing:.15em;" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div id="loginError" style="font-size:.76rem;color:#e74c3c;text-align:center;margin-bottom:10px;display:none;">你又打錯帳號密碼了！</div>
+    <div class="modal-btns">
+      <button class="btn btn-fill" id="loginBtn" onclick="doLogin()">登入</button>
+      <button class="btn btn-ghost" onclick="closeOverlay('pwOverlay')">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- BOOK DETAIL MODAL -->
+<div class="overlay" id="detailOverlay" onclick="overlayClick(event,'detailOverlay')">
+  <div class="modal detail-modal">
+    <h3 id="dm-title"></h3>
+    <div class="detail-author" id="dm-author"></div>
+    <div class="detail-tags" id="dm-tags"></div>
+    <div class="detail-row">
+      <span class="detail-lbl">評分</span>
+      <span id="dm-rating"></span>
+    </div>
+    <div class="detail-row" id="dm-chaps-row" style="display:none">
+      <span class="detail-lbl">字數</span>
+      <span id="dm-chaps"></span>
+    </div>
+    <div id="dm-persona-row" style="display:none"></div>
+    <hr class="detail-divider">
+    <div class="detail-meta-row">
+      <div class="detail-meta-item">閱讀日期
+        <span id="dm-readdate-display"></span>
+        <input type="text" id="dm-readdate-edit" placeholder="YYYY-MM-DD" style="display:none;width:110px;padding:2px 6px;border:1.5px solid var(--border-md);border-radius:5px;font-family:inherit;font-size:.72rem;color:var(--text);background:white;outline:none;">
+      </div>
+      <div class="detail-meta-item" id="dm-updated-wrap">最後編輯 <span id="dm-updated"></span></div>
+    </div>
+    <div class="detail-notes-lbl">心得</div>
+    <div class="detail-notes-text" id="dm-notes-text"></div>
+    <textarea class="detail-notes-edit" id="dm-notes-edit" placeholder="寫下心得…" style="display:none"></textarea>
+    <input type="hidden" id="dm-id">
+    <div class="modal-btns" style="margin-top:16px;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+      <!-- 左側：隨機觸發的按鈕 -->
+      <div style="display:flex;gap:8px;" id="dm-random-actions"></div>
+      <!-- 右側：一般按鈕 -->
+      <div style="display:flex;gap:8px;margin-left:auto;">
+        <button class="btn btn-ghost" id="dm-delete" onclick="delBookFromDetail()" style="display:none;color:#c0392b;border-color:#c0392b;">刪除</button>
+        <button class="btn btn-ghost" id="dm-open-edit" onclick="openEditFromDetail()" style="display:none;">編輯</button>
+        <button class="btn btn-ghost" onclick="closeOverlay('detailOverlay')">關閉</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT BOOK MODAL -->
+<div class="overlay" id="editOverlay" onclick="overlayClick(event,'editOverlay')">
+  <div class="modal wide-modal">
+    <h3>編輯書目</h3>
+    <input type="hidden" id="em-id">
+    <div class="add-modal-grid">
+      <div class="fi-wrap"><span class="fi-lbl">書名</span><input class="fi" id="em-title"></div>
+      <div class="fi-wrap"><span class="fi-lbl">作者</span><input class="fi" id="em-author"></div>
+      <div class="fi-wrap"><span class="fi-lbl">評分</span>
+        <select class="fi" id="em-rating">
+          <option>★★★★★</option><option>★★★★☆</option>
+          <option>★★★☆☆</option><option>★★☆☆☆</option>
+          <option>★☆☆☆☆</option><option>☆☆☆☆☆</option>
+        </select>
+      </div>
+      <div class="fi-wrap"><span class="fi-lbl">萬字數</span><input class="fi" id="em-chaps"></div>
+    </div>
+    <div class="tag-picker" style="margin-bottom:12px;">
+      <div class="tag-picker-lbl collapsible-lbl" onclick="toggleTagPicker('em')" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;">
+        <span>標籤</span>
+        <span id="em-tp-arrow" style="font-size:.6rem;color:var(--clay-xlt);transition:transform .2s;">▼</span>
+      </div>
+      <div id="em-tp-collapsible" style="display:none;">
+        <div id="em-tp-content"></div>
+      </div>
+    </div>
+    <div class="add-modal-persona">
+      <div class="fi-wrap"><span class="fi-lbl">攻</span><input class="fi" id="em-gong"></div>
+      <div class="fi-wrap"><span class="fi-lbl">受</span><input class="fi" id="em-shou"></div>
+    </div>
+    <div class="fi-wrap" style="margin-bottom:12px;">
+      <span class="fi-lbl">心得</span>
+      <textarea class="fi" id="em-notes" rows="3" style="resize:vertical;min-height:60px;" placeholder="寫下心得…"></textarea>
+    </div>
+    <div class="modal-btns" style="justify-content:flex-end;">
+      <button class="btn btn-ghost" onclick="closeOverlay('editOverlay')">取消</button>
+      <button class="btn btn-fill" id="saveEditBtn" onclick="saveEdit()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD BOOK MODAL -->
+<div class="overlay" id="addOverlay" onclick="overlayClick(event,'addOverlay')">
+  <div class="modal wide-modal">
+    <h3>新增書目</h3>
+    <div class="add-modal-grid">
+      <div class="fi-wrap"><span class="fi-lbl">書名 *</span><input class="fi" id="n-title" placeholder="書名"></div>
+      <div class="fi-wrap"><span class="fi-lbl">作者</span><input class="fi" id="n-author" placeholder="作者"></div>
+      <div class="fi-wrap"><span class="fi-lbl">評分</span>
+        <select class="fi" id="n-rating">
+          <option value="★★★★★">★★★★★</option>
+          <option value="★★★★☆" selected>★★★★☆</option>
+          <option value="★★★☆☆">★★★☆☆</option>
+          <option value="★★☆☆☆">★★☆☆☆</option>
+          <option value="★☆☆☆☆">★☆☆☆☆</option>
+          <option value="☆☆☆☆☆">☆☆☆☆☆</option>
+        </select>
+      </div>
+      <div class="fi-wrap"><span class="fi-lbl">萬字</span><input class="fi" id="n-chaps" placeholder="數字"></div>
+    </div>
+    <div class="tag-picker" style="margin-bottom:12px;">
+      <div class="tag-picker-lbl" onclick="toggleTagPicker('n')" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;">
+        <span>標籤</span>
+        <span id="n-tp-arrow" style="font-size:.6rem;color:var(--clay-xlt);transition:transform .2s;">▼</span>
+      </div>
+      <div id="n-tp-collapsible" style="display:none;">
+        <div id="n-tp-content"></div>
+      </div>
+    </div>
+    <div class="add-modal-persona">
+      <div class="fi-wrap"><span class="fi-lbl">攻</span><input class="fi" id="n-gong"></div>
+      <div class="fi-wrap"><span class="fi-lbl">受</span><input class="fi" id="n-shou"></div>
+    </div>
+    <div class="fi-wrap" style="margin-bottom:12px;">
+      <span class="fi-lbl">心得</span>
+      <textarea class="fi" id="n-notes" rows="3" style="resize:vertical;min-height:60px;" placeholder="寫下心得…"></textarea>
+    </div>
+    <div class="modal-btns" style="justify-content:flex-end;">
+      <button class="btn btn-ghost" onclick="closeOverlay('addOverlay')">取消</button>
+      <button class="btn btn-fill" id="addBtn" onclick="addBook()">新增</button>
+    </div>
+  </div>
+</div>
+
+<!-- TAG MANAGER MODAL -->
+<div class="overlay" id="tagOverlay" onclick="overlayClick(event,'tagOverlay')">
+  <div class="modal wide-modal">
+    <h3>管理標籤</h3>
+    <p class="sub">新增或刪除自訂標籤（不影響已用此標籤的書）</p>
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <input class="fi" type="text" id="newTagInput" placeholder="輸入新標籤名稱…" onkeydown="if(event.key==='Enter')addCustomTag()" style="flex:1;">
+      <button class="btn btn-fill" onclick="addCustomTag()">新增</button>
+    </div>
+    <div class="tag-list" id="tagList" style="max-height:300px;overflow-y:auto;"></div>
+    <div class="modal-btns" style="margin-top:16px;">
+      <button class="btn btn-ghost" onclick="closeOverlay('tagOverlay')">關閉</button>
+    </div>
+  </div>
+</div>
+
+<!-- REVIEW MODAL -->
+<div class="overlay" id="reviewOverlay" onclick="overlayClick(event,'reviewOverlay')">
+  <div class="modal review-modal">
+    <h3>閱讀回顧</h3>
+    <p class="sub">選擇要回顧的時間範圍</p>
+    <div class="review-picker">
+      <select id="rv-type" onchange="onReviewTypeChange()">
+        <option value="year">年度回顧</option>
+        <option value="month">月度回顧</option>
+      </select>
+      <select id="rv-year"></select>
+      <select id="rv-month" style="display:none"></select>
+      <button class="btn btn-fill" onclick="generateReview()">生成回顧</button>
+    </div>
+    <div class="review-output" id="reviewOutput">
+      <div class="review-card" id="reviewCard">
+        <div class="review-title">Reading List</div>
+        <div class="review-subtitle" id="rv-subtitle"></div>
+        <div class="review-divider">୨୧ --- ･ --- ･ --- ୨୧ --- ･ --- ･ --- ୨୧</div>
+        <div class="review-body" id="rv-body"></div>
+        <div class="review-divider" id="rv-divider2" style="display:none">୨୧ --- ･ --- ･ --- ୨୧ --- ･ --- ･ --- ୨୧</div>
+        <div class="review-book-list" id="rv-booklist"></div>
+        <div class="review-divider" id="rv-divider3">୨୧ --- ･ --- ･ --- ୨୧ --- ･ --- ･ --- ୨୧</div>
+      </div>
+    </div>
+    <div class="modal-btns" style="margin-top:16px;justify-content:flex-end;">
+      <button class="btn btn-ghost" onclick="closeOverlay('reviewOverlay')" style="height:36px;">關閉</button>
+      <button class="btn btn-out" id="rv-export-btn" onclick="exportReviewImage()" style="display:none;height:36px;">匯出圖片</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL='https://miipumgubvwoaoeiteew.supabase.co';
+const SUPABASE_KEY='sb_publishable_9UBbONOpY9h1O7H9tobF5g_5_y1pBtU';
+const HEADERS={'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':'return=representation'};
+const BASE=`${SUPABASE_URL}/rest/v1/books`;
+const SBASE=`${SUPABASE_URL}/rest/v1/settings`;
+
+let _authToken = null; // 登入後的 JWT token
+
+function authHeaders(extra){
+  const h = {...HEADERS};
+  if(_authToken) h['Authorization'] = `Bearer ${_authToken}`;
+  return extra ? {...h, ...extra} : h;
+}
+
+async function doLogin(){
+  const email = document.getElementById('loginEmail').value.trim();
+  const pw    = document.getElementById('loginPw').value;
+  const btn   = document.getElementById('loginBtn');
+  const err   = document.getElementById('loginError');
+  err.style.display='none';
+  btn.disabled=true; btn.textContent='登入中…';
+  try{
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY},
+      body: JSON.stringify({email, password:pw})
+    });
+    const data = await res.json();
+    if(!res.ok || !data.access_token) throw new Error(data.error_description||'登入失敗');
+    _authToken = data.access_token;
+    closeOverlay('pwOverlay');
+    enterEdit();
+  } catch(e){
+    err.style.display='block';
+    document.getElementById('loginPw').value='';
+    document.getElementById('loginPw').focus();
+  }
+  btn.disabled=false; btn.textContent='登入';
+}
+
+async function doLogout(){
+  try{
+    await fetch(`${SUPABASE_URL}/auth/v1/logout`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${_authToken}`}
+    });
+  } catch(e){}
+  _authToken = null;
+  exitEdit();
+}
+
+const VIEW_TAGS=['主受','主攻','互攻','反攻','第一人稱','第二人稱'];
+const TIME_TAGS=['現代','古代','未來','西幻','末世','快穿','無限流'];
+const RATING_VALS=['★★★★★','★★★★☆','★★★☆☆','★★☆☆☆','★☆☆☆☆','☆☆☆☆☆'];
+const RATING_CLS=['r5','r4','r3','r2','r1','r0'];
+const VIEW_SET=new Set(['主攻','互攻','反攻']);
+const GROUPED=new Set([...VIEW_TAGS,...TIME_TAGS]);
+const MONTHS=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+
+let books=[], customTags=[], allOtherTags=[];
+let editMode=false;
+// 每個類別都有 inc（包含）和 exc（排除）兩個 Set
+let activeFilters={
+  ratings:{inc:new Set(),exc:new Set()},
+  view:{inc:new Set(),exc:new Set()},
+  time:{inc:new Set(),exc:new Set()},
+  other:{inc:new Set(),exc:new Set()},
+  years:{inc:new Set(),exc:new Set()},
+  months:{inc:new Set(),exc:new Set()}
+};
+let curSort='default', curPage=1;
+const PER=40;
+
+// ── Sync status ───────────────────────────────
+function setSyncStatus(state,msg){
+  document.getElementById('syncDot').className='sync-dot '+state;
+  document.getElementById('stats').textContent=msg;
+}
+
+// ── Supabase ──────────────────────────────────
+async function dbFetchAll(){
+  setSyncStatus('busy','載入中…');
+  let all=[],from=0,batchSize=1000;
+  while(true){
+    const res=await fetch(`${BASE}?select=*&order=id.desc&limit=${batchSize}&offset=${from}`,{headers:HEADERS});
+    if(!res.ok) throw new Error(await res.text());
+    const batch=await res.json();
+    all=all.concat(batch);
+    if(batch.length<batchSize) break;
+    from+=batchSize;
+  }
+  return all;
+}
+async function dbInsert(book){
+  const res=await fetch(BASE,{method:'POST',headers:authHeaders(),body:JSON.stringify(book)});
+  if(!res.ok) throw new Error(await res.text());
+  return (await res.json())[0];
+}
+async function dbUpdate(id,updates){
+  const res=await fetch(`${BASE}?id=eq.${id}`,{method:'PATCH',headers:authHeaders(),body:JSON.stringify(updates)});
+  if(!res.ok) throw new Error(await res.text());
+  return (await res.json())[0];
+}
+async function dbDelete(id){
+  const res=await fetch(`${BASE}?id=eq.${id}`,{method:'DELETE',headers:authHeaders({'Prefer':'return=minimal'})});
+  if(!res.ok) throw new Error(await res.text());
+}
+async function dbGetSetting(key){
+  const res=await fetch(`${SBASE}?key=eq.${key}&select=value`,{headers:HEADERS});
+  if(!res.ok) return null;
+  const rows=await res.json();
+  return rows.length?rows[0].value:null;
+}
+async function dbSetSetting(key,value){
+  const res=await fetch(SBASE,{method:'POST',headers:authHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),body:JSON.stringify({key,value})});
+  if(!res.ok) throw new Error(await res.text());
+}
+
+// ── 評分標準折疊（手機端）─────────────────────
+function toggleRatingCard(){
+  if(window.innerWidth > 700) return;
+  const grid = document.getElementById('ratingGrid');
+  const head = document.getElementById('ratingHead');
+  if(grid.classList.contains('collapsed')){
+    grid.style.maxHeight = grid.scrollHeight + 'px';
+    grid.classList.remove('collapsed');
+    head.classList.remove('collapsed');
+    grid.addEventListener('transitionend', ()=>{ grid.style.maxHeight = ''; }, {once:true});
+  } else {
+    grid.style.maxHeight = grid.scrollHeight + 'px';
+    requestAnimationFrame(()=>{ grid.classList.add('collapsed'); head.classList.add('collapsed'); });
+  }
+}
+
+function toggleUsageCard(){
+  if(window.innerWidth > 700) return;
+  const grid = document.getElementById('usageGrid');
+  const head = document.getElementById('usageHead');
+  if(grid.classList.contains('collapsed')){
+    grid.style.maxHeight = grid.scrollHeight + 'px';
+    grid.classList.remove('collapsed');
+    head.classList.remove('collapsed');
+    grid.addEventListener('transitionend', ()=>{ grid.style.maxHeight = ''; }, {once:true});
+  } else {
+    grid.style.maxHeight = grid.scrollHeight + 'px';
+    requestAnimationFrame(()=>{ grid.classList.add('collapsed'); head.classList.add('collapsed'); });
+  }
+}
+
+// 手機端預設折疊
+function initRatingCard(){
+  if(window.innerWidth <= 700){
+    const grid = document.getElementById('ratingGrid');
+    const head = document.getElementById('ratingHead');
+    if(!grid) return;
+    grid.style.maxHeight = '0';
+    grid.style.transition = 'none';
+    grid.classList.add('collapsed');
+    if(head) head.classList.add('collapsed');
+    requestAnimationFrame(()=>{ grid.style.transition = ''; });
+  }
+}
+
+// ── Init ──────────────────────────────────────
+async function init(){
+  // 儲存篩選按鈕的原始內容（含 SVG）
+  const fb=document.getElementById('filterBtn');
+  if(fb) fb.dataset.orig=fb.innerHTML;
+  try{
+    books=await dbFetchAll();
+    try{ const raw=await dbGetSetting('custom_tags'); customTags=raw?JSON.parse(raw):[]; }catch(e){ customTags=[]; }
+    try{ const ts=await dbGetSetting('last_updated'); renderLastUpdated(ts); }catch(e){}
+    buildOtherTags(); initFilters(); renderTagManager(); renderTotalWords(); render();
+    setSyncStatus('ok',`共 ${books.length} 本`);
+    initRatingCard();
+  }catch(e){
+    setSyncStatus('err','連線失敗');
+    document.getElementById('bookList').innerHTML=`<div class="empty"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14"><defs fill="#aa6657"></defs><path d="m33.73,8h-3.46L5.44,51c.77,1.33.96,1.67,1.73,3h49.65c.77-1.33.96-1.67,1.73-3L33.73,8Zm2.27,42h-8v-6h8v6Zm0-18l-2,8h-4l-2-8v-12h8v12Z" fill="#aa6657"></path></svg>無法連線到資料庫<br><small style="opacity:.6">${e.message}</small></div>`;
+  }
+}
+
+// ── Last updated ──────────────────────────────
+function renderLastUpdated(iso){
+  const el=document.getElementById('lastUpdated');
+  if(!el) return;
+  if(!iso){el.textContent='';return;}
+  const d=new Date(iso),pad=n=>String(n).padStart(2,'0');
+  el.textContent=`最後更新：${d.getFullYear()}/${pad(d.getMonth()+1)}/${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+async function saveLastUpdated(){
+  const iso=new Date().toISOString(); renderLastUpdated(iso);
+  try{ await dbSetSetting('last_updated',iso); }catch(e){}
+}
+
+// ── Date helpers ──────────────────────────────
+function fmtDate(s){
+  if(!s) return '日期不詳';
+  const d=new Date(s);
+  return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`;
+}
+function fmtDatetime(s){
+  if(!s) return '—';
+  const d=new Date(s),pad=n=>String(n).padStart(2,'0');
+  return `${d.getFullYear()}/${pad(d.getMonth()+1)}/${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+function getYear(b){ return b.read_date?new Date(b.read_date).getFullYear():null; }
+function getMonth(b){ return b.read_date?new Date(b.read_date).getMonth()+1:null; }
+
+// ── Tags ──────────────────────────────────────
+function buildOtherTags(){
+  const freq={};
+  books.forEach(b=>(b.tags||[]).forEach(t=>{ if(!GROUPED.has(t)) freq[t]=(freq[t]||0)+1; }));
+  customTags.forEach(t=>{ if(!freq[t]) freq[t]=0; });
+  allOtherTags=Object.keys(freq).sort((a,b)=>freq[b]-freq[a]);
+}
+
+// ── Filters ───────────────────────────────────
+function initFilters(){
+  document.getElementById('ratingChips').innerHTML=
+    RATING_VALS.map((r,i)=>`<span class="chip rating-chip ${RATING_CLS[i]}" onclick="toggleRating('${r}',this)">${r}</span>`).join('');
+  document.getElementById('viewChips').innerHTML=
+    VIEW_TAGS.map(t=>`<span class="chip" onclick="toggleChip('view','${t}',this)">${t}</span>`).join('');
+  document.getElementById('timeChips').innerHTML=
+    TIME_TAGS.map(t=>`<span class="chip" onclick="toggleChip('time','${t}',this)">${t}</span>`).join('');
+  document.getElementById('otherChips').innerHTML=
+    allOtherTags.map(t=>`<span class="chip" data-o="${esc(t)}" onclick="toggleChip('other','${esc(t)}',this)">${esc(t)}</span>`).join('');
+  // 年份：從書單動態計算
+  const years=[...new Set(books.map(b=>getYear(b)).filter(Boolean))].sort((a,b)=>b-a);
+  document.getElementById('yearChips').innerHTML=
+    years.map(y=>`<span class="chip" onclick="toggleDateChip('years',${y},this)">${y}</span>`).join('');
+  document.getElementById('monthChips').innerHTML=
+    MONTHS.map((m,i)=>`<span class="chip" onclick="toggleDateChip('months',${i+1},this)">${m}</span>`).join('');
+}
+// 三態循環：空→包含→排除→空
+function triCycle(cat, key, el){
+  const f=activeFilters[cat];
+  if(f.exc.has(key)){ f.exc.delete(key); el.classList.remove('on','ex'); }
+  else if(f.inc.has(key)){ f.inc.delete(key); f.exc.add(key); el.classList.remove('on'); el.classList.add('ex'); }
+  else { f.inc.add(key); el.classList.add('on'); el.classList.remove('ex'); }
+  go();
+}
+function toggleRating(r,el){ triCycle('ratings',r,el); }
+function toggleChip(cat,tag,el){ triCycle(cat,tag,el); }
+function toggleDateChip(cat,val,el){ triCycle(cat,val,el); }
+function clearFilters(){
+  Object.keys(activeFilters).forEach(k=>{ activeFilters[k]={inc:new Set(),exc:new Set()}; });
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on','ex')); go();
+}
+function toggleFilter(){
+  const p=document.getElementById('filterPanel'),open=p.classList.toggle('open');
+  const btn=document.getElementById('filterBtn');
+  if(open){
+    btn.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14"><defs fill="#aa6657"></defs><path d="m36.24,32l15.76,15.76-4.24,4.24-15.76-15.76-15.76,15.76-4.24-4.24,15.76-15.76-15.76-15.76,4.24-4.24,15.76,15.76,15.76-15.76,4.24,4.24-15.76,15.76Z" fill="#aa6657"></path></svg>關閉篩選';
+  } else {
+    btn.innerHTML=document.getElementById('filterBtn').dataset.orig||btn.innerHTML;
+  }
+}
+
+// ── Tag manager ───────────────────────────────
+function renderTagManager(){
+  const tl=document.getElementById('tagList');
+  if(!allOtherTags.length){tl.innerHTML='<span style="font-size:.76rem;color:var(--text-lt)">尚無自訂標籤</span>';return;}
+  tl.innerHTML=allOtherTags.map(t=>`<span class="tag-manage-chip">${esc(t)}<span class="del-tag" onclick="removeCustomTag('${esc(t)}')" title="刪除標籤">✕</span></span>`).join('');
+}
+async function addCustomTag(){
+  const inp=document.getElementById('newTagInput'),tag=inp.value.trim();
+  if(!tag) return;
+  if(allOtherTags.includes(tag)){inp.value='';return;}
+  customTags.push(tag); inp.value='';
+  buildOtherTags(); initFilters(); renderTagManager(); renderAllTagPickers();
+  try{ await dbSetSetting('custom_tags',JSON.stringify(customTags)); }catch(e){}
+}
+async function removeCustomTag(tag){
+  if(!confirm(`確定刪除標籤「${tag}」？\n（已使用此標籤的書不受影響）`)) return;
+  customTags=customTags.filter(t=>t!==tag);
+  buildOtherTags(); initFilters(); renderTagManager(); renderAllTagPickers();
+  try{ await dbSetSetting('custom_tags',JSON.stringify(customTags)); }catch(e){}
+}
+
+// ── Tag picker ────────────────────────────────
+function buildTagPickerHTML(prefix,selectedTags){
+  const sel=new Set(selectedTags);
+  const viewRow=VIEW_TAGS.map(t=>`<span class="tpchip${sel.has(t)?' on':''}" data-tp="${prefix}" data-tag="${esc(t)}" onclick="toggleTpChip(this)">${esc(t)}</span>`).join('');
+  const timeRow=TIME_TAGS.map(t=>`<span class="tpchip${sel.has(t)?' on':''}" data-tp="${prefix}" data-tag="${esc(t)}" onclick="toggleTpChip(this)">${esc(t)}</span>`).join('');
+  const otherRow=allOtherTags.map(t=>`<span class="tpchip${sel.has(t)?' on':''}" data-tp="${prefix}" data-tag="${esc(t)}" onclick="toggleTpChip(this)">${esc(t)}</span>`).join('');
+  return `<div class="tag-picker-section"><div class="tag-picker-section-lbl">視角</div><div class="tag-picker-row">${viewRow}</div></div>
+    <div class="tag-picker-section"><div class="tag-picker-section-lbl">時代</div><div class="tag-picker-row">${timeRow}</div></div>
+    ${otherRow?`<div class="tag-picker-section"><div class="tag-picker-section-lbl">其他標籤</div><div class="tag-picker-row">${otherRow}</div></div>`:''}`;
+}
+function renderAllTagPickers(){
+  const nSel=getPickerSelected('n');
+  document.getElementById('n-tp-content').innerHTML=buildTagPickerHTML('n',nSel);
+  const emSel=getPickerSelected('em');
+  document.getElementById('em-tp-content').innerHTML=buildTagPickerHTML('em',emSel);
+}
+function getPickerSelected(prefix){
+  return [...document.querySelectorAll(`.tpchip[data-tp="${prefix}"].on`)].map(el=>el.dataset.tag);
+}
+function toggleTpChip(el){ el.classList.toggle('on'); }
+
+// ── Sort ──────────────────────────────────────
+function setSort(s){
+  curSort=s;
+  document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('sb-'+s).classList.add('on'); go();
+}
+function ratingNum(r){ return (r?.match(/★/g)||[]).length; }
+
+// ── Filter ────────────────────────────────────
+function getFiltered(){
+  const q=document.getElementById('searchQ').value.toLowerCase().trim();
+  let list=[...books];
+  if(q) list=list.filter(b=>b.title?.toLowerCase().includes(q)||b.author?.toLowerCase().includes(q));
+  const f=activeFilters;
+  // 評分
+  if(f.ratings.inc.size) list=list.filter(b=>f.ratings.inc.has(b.rating));
+  if(f.ratings.exc.size) list=list.filter(b=>!f.ratings.exc.has(b.rating));
+  // 視角
+  if(f.view.inc.size) list=list.filter(b=>(b.tags||[]).some(t=>f.view.inc.has(t)));
+  if(f.view.exc.size) list=list.filter(b=>![...f.view.exc].some(t=>(b.tags||[]).includes(t)));
+  // 時代
+  if(f.time.inc.size) list=list.filter(b=>(b.tags||[]).some(t=>f.time.inc.has(t)));
+  if(f.time.exc.size) list=list.filter(b=>![...f.time.exc].some(t=>(b.tags||[]).includes(t)));
+  // 其他標籤（包含要全部符合，排除要全部不符合）
+  if(f.other.inc.size) list=list.filter(b=>[...f.other.inc].every(t=>(b.tags||[]).includes(t)));
+  if(f.other.exc.size) list=list.filter(b=>![...f.other.exc].some(t=>(b.tags||[]).includes(t)));
+  // 年份
+  if(f.years.inc.size) list=list.filter(b=>f.years.inc.has(getYear(b)));
+  if(f.years.exc.size) list=list.filter(b=>!f.years.exc.has(getYear(b)));
+  // 月份
+  if(f.months.inc.size) list=list.filter(b=>f.months.inc.has(getMonth(b)));
+  if(f.months.exc.size) list=list.filter(b=>!f.months.exc.has(getMonth(b)));
+  if(curSort==='rd') list.sort((a,b)=>ratingNum(b.rating)-ratingNum(a.rating));
+  else if(curSort==='ra') list.sort((a,b)=>ratingNum(a.rating)-ratingNum(b.rating));
+  else if(curSort==='chd') list.sort((a,b)=>parseFloat(b.chapters||0)-parseFloat(a.chapters||0));
+  else if(curSort==='cha') list.sort((a,b)=>parseFloat(a.chapters||0)-parseFloat(b.chapters||0));
+  else if(curSort==='dated') list.sort((a,b)=>(b.read_date||'0').localeCompare(a.read_date||'0'));
+  else if(curSort==='datea') list.sort((a,b)=>(a.read_date||'9').localeCompare(b.read_date||'9'));
+  return list;
+}
+function go(){ curPage=1; render(); }
+
+// ── Render ────────────────────────────────────
+function ratingCls(r){ return ['r0','r1','r2','r3','r4','r5'][ratingNum(r)]; }
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function tagHtml(tags){
+  return (tags||[]).map(t=>{
+    const f=activeFilters;
+    const isOn=f.view.inc.has(t)||f.time.inc.has(t)||f.other.inc.has(t);
+    const isEx=f.view.exc.has(t)||f.time.exc.has(t)||f.other.exc.has(t);
+    return `<span class="book-tag${isOn?' on':isEx?' ex':''}" onclick="event.stopPropagation();quickTag(this)">${esc(t)}</span>`;
+  }).join('');
+}
+function quickTag(el){
+  const tag=el.textContent.trim();
+  let cat='other';
+  if(VIEW_TAGS.includes(tag)) cat='view';
+  else if(TIME_TAGS.includes(tag)) cat='time';
+  const f=activeFilters[cat];
+  // 三態循環
+  if(f.exc.has(tag)){ f.exc.delete(tag); }
+  else if(f.inc.has(tag)){ f.inc.delete(tag); f.exc.add(tag); }
+  else { f.inc.add(tag); }
+  // 同步篩選面板的 chip 狀態
+  const selector=cat==='other'?`[data-o="${esc(tag)}"]`:`[onclick="toggleChip('${cat}','${tag}',this)"]`;
+  document.querySelectorAll(selector).forEach(c=>{
+    c.classList.toggle('on',f.inc.has(tag));
+    c.classList.toggle('ex',f.exc.has(tag));
+  });
+  go();
+}
+
+function render(){
+  const list=getFiltered(),total=list.length;
+  const pages=Math.max(1,Math.ceil(total/PER));
+  curPage=Math.min(curPage,pages);
+  const slice=list.slice((curPage-1)*PER,curPage*PER);
+  const f=activeFilters;
+  const active=Object.values(f).reduce((s,v)=>s+v.inc.size+v.exc.size,0);
+  // 只在有篩選時顯示 x/x，否則只顯示總數
+  if(total < books.length){
+    document.getElementById('stats').textContent=`共 ${total.toLocaleString()} / ${books.length.toLocaleString()} 本`;
+  } else {
+    document.getElementById('stats').textContent=`共 ${books.length.toLocaleString()} 本`;
+  }
+  document.getElementById('filterCount').textContent=active?`已選 ${active} 個篩選條件`:'尚未篩選';
+  const bl=document.getElementById('bookList');
+  if(!slice.length){
+    bl.innerHTML=`<div class="empty">沒有符合條件的書目ᶻz ₍^_   ̫ _^₎</div>`;
+  } else {
+    bl.innerHTML=slice.map(b=>{
+      const rc=ratingCls(b.rating);
+      const persona=(b.gong||b.shou)?
+        `<div class="book-persona">
+          ${b.gong?`<span class="persona-item"><span class="persona-label">攻</span> ${esc(b.gong)}</span>`:''}
+          ${b.shou?`<span class="persona-item"><span class="persona-label">受</span> ${esc(b.shou)}</span>`:''}
+        </div>`:'';
+      return `<div class="book-card" onclick="openDetail('${b.id}')">
+        <div class="book-main">
+          <div class="book-title">${esc(b.title)}${b.notes?'<svg class="note-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" title="有心得"><path d="m32,8c-14.81,0-24,8.43-24,22,0,6.92,2.4,12.49,6.7,16.3l-6.7,6.7,2,3c5.42,0,10.43-1.8,14.45-4.84,2.32.55,4.84.84,7.55.84,14.81,0,24-8.43,24-22s-9.19-22-24-22Zm-12,26c-2.21,0-4-1.79-4-4s1.79-4,4-4,4,1.79,4,4-1.79,4-4,4Zm12,0c-2.21,0-4-1.79-4-4s1.79-4,4-4,4,1.79,4,4-1.79,4-4,4Zm12,0c-2.21,0-4-1.79-4-4s1.79-4,4-4,4,1.79,4,4-1.79,4-4,4Z" fill="#ddb8ac"/></svg>':''}</div>
+          <div class="book-author">${esc(b.author)}</div>
+          ${persona}
+          <div class="book-meta">${tagHtml(b.tags)}</div>
+        </div>
+        <div class="book-right">
+          <div class="book-rating ${rc}">${b.rating||''}</div>
+          ${b.chapters?`<div class="book-chaps">${esc(b.chapters)} 萬字</div>`:''}
+          ${b.read_date?`<div class="book-date">${fmtDate(b.read_date)}</div>`:''}
+        </div>
+      </div>`;
+    }).join('');
+  }
+  renderPager(pages);
+}
+
+function renderPager(pages){
+  const pg=document.getElementById('pager');
+  if(pages<=1){pg.innerHTML='';return;}
+  let h=`<button class="pg" onclick="goP(${curPage-1})" ${curPage===1?'disabled':''}>‹</button>`;
+  const show=new Set([1,pages]);
+  for(let i=Math.max(2,curPage-2);i<=Math.min(pages-1,curPage+2);i++) show.add(i);
+  let prev=0;
+  [...show].sort((a,b)=>a-b).forEach(p=>{
+    if(prev&&p-prev>1) h+=`<span class="pg" style="border:none;background:none;cursor:default;opacity:.4">…</span>`;
+    h+=`<button class="pg${p===curPage?' on':''}" onclick="goP(${p})">${p}</button>`;
+    prev=p;
+  });
+  h+=`<button class="pg" onclick="goP(${curPage+1})" ${curPage===pages?'disabled':''}>›</button>`;
+  pg.innerHTML=h;
+}
+function goP(p){ curPage=p; render(); window.scrollTo({top:document.getElementById('bookList').offsetTop-60,behavior:'smooth'}); }
+
+// ── Total words ───────────────────────────────
+function renderTotalWords(){
+  const total=books.reduce((sum,b)=>sum+(parseFloat(b.chapters)||0),0);
+  const d=document.getElementById('totalWordsDisplay');
+  if(d) d.textContent=total%1===0?total.toLocaleString():total.toFixed(1);
+}
+
+// ── Book detail modal ─────────────────────────
+function openDetail(id, fromRandom=false){
+  const b=books.find(x=>String(x.id)===String(id)); if(!b) return;
+  document.getElementById('dm-id').value=id;
+  document.getElementById('dm-title').textContent=b.title;
+  document.getElementById('dm-author').textContent=b.author||'';
+  document.getElementById('dm-rating').textContent=b.rating||'';
+  document.getElementById('dm-rating').className=ratingCls(b.rating);
+  document.getElementById('dm-tags').innerHTML=(b.tags||[]).map(t=>`<span class="detail-tag">${esc(t)}</span>`).join('');
+  if(b.chapters){
+    document.getElementById('dm-chaps-row').style.display='flex';
+    document.getElementById('dm-chaps').textContent=b.chapters+' 萬字';
+  } else { document.getElementById('dm-chaps-row').style.display='none'; }
+  const personaRow=document.getElementById('dm-persona-row');
+  if(b.gong||b.shou){
+    personaRow.style.display='block';
+    personaRow.innerHTML=
+      (b.gong?`<div class="detail-row"><span class="detail-lbl">攻</span><span>${esc(b.gong)}</span></div>`:'') +
+      (b.shou?`<div class="detail-row"><span class="detail-lbl">受</span><span>${esc(b.shou)}</span></div>`:'');
+  } else { personaRow.style.display='none'; personaRow.innerHTML=''; }
+  document.getElementById('dm-readdate-display').textContent=fmtDate(b.read_date);
+  document.getElementById('dm-readdate-edit').value=b.read_date||'';
+  document.getElementById('dm-readdate-edit').style.display='none';
+  document.getElementById('dm-updated').textContent=b.updated_at?fmtDatetime(b.updated_at):'—';
+  document.getElementById('dm-notes-text').textContent=b.notes||'杏桃貝果沒有心得……';
+  document.getElementById('dm-notes-edit').value=b.notes||'';
+  document.getElementById('dm-notes-text').style.display='block';
+  document.getElementById('dm-notes-edit').style.display='none';
+  // 隨機觸發按鈕
+  const ra = document.getElementById('dm-random-actions');
+  ra.innerHTML = '';
+  if(fromRandom){
+    const skip = document.createElement('button');
+    skip.className = 'btn btn-ghost';
+    skip.textContent = '不想吃';
+    skip.onclick = () => { skipSet.add(String(id)); closeOverlay('detailOverlay'); setTimeout(()=>randomPick(true), 230); };
+    const again = document.createElement('button');
+    again.className = 'btn btn-ghost';
+    again.textContent = '再抽一次';
+    again.onclick = () => { closeOverlay('detailOverlay'); setTimeout(()=>randomPick(true), 230); };
+    ra.appendChild(skip);
+    ra.appendChild(again);
+  }
+  // 編輯模式按鈕
+  document.getElementById('dm-open-edit').style.display = editMode ? 'inline-flex' : 'none';
+  document.getElementById('dm-delete').style.display = editMode ? 'inline-flex' : 'none';
+  document.getElementById('detailOverlay').classList.add('open');
+}
+function toggleDetailEdit(){
+  const txt=document.getElementById('dm-notes-text');
+  const edt=document.getElementById('dm-notes-edit');
+  const rdDisplay=document.getElementById('dm-readdate-display');
+  const rdEdit=document.getElementById('dm-readdate-edit');
+  const editing=edt.style.display==='block';
+  if(editing){
+    txt.style.display='block'; edt.style.display='none';
+    rdDisplay.style.display=''; rdEdit.style.display='none';
+    document.getElementById('dm-edit-btn').textContent='編輯心得';
+    document.getElementById('dm-save-btn').style.display='none';
+  } else {
+    txt.style.display='none'; edt.style.display='block'; edt.focus();
+    rdDisplay.style.display='none'; rdEdit.style.display='inline-block';
+    document.getElementById('dm-edit-btn').textContent='取消';
+    document.getElementById('dm-save-btn').style.display='inline-flex';
+  }
+}
+async function saveDetailNotes(){
+  const id=document.getElementById('dm-id').value;
+  const notes=document.getElementById('dm-notes-edit').value;
+  const readDate=document.getElementById('dm-readdate-edit').value.trim()||null;
+  setSyncStatus('busy','儲存中…');
+  try{
+    const updated=await dbUpdate(id,{notes, read_date:readDate});
+    const idx=books.findIndex(b=>String(b.id)===String(id));
+    if(idx!==-1) books[idx]={...books[idx],...updated};
+    document.getElementById('dm-notes-text').textContent=notes||'杏桃貝果沒有心得……⦁֊⦁꧞';
+    document.getElementById('dm-notes-text').style.display='block';
+    document.getElementById('dm-notes-edit').style.display='none';
+    document.getElementById('dm-readdate-display').textContent=fmtDate(readDate);
+    document.getElementById('dm-readdate-display').style.display='';
+    document.getElementById('dm-readdate-edit').style.display='none';
+    document.getElementById('dm-edit-btn').textContent='編輯心得';
+    document.getElementById('dm-save-btn').style.display='none';
+    setSyncStatus('ok','已儲存');
+    saveLastUpdated();
+    render();
+  }catch(e){ setSyncStatus('err','儲存失敗'); alert('儲存失敗：'+e.message); }
+}
+
+// ── Edit mode ─────────────────────────────────
+function toggleEdit(){
+  if(!editMode){
+    document.getElementById('loginEmail').value='';
+    document.getElementById('loginPw').value='';
+    document.getElementById('loginError').style.display='none';
+    document.getElementById('pwOverlay').classList.add('open');
+    setTimeout(()=>document.getElementById('loginEmail').focus(),80);
+  } else { doLogout(); }
+}
+function enterEdit(){
+  editMode=true; document.body.classList.add('edit-mode');
+  const btn=document.getElementById('editBtn');
+  btn.innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14"><defs fill="#fefaf9"></defs><path d="m44,26v-6c0-7.4-4.6-12-12-12s-12,4.6-12,12v6h-8v30h40v-30h-8Zm-18-6c0-4.09,1.91-6,6-6s6,1.91,6,6v6h-12v-6Z" fill="#fefaf9"></path></svg>登出`; btn.classList.replace('btn-out','btn-edit-on');
+  render();
+}
+function exitEdit(){
+  editMode=false; document.body.classList.remove('edit-mode');
+  const btn=document.getElementById('editBtn');
+  btn.innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14"><defs fill="#aa6657"></defs><path d="m39.17,17.76l7.07,7.07-27.17,27.17-9.66,4-1.41-1.41,4-9.66,27.17-27.17Zm9.76-9.76l-6.93,6.93,7.07,7.07,6.93-6.93-7.07-7.07Z" fill="#aa6657"></path></svg>編輯`; btn.classList.replace('btn-edit-on','btn-out');
+  render();
+}
+
+// ── Add book ──────────────────────────────────
+function openAddModal(){
+  ['n-title','n-author','n-chaps','n-gong','n-shou','n-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('n-rating').value='★★★★☆';
+  document.getElementById('n-tp-content').innerHTML=buildTagPickerHTML('n',[]);
+  document.getElementById('n-tp-collapsible').style.display='none';
+  document.getElementById('n-tp-arrow').style.transform='rotate(0deg)';
+  document.getElementById('addOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('n-title').focus(),80);
+}
+async function addBook(){
+  const title=document.getElementById('n-title').value.trim();
+  if(!title){ document.getElementById('n-title').focus(); return; }
+  const dup=books.some(b=>(b.title||'').trim().toLowerCase()===title.toLowerCase());
+  if(dup){
+    showConfirmModal('你好像吃過了！確定要新增嗎？', '是', '否', ()=>doAddBook(title));
+    return;
+  }
+  doAddBook(title);
+}
+async function doAddBook(title){
+  let tags=getPickerSelected('n');
+  const ALL_VIEW=new Set([...VIEW_SET,'主受']);
+  if(!tags.some(t=>ALL_VIEW.has(t))) tags.unshift('主受');
+  const book={
+    title, author:document.getElementById('n-author').value.trim(),
+    rating:document.getElementById('n-rating').value,
+    chapters:document.getElementById('n-chaps').value.trim(),
+    tags, gong:document.getElementById('n-gong').value.trim(),
+    shou:document.getElementById('n-shou').value.trim(),
+    notes:document.getElementById('n-notes').value.trim(),
+    read_date:new Date().toISOString().slice(0,10)
+  };
+  const btn=document.getElementById('addBtn');
+  btn.disabled=true; btn.textContent='儲存中…';
+  setSyncStatus('busy','儲存中…');
+  try{
+    const saved=await dbInsert(book);
+    books.unshift(saved);
+    buildOtherTags(); initFilters(); renderTagManager(); renderTotalWords();
+    ['n-title','n-author','n-chaps','n-gong','n-shou','n-notes'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('n-rating').value='★★★★☆';
+    document.getElementById('n-tp-content').innerHTML=buildTagPickerHTML('n',[]);
+    document.getElementById('n-tp-collapsible').style.display='none';
+    document.getElementById('n-tp-arrow').style.transform='rotate(0deg)';
+    setSyncStatus('ok',`共 ${books.length} 本`);
+    saveLastUpdated(); closeOverlay('addOverlay'); curPage=1; render();
+  }catch(e){ setSyncStatus('err','儲存失敗'); alert('儲存失敗：'+e.message); }
+  btn.disabled=false; btn.textContent='新增';
+}
+
+// ── Delete ────────────────────────────────────
+async function delBook(id,title){
+  if(!confirm(`確定刪除「${title}」？`)) return;
+  setSyncStatus('busy','刪除中…');
+  try{
+    await dbDelete(id);
+    books=books.filter(b=>String(b.id)!==String(id));
+    buildOtherTags(); initFilters(); renderTagManager(); renderTotalWords();
+    setSyncStatus('ok',`共 ${books.length} 本`); saveLastUpdated(); render();
+  }catch(e){ setSyncStatus('err','刪除失敗'); alert('刪除失敗：'+e.message); }
+}
+
+function openEditFromDetail(){
+  const id = document.getElementById('dm-id').value;
+  closeOverlay('detailOverlay');
+  openEdit(id);
+}
+
+async function delBookFromDetail(){
+  const id = document.getElementById('dm-id').value;
+  const title = document.getElementById('dm-title').textContent;
+  closeOverlay('detailOverlay');
+  await delBook(id, title);
+}
+
+// ── Edit book ─────────────────────────────────
+function openEdit(id){
+  const b=books.find(x=>String(x.id)===String(id)); if(!b) return;
+  document.getElementById('em-id').value=id;
+  document.getElementById('em-title').value=b.title;
+  document.getElementById('em-author').value=b.author||'';
+  document.getElementById('em-rating').value=b.rating;
+  document.getElementById('em-chaps').value=b.chapters||'';
+  document.getElementById('em-gong').value=b.gong||'';
+  document.getElementById('em-shou').value=b.shou||'';
+  document.getElementById('em-notes').value=b.notes||'';
+  document.getElementById('em-tp-content').innerHTML=buildTagPickerHTML('em',b.tags||[]);
+  // 預設收合標籤區
+  document.getElementById('em-tp-collapsible').style.display='none';
+  document.getElementById('em-tp-arrow').style.transform='rotate(0deg)';
+  document.getElementById('editOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('em-title').focus(),80);
+}
+async function saveEdit(){
+  const id=document.getElementById('em-id').value;
+  let tags=getPickerSelected('em');
+  const ALL_VIEW=new Set([...VIEW_SET,'主受']);
+  if(!tags.some(t=>ALL_VIEW.has(t))) tags.unshift('主受');
+  const updates={
+    title:document.getElementById('em-title').value.trim(),
+    author:document.getElementById('em-author').value.trim(),
+    rating:document.getElementById('em-rating').value,
+    chapters:document.getElementById('em-chaps').value.trim(),
+    tags, gong:document.getElementById('em-gong').value.trim(),
+    shou:document.getElementById('em-shou').value.trim(),
+    notes:document.getElementById('em-notes').value
+  };
+  const btn=document.getElementById('saveEditBtn');
+  btn.disabled=true; btn.textContent='儲存中…';
+  setSyncStatus('busy','儲存中…');
+  try{
+    const updated=await dbUpdate(id,updates);
+    const idx=books.findIndex(b=>String(b.id)===String(id));
+    if(idx!==-1) books[idx]={...books[idx],...updated};
+    buildOtherTags(); initFilters(); renderTagManager(); renderTotalWords();
+    setSyncStatus('ok','已儲存'); saveLastUpdated(); closeOverlay('editOverlay'); render();
+  }catch(e){ setSyncStatus('err','儲存失敗'); alert('儲存失敗：'+e.message); }
+  btn.disabled=false; btn.textContent='儲存';
+}
+
+function toggleTagPicker(prefix){
+  const body=document.getElementById(`${prefix}-tp-collapsible`);
+  const arrow=document.getElementById(`${prefix}-tp-arrow`);
+  const open=body.style.display==='none';
+  body.style.display=open?'block':'none';
+  arrow.style.transform=open?'rotate(180deg)':'rotate(0deg)';
+}
+function openTagModal(){
+  renderTagManager();
+  document.getElementById('tagOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('newTagInput').focus(),80);
+}
+
+// ── Review ────────────────────────────────────
+function openReviewModal(){
+  // 從書單動態取年份
+  const years=[...new Set(books.map(b=>b.read_date?new Date(b.read_date).getFullYear():null).filter(Boolean))].sort((a,b)=>b-a);
+  const yrSel=document.getElementById('rv-year');
+  yrSel.innerHTML=years.map(y=>`<option value="${y}">${y}</option>`).join('');
+  const moSel=document.getElementById('rv-month');
+  moSel.innerHTML=Array.from({length:12},(_,i)=>`<option value="${i+1}">${i+1}月</option>`).join('');
+  // 預設月份選當月
+  moSel.value=new Date().getMonth()+1;
+  document.getElementById('rv-type').value='year';
+  onReviewTypeChange();
+  document.getElementById('reviewOutput').classList.remove('show');
+  document.getElementById('rv-export-btn').style.display='none';
+  document.getElementById('reviewOverlay').classList.add('open');
+}
+
+function onReviewTypeChange(){
+  const isMonth=document.getElementById('rv-type').value==='month';
+  document.getElementById('rv-month').style.display=isMonth?'':'none';
+}
+
+function generateReview(){
+  const type=document.getElementById('rv-type').value;
+  const year=parseInt(document.getElementById('rv-year').value);
+  const month=type==='month'?parseInt(document.getElementById('rv-month').value):null;
+
+  // 篩選這段時間的書
+  const filtered=books.filter(b=>{
+    if(!b.read_date) return false;
+    const d=new Date(b.read_date);
+    if(d.getFullYear()!==year) return false;
+    if(month!==null && d.getMonth()+1!==month) return false;
+    return true;
+  });
+
+  // 副標題
+  const subtitle=month?`${year} 年 ${month} 月 回顧`:`${year} 年度回顧`;
+  document.getElementById('rv-subtitle').textContent=subtitle;
+
+  const body=document.getElementById('rv-body');
+  const booklist=document.getElementById('rv-booklist');
+  const divider2=document.getElementById('rv-divider2');
+
+  if(!filtered.length){
+    body.innerHTML=`<div class="review-empty">這段時間杏桃貝果什麼都沒有吃……</div>`;
+    divider2.style.display='none';
+    booklist.innerHTML='';
+    document.getElementById('reviewOutput').classList.add('show');
+    document.getElementById('rv-export-btn').style.display='inline-flex';
+    return;
+  }
+
+  const total=filtered.length;
+  const totalWords=filtered.reduce((s,b)=>s+(parseFloat(b.chapters)||0),0);
+  const r5=filtered.filter(b=>b.rating==='★★★★★').length;
+  const r4=filtered.filter(b=>b.rating==='★★★★☆').length;
+  const low=filtered.filter(b=>['★★☆☆☆','★☆☆☆☆','☆☆☆☆☆'].includes(b.rating)).length;
+
+  // 標籤統計（排除視角和時代）
+  const excluded=new Set([...VIEW_TAGS,...TIME_TAGS]);
+  const freq={};
+  filtered.forEach(b=>(b.tags||[]).forEach(t=>{ if(!excluded.has(t)) freq[t]=(freq[t]||0)+1; }));
+  const topTags=Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0]);
+
+  let html=`這段時間一共閱讀了 <span class="review-highlight">${total}</span> 本，<br>共 <span class="review-highlight">${totalWords%1===0?totalWords.toLocaleString():totalWords.toFixed(1)}</span> 萬字。${type==='year'?'<br><br>':''}`;
+
+  // 月度回顧只顯示第一段
+  if(type==='year'){
+    html+=`有 <span class="review-highlight">${r5}</span> 本被評為 <span class="review-highlight">★★★★★</span>，<br><span class="review-highlight">${r4}</span> 本 <span class="review-highlight">★★★★☆</span>，<br>`;
+    if(low>0) html+=`還有 <span class="review-highlight">${low}</span> 本低於 <span class="review-highlight">★★★☆☆</span>。<br><br>`;
+    else html+=`<br>`;
+    if(topTags.length){
+      html+=`這段時間閱讀最多的種類是<br>`;
+      html+=topTags.map(t=>`<span class="review-tag">#${esc(t)}</span>`).join(' ');
+    } else {
+      html+=`……咦？杏桃貝果到底閱讀了什麼？`;
+    }
+  }
+  body.innerHTML=html;
+
+  // 月度書卡
+  if(type==='month'){
+    divider2.style.display='block';
+    booklist.innerHTML=filtered.map(b=>{
+      const rc=ratingCls(b.rating);
+      const persona=(b.gong||b.shou)?
+        `<div class="review-book-persona">${[b.gong?esc(b.gong):'', b.shou?esc(b.shou):''].filter(Boolean).join(' × ')}</div>`:'';
+      return `<div class="review-book-card">
+        <div>
+          <div class="review-book-title">${esc(b.title)}</div>
+          <div class="review-book-author">${esc(b.author)}</div>
+          ${persona}
+          <div class="review-book-meta">${(b.tags||[]).map(t=>`<span class="review-book-tag">${esc(t)}</span>`).join('')}</div>
+        </div>
+        <div class="review-book-right">
+          <div class="review-book-rating ${rc}">${b.rating||''}</div>
+          ${b.chapters?`<div class="review-book-chaps">${esc(b.chapters)} 萬字</div>`:''}
+        </div>
+      </div>`;
+    }).join('');
+  } else {
+    divider2.style.display='none';
+    booklist.innerHTML='';
+  }
+
+  document.getElementById('reviewOutput').classList.add('show');
+  document.getElementById('rv-export-btn').style.display='inline-flex';
+}
+
+async function exportReviewImage(){
+  const card=document.getElementById('reviewCard');
+  const btn=document.getElementById('rv-export-btn');
+  btn.disabled=true; btn.textContent='生成中…';
+  try{
+    // 動態載入 html2canvas
+    if(!window.html2canvas){
+      await new Promise((res,rej)=>{
+        const s=document.createElement('script');
+        s.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+        s.onload=res; s.onerror=rej;
+        document.head.appendChild(s);
+      });
+    }
+    const scale=750/card.offsetWidth;
+    const canvas=await html2canvas(card,{
+      scale: window.devicePixelRatio*scale,
+      useCORS:true,
+      backgroundColor:'#F8F1F1',
+      logging:false,
+      onclone:(doc)=>{
+        // 嵌入 Google Fonts link 到截圖文件
+        const link=doc.createElement('link');
+        link.rel='stylesheet';
+        link.href='https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700;900&family=Google+Sans:wght@400;500&display=swap';
+        doc.head.appendChild(link);
+        // 明確套用字體
+        doc.querySelectorAll('.review-divider').forEach(el=>{
+          el.style.fontFamily='"Google Sans","PingFang TC","Microsoft JhengHei",sans-serif';
+        });
+        doc.querySelectorAll('.review-card *:not(.review-divider)').forEach(el=>{
+          el.style.fontFamily='"Noto Serif TC","PingFang TC","Microsoft JhengHei","蘋方-繁","微軟正黑體",serif';
+        });
+      }
+    });
+    const link=document.createElement('a');
+    const subtitle=document.getElementById('rv-subtitle').textContent.replace(/\s/g,'_');
+    link.download=`Reading_List_${subtitle}.png`;
+    link.href=canvas.toDataURL('image/png');
+    link.click();
+  } catch(e){
+    alert('匯出失敗：'+e.message);
+  }
+  btn.disabled=false; btn.textContent='匯出圖片';
+}
+
+// ── 隨機抽取 ──────────────────────────────────
+const EASTER_EGG_KEY = 'rl_pick_count';
+const skipSet = new Set();
+
+function showInfoModal(content, btnText){
+  const existing = document.getElementById('infoModalOverlay');
+  if(existing) existing.remove();
+  const overlay = document.createElement('div');
+  overlay.id = 'infoModalOverlay';
+  overlay.className = 'overlay';
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.style.textAlign = 'center';
+  const msgP = document.createElement('p');
+  msgP.style.cssText = 'font-size:.95rem;color:var(--text);line-height:1.8;margin-bottom:20px;';
+  msgP.textContent = content;
+  const btnWrap = document.createElement('div');
+  btnWrap.className = 'modal-btns';
+  const btn = document.createElement('button');
+  btn.className = 'btn btn-fill';
+  btn.textContent = btnText;
+  btn.onclick = () => overlay.classList.remove('open');
+  btnWrap.appendChild(btn);
+  modal.appendChild(msgP);
+  modal.appendChild(btnWrap);
+  overlay.appendChild(modal);
+  overlay.onclick = e => { if(e.target===overlay) overlay.classList.remove('open'); };
+  document.body.appendChild(overlay);
+  requestAnimationFrame(()=>overlay.classList.add('open'));
+}
+
+function showConfirmModal(content, yesText, noText, onYes){
+  const existing = document.getElementById('confirmModalOverlay');
+  if(existing) existing.remove();
+  const overlay = document.createElement('div');
+  overlay.id = 'confirmModalOverlay';
+  overlay.className = 'overlay';
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.style.textAlign = 'center';
+  const msgP = document.createElement('p');
+  msgP.style.cssText = 'font-size:.95rem;color:var(--text);line-height:1.8;margin-bottom:20px;';
+  msgP.textContent = content;
+  const btnWrap = document.createElement('div');
+  btnWrap.className = 'modal-btns';
+  const close = () => overlay.classList.remove('open');
+  const noBtn = document.createElement('button');
+  noBtn.className = 'btn btn-ghost';
+  noBtn.textContent = noText;
+  noBtn.onclick = close;
+  const yesBtn = document.createElement('button');
+  yesBtn.className = 'btn btn-fill';
+  yesBtn.textContent = yesText;
+  yesBtn.onclick = () => { close(); onYes(); };
+  btnWrap.appendChild(noBtn);
+  btnWrap.appendChild(yesBtn);
+  modal.appendChild(msgP);
+  modal.appendChild(btnWrap);
+  overlay.appendChild(modal);
+  overlay.onclick = e => { if(e.target===overlay) close(); };
+  document.body.appendChild(overlay);
+  requestAnimationFrame(()=>overlay.classList.add('open'));
+}
+
+function randomPick(fromRandom=false){
+  const list = getFiltered().filter(b => !skipSet.has(String(b.id)));
+  if(!list.length){
+    if(skipSet.size){
+      showInfoModal('所有書都被你吃掉了！重新整理可以刷新。', '好吧');
+    } else {
+      showInfoModal('目前篩選範圍內沒有可以吃的！', '我沒吃過…');
+    }
+    return;
+  }
+  let count = parseInt(localStorage.getItem(EASTER_EGG_KEY)||'0') + 1;
+  const forceEgg = count >= 100;
+  if(forceEgg || Math.random() < 0.001){
+    // 重設計數器，確保彩蛋觸發後從頭開始
+    localStorage.setItem(EASTER_EGG_KEY, '0');
+    // 稍微延遲確保前一個彈窗已完全關閉
+    setTimeout(()=>showEasterEgg(), fromRandom ? 230 : 250);
+    return;
+  }
+  localStorage.setItem(EASTER_EGG_KEY, String(count));
+  const book = list[Math.floor(Math.random()*list.length)];
+  // 延遲開啟，確保前一個彈窗 CSS transition 結束
+  setTimeout(()=>openDetail(book.id, true), fromRandom ? 230 : 0);
+}
+
+const EASTER_EGGS = [
+  {
+    content: `抽到草莓貝果的<a href="https://kohane1127.lofter.com" target="_blank" style="color:var(--clay);text-decoration:underline;font-weight:700;">同人文</a>了！`,
+    btn: '好色喔'
+  },
+  {
+    content: '桂花貝果什麼都沒有聽見……',
+    btn: '你說什麼？'
+  },
+  {
+    content: '抹茶貝果：各位親愛的原住民同胞大家好！',
+    btn: '馬英九還我牛！'
+  },
+  {
+    content: `抽到黛玉貝果對你播放<a href="https://www.youtube.com/watch?v=urfRz8G4-Ec" target="_blank" style="color:var(--clay);text-decoration:underline;font-weight:700;">同道殊途</a>了。`,
+    btn: '靈氣也是氣……'
+  },
+  {
+    content: `被你發現杏桃貝果又在偷偷課金了⦁-⦁꧞`,
+    btn: '嚴厲斥責'
+  }
+];
+
+function launchConfetti(){
+  const canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const colors = ['#AA6657','#E3BFB5','#DDB8AC','#C4897A','#F8F1F1','#b8460b','#8B4F3F'];
+  const pieces = Array.from({length:120}, () => ({
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height - canvas.height,
+    w: Math.random()*10+5,
+    h: Math.random()*6+3,
+    color: colors[Math.floor(Math.random()*colors.length)],
+    rot: Math.random()*360,
+    vx: (Math.random()-0.5)*4,
+    vy: Math.random()*4+2,
+    vr: (Math.random()-0.5)*6
+  }));
+  let frame = 0;
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pieces.forEach(p=>{
+      ctx.save();
+      ctx.translate(p.x,p.y);
+      ctx.rotate(p.rot*Math.PI/180);
+      ctx.fillStyle=p.color;
+      ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      ctx.restore();
+      p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; p.vy+=0.05;
+    });
+    frame++;
+    if(frame<160) requestAnimationFrame(draw);
+    else canvas.remove();
+  }
+  draw();
+}
+
+function closeEasterEgg(){
+  const overlay = document.getElementById('easterEggOverlay');
+  if(!overlay) return;
+  overlay.classList.remove('open');
+  setTimeout(()=>{ if(overlay.parentNode) overlay.remove(); }, 230);
+}
+
+function showEasterEgg(){
+  const egg = EASTER_EGGS[Math.floor(Math.random()*EASTER_EGGS.length)];
+  const existing = document.getElementById('easterEggOverlay');
+  if(existing) existing.remove();
+  const overlay = document.createElement('div');
+  overlay.id = 'easterEggOverlay';
+  overlay.className = 'overlay';  // opacity:0 已在 CSS .overlay 裡定義
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.style.textAlign = 'center';
+  const msgP = document.createElement('p');
+  msgP.style.cssText = 'font-size:.95rem;color:var(--text);line-height:1.8;margin-bottom:20px;';
+  msgP.innerHTML = egg.content;
+  const btnWrap = document.createElement('div');
+  btnWrap.className = 'modal-btns';
+  const btn = document.createElement('button');
+  btn.className = 'btn btn-fill';
+  btn.textContent = egg.btn;
+  btn.onclick = closeEasterEgg;
+  btnWrap.appendChild(btn);
+  modal.appendChild(msgP);
+  modal.appendChild(btnWrap);
+  overlay.appendChild(modal);
+  overlay.onclick = e => { if(e.target===overlay) closeEasterEgg(); };
+  document.body.appendChild(overlay);
+  requestAnimationFrame(()=>{
+    overlay.classList.add('open');
+    launchConfetti();
+  });
+}
+
+// ── Modal utils ───────────────────────────────
+function closeOverlay(id){ document.getElementById(id).classList.remove('open'); }
+function overlayClick(e,id){ if(e.target===document.getElementById(id)) closeOverlay(id); }
+
+init();
+</script>
+</body>
+</html>
