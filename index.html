@@ -1338,12 +1338,12 @@ function generateReview(){
   filtered.forEach(b=>(b.tags||[]).forEach(t=>{ if(!excluded.has(t)) freq[t]=(freq[t]||0)+1; }));
   const topTags=Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0]);
 
-  let html=`這段時間一共閱讀了 <span class="review-highlight">${total}</span> 本，<br>共 <span class="review-highlight">${totalWords%1===0?totalWords.toLocaleString():totalWords.toFixed(1)}</span> 萬字。${type==='year'?'<br><br>':''}`;
+  let html=`這段時間一共閱讀了 <span class="review-highlight">${total}</span> 本<br>共 <span class="review-highlight">${totalWords%1===0?totalWords.toLocaleString():totalWords.toFixed(1)}</span> 萬字${type==='year'?'<br><br>':''}`;
 
   // 月度回顧只顯示第一段
   if(type==='year'){
-    html+=`有 <span class="review-highlight">${r5}</span> 本被評為 <span class="review-highlight">★★★★★</span>，<br><span class="review-highlight">${r4}</span> 本 <span class="review-highlight">★★★★☆</span>，<br>`;
-    if(low>0) html+=`還有 <span class="review-highlight">${low}</span> 本低於 <span class="review-highlight">★★★☆☆</span>。<br><br>`;
+    html+=`有 <span class="review-highlight">${r5}</span> 本被評為 <span class="review-highlight">★★★★★</span><br><span class="review-highlight">${r4}</span> 本 <span class="review-highlight">★★★★☆</span><br>`;
+    if(low>0) html+=`還有 <span class="review-highlight">${low}</span> 本低於 <span class="review-highlight">★★★☆☆</span><br><br>`;
     else html+=`<br>`;
     if(topTags.length){
       html+=`這段時間閱讀最多的種類是<br>`;
