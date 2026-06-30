@@ -41,10 +41,10 @@ body::before{content:"";position:fixed;inset:0;background:
 .sb-stats-unit{font-size:.72rem;color:var(--text-lt);}
 .sb-count{font-size:.72rem;color:var(--text-lt);padding-left:14px;margin-top:5px;margin-bottom:28px;}
 .sb-nav{display:flex;flex-direction:column;}
-.sb-item{font-size:.88rem;color:var(--text);font-weight:600;padding:7px 14px;border-radius:8px;cursor:pointer;transition:background .15s,color .15s;user-select:none;display:flex;align-items:center;justify-content:space-between;line-height:1.4;}
+.sb-item{font-size:.88rem;color:var(--text);font-weight:600;padding:7px 14px;border-radius:8px;cursor:pointer;transition:background .15s,color .15s;user-select:none;display:flex;align-items:center;justify-content:space-between;line-height:1.4;flex-shrink:0;}
 .sb-item:hover{background:rgba(170,102,87,.08);color:var(--clay);}
-.sb-item.active{background:rgba(170,102,87,.13);color:var(--clay);font-weight:600;}
-.sb-gap{height:16px;}
+.sb-item.active{color:var(--clay);font-weight:600;}
+.sb-gap{height:16px;flex-shrink:0;}
 .sb-edit-nav{display:none;flex-direction:column;}
 .body-edit-mode .sb-edit-nav{display:flex;}
 .sb-badge{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--clay);color:white;font-size:.62rem;font-weight:700;}
@@ -64,6 +64,20 @@ body::before{content:"";position:fixed;inset:0;background:
 .stars{font-size:.78rem;min-width:84px;white-space:nowrap;}
 .rdesc{color:var(--text-mid);font-size:.82rem;}
 .r5{color:#b8460b}.r4{color:var(--clay)}.r3{color:var(--clay-lt)}.r2{color:#c0a090}.r1{color:#cdb8b0}.r0{color:#d5c8c0}
+
+/* ── REVIEW INLINE PICKER (sidebar text list) ──── */
+.sb-review-inline{max-height:0;overflow:hidden;transition:max-height .32s ease,padding .32s ease;padding:0 14px;}
+.sb-review-inline.open{max-height:640px;padding:4px 0 10px;overflow-y:auto;}
+.sb-rv-year{font-size:.86rem;color:var(--text);font-weight:600;padding:6px 14px;text-indent:8px;border-radius:8px;cursor:pointer;transition:background .14s,color .14s;user-select:none;line-height:1.5;}
+.sb-rv-year:hover{background:rgba(170,102,87,.08);color:var(--clay);}
+.sb-rv-year.expanded{color:var(--clay);font-weight:700;}
+.sb-rv-sub{max-height:0;overflow:hidden;transition:max-height .32s ease,padding .32s ease;padding:0;}
+.sb-rv-sub.open{max-height:420px;padding:2px 0 6px;}
+.sb-rv-opt{font-size:.8rem;color:var(--text-mid);padding:5px 14px;text-indent:24px;border-radius:8px;cursor:pointer;transition:background .13s,color .13s;user-select:none;line-height:1.5;}
+.sb-rv-opt:hover{background:rgba(170,102,87,.07);color:var(--clay);}
+.sb-rv-opt.all{font-weight:700;color:var(--clay-lt);letter-spacing:.06em;}
+.sb-rv-opt.all:hover{color:var(--clay);}
+.sb-rv-empty{font-size:.78rem;color:var(--text-lt);padding:6px 10px;}
 
 /* ── SECOND PANEL (desktop only) ────────────── */
 .second-panel{position:fixed;left:324px;top:28px;bottom:28px;height:auto;width:480px;background:rgba(248,241,241,0.85);border:1px solid rgba(255,255,255,0.4);border-radius:22px;z-index:95;overflow-y:auto;transform:translateX(calc(-100% - 350px));transition:transform .26s ease;padding:36px 42px 32px;box-sizing:border-box;backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 12px 40px rgba(100,40,20,.12);}
@@ -129,13 +143,13 @@ body::before{content:"";position:fixed;inset:0;background:
 @media(max-width:900px){.sb-review-only{display:none !important;}}
 
 /* ── REVIEW MODAL ─────────────────────────────── */
-.modal.review-modal{width:650px;}
+.modal.review-modal{width:600px;}
 .review-picker{display:flex;gap:10px;align-items:center;margin-bottom:18px;flex-wrap:wrap;}
 .review-picker select{padding:7px 10px;border:1.5px solid var(--border-md);border-radius:7px;font-family:inherit;font-size:.83rem;color:var(--text);background:white;outline:none;cursor:pointer;}
 .review-picker select:focus{border-color:var(--clay-lt);}
 .review-output{display:none;}
 .review-output.show{display:block;}
-.review-card{background:#F8F1F1;border:none;border-radius:var(--r);padding:28px 28px 24px;width:650px;max-width:100%;margin:0 auto;}
+.review-card{background:#F8F1F1;border:none;border-radius:var(--r);padding:28px 28px 24px;width:600px;max-width:100%;margin:0 auto;}
 .review-title{font-size:1.3rem;font-weight:900;color:var(--clay);letter-spacing:.06em;text-align:center;margin-bottom:6px;}
 .review-subtitle{font-size:.85rem;color:var(--text-mid);text-align:center;margin-bottom:10px;letter-spacing:.04em;}
 .review-divider{font-family:"Google Sans",sans-serif;font-size:.7rem;color:var(--clay-xlt);text-align:center;margin:10px 0;letter-spacing:.1em;}
@@ -292,6 +306,60 @@ body::before{content:"";position:fixed;inset:0;background:
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:var(--blush);border-radius:4px;}
 
+/* ── REVIEW CARD v2 (menu style) ──────────────── */
+.review-card{padding:0;overflow:hidden;}
+.rv2-head{padding:28px 48px 16px;text-align:center;}
+.rv2-period{font-size:1.5rem;font-weight:900;color:var(--clay);letter-spacing:.04em;line-height:1.1;}
+.rv2-period-sub{font-size:.82rem;color:var(--text-lt);letter-spacing:.14em;margin-top:7px;}
+.rv2-period-pre{font-size:.82rem;color:var(--text-lt);letter-spacing:.14em;margin-bottom:7px;}
+.rv2-empty{text-align:center;padding:30px 24px 40px;color:var(--text-lt);font-size:.9rem;line-height:1.9;}
+
+/* hero stats: two figures side by side (no dividers) */
+.rv2-hero{text-align:center;}
+.rv2-hero-cell{display:inline-block;text-align:center;padding:14px 28px 18px;vertical-align:middle;}
+.rv2-hero-num{font-size:1.4rem;font-weight:900;color:var(--clay);line-height:1;letter-spacing:.02em;}
+.rv2-hero-unit{font-size:.72rem;color:var(--clay-lt);font-weight:600;margin-left:3px;}
+.rv2-hero-lbl{font-size:.68rem;color:var(--text-lt);letter-spacing:.12em;margin-top:8px;}
+
+/* section block (no dividers) */
+.rv2-section{padding:14px 48px 18px;}
+.rv2-section-lbl{font-size:.64rem;letter-spacing:.2em;color:var(--clay-lt);text-transform:uppercase;font-weight:700;margin-bottom:14px;text-align:center;}
+
+/* rating breakdown bars */
+.rv2-bar-row{display:table;width:100%;margin-bottom:9px;}
+.rv2-bar-row:last-child{margin-bottom:0;}
+.rv2-bar-stars{display:table-cell;width:92px;font-size:.72rem;white-space:nowrap;vertical-align:middle;letter-spacing:.04em;}
+.rv2-bar-track{display:table-cell;vertical-align:middle;padding:0 10px;}
+.rv2-bar-fill-wrap{background:rgba(170,102,87,.1);border-radius:5px;height:8px;overflow:hidden;}
+.rv2-bar-fill{height:8px;border-radius:5px;}
+.rv2-bar-count{display:table-cell;width:28px;text-align:right;font-size:.72rem;color:var(--text-mid);vertical-align:middle;font-weight:600;}
+.rv2-bar-fill.r5{background:#b8460b;}
+.rv2-bar-fill.r4{background:var(--clay);}
+.rv2-bar-fill.r3{background:var(--clay-lt);}
+.rv2-bar-fill.r2{background:#c0a090;}
+.rv2-bar-fill.r1{background:#cdb8b0;}
+.rv2-bar-fill.r0{background:#d5c8c0;}
+
+/* top tags as menu items */
+.rv2-tags{text-align:center;}
+.rv2-tag-pill{display:inline-block;padding:5px 14px;margin:3px 4px;border-radius:18px;font-size:.78rem;background:rgba(227,191,181,.4);color:var(--clay);font-weight:600;border:1px solid var(--border-md);}
+.rv2-tag-rank{font-size:.62rem;color:var(--clay-lt);margin-right:4px;font-weight:700;}
+
+/* month booklist: plain text rows */
+.rv2-booklist{padding:14px 48px 26px;}
+.rv2-booklist-month{padding-top:20px;}
+.rv2-booklist-lbl{font-size:.64rem;letter-spacing:.2em;color:var(--clay-lt);text-transform:uppercase;font-weight:700;margin-bottom:14px;text-align:center;}
+.rv2-bk{padding:9px 0;}
+.rv2-bk-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;line-height:1.5;}
+.rv2-bk-row1{font-size:.86rem;color:var(--text);}
+.rv2-bk-left{min-width:0;}
+.rv2-bk-title{font-weight:700;}
+.rv2-bk-author{color:var(--text-lt);font-weight:400;font-size:.78rem;margin-left:6px;}
+.rv2-bk-rating{font-size:.78rem;letter-spacing:.02em;white-space:nowrap;flex-shrink:0;}
+.rv2-bk-row2{margin-top:3px;}
+.rv2-bk-tags{font-size:.74rem;color:var(--clay-lt);line-height:1.5;}
+.rv2-bk-chaps{color:var(--text-lt);font-size:.74rem;white-space:nowrap;flex-shrink:0;}
+
 
 
 /* ── 桌面：隱藏手機專用的側邊欄頁面 ────────────── */
@@ -401,7 +469,8 @@ body::before{content:"";position:fixed;inset:0;background:
       <nav class="sb-nav sb-edit-nav" id="sbEditNavDesk">
         <div class="sb-item" id="sbItemAdd" onclick="openPanel('add')">新增書目</div>
         <div class="sb-item" id="sbItemTags" onclick="openPanel('tags')">管理標籤</div>
-        <div class="sb-item review-only" onclick="openReviewModal()">閱讀回顧</div>
+        <div class="sb-item review-only" id="sbItemReviewDesk" onclick="toggleReviewInline('desk')">閱讀回顧</div>
+        <div class="sb-review-inline" id="sbReviewInlineDesk"></div>
       </nav>
     </div>
 
@@ -433,6 +502,8 @@ body::before{content:"";position:fixed;inset:0;background:
       <nav class="sb-nav sb-edit-nav" id="sbEditNavMob">
         <div class="sb-item" onclick="openPanel('add')">新增書目</div>
         <div class="sb-item" onclick="openPanel('tags')">管理標籤</div>
+        <div class="sb-item review-only" id="sbItemReviewMob" onclick="toggleReviewInline('mob')">閱讀回顧</div>
+        <div class="sb-review-inline" id="sbReviewInlineMob"></div>
       </nav>
     </div>
 
@@ -745,28 +816,19 @@ body::before{content:"";position:fixed;inset:0;background:
 <!-- REVIEW MODAL -->
 <div class="overlay" id="reviewOverlay" onclick="overlayClick(event,'reviewOverlay')">
   <div class="modal review-modal">
-    <h3>閱讀回顧</h3>
-    <div class="review-picker">
-      <select id="rv-type" onchange="onReviewTypeChange()">
+    <div style="display:none;">
+      <select id="rv-type">
         <option value="year">年度回顧</option>
         <option value="month">月度回顧</option>
       </select>
       <select id="rv-year"></select>
-      <select id="rv-month" style="display:none"></select>
-      <button class="btn btn-fill" onclick="generateReview()">產生回顧</button>
-      <button class="btn btn-out" id="rv-export-btn" onclick="exportReviewImage()" style="display:none;">匯出圖片</button>
+      <select id="rv-month"></select>
     </div>
     <div class="review-output" id="reviewOutput">
-      <div class="review-card" id="reviewCard">
-        <div class="review-title">杏桃貝果的 Reading List</div>
-        <div class="review-subtitle" id="rv-subtitle"></div>
-        <div class="review-divider">୨୧ --- ･ --- ･ --- ୨୧</div>
-        <div class="review-body" id="rv-body"></div>
-        <div class="review-divider" id="rv-divider2" style="display:none;">୨୧ --- ･ --- ･ --- ୨୧</div>
-        <div class="review-book-list" id="rv-booklist"></div>
-      </div>
+      <div class="review-card" id="reviewCard"></div>
     </div>
     <div class="modal-btns" style="margin-top:16px;">
+      <button class="btn btn-out" id="rv-export-btn" onclick="exportReviewImage()" style="display:none;">匯出圖片</button>
       <button class="btn btn-ghost" onclick="closeOverlay('reviewOverlay')">關閉</button>
     </div>
   </div>
@@ -1163,6 +1225,68 @@ function toggleRatingInline(which){
   if(item) item.classList.toggle('active',isOpen);
 }
 
+// ── Review inline picker ──────────────────────
+function reviewYears(){
+  return [...new Set(books.map(b=>b.read_date?new Date(b.read_date).getFullYear():null).filter(Boolean))].sort((a,b)=>b-a);
+}
+function reviewMonthsForYear(year){
+  // months (1-12) that have at least one record in the given year, descending
+  const set=new Set();
+  books.forEach(b=>{
+    if(!b.read_date) return;
+    const d=new Date(b.read_date);
+    if(d.getFullYear()===year) set.add(d.getMonth()+1);
+  });
+  return [...set].sort((a,b)=>b-a);
+}
+const MONTHS_EN=['January','February','March','April','May','June','July','August','September','October','November','December'];
+function renderReviewInline(which){
+  const el=document.getElementById(which==='desk'?'sbReviewInlineDesk':'sbReviewInlineMob');
+  if(!el) return;
+  const years=reviewYears();
+  if(!years.length){
+    el.innerHTML='<div class="sb-rv-empty">還沒有可以回顧的書目</div>';
+    return;
+  }
+  el.innerHTML=years.map(y=>`
+    <div class="sb-rv-year" id="sbRvY-${which}-${y}" onclick="toggleReviewYear('${which}',${y})">${y}</div>
+    <div class="sb-rv-sub" id="sbRvSub-${which}-${y}">
+      <div class="sb-rv-opt all" onclick="event.stopPropagation();runReview('year',${y},null)">Year</div>
+      ${reviewMonthsForYear(y).map(m=>`<div class="sb-rv-opt" onclick="event.stopPropagation();runReview('month',${y},${m})">${MONTHS_EN[m-1]}</div>`).join('')}
+    </div>`).join('');
+}
+function toggleReviewInline(which){
+  const el=document.getElementById(which==='desk'?'sbReviewInlineDesk':'sbReviewInlineMob');
+  const item=document.getElementById(which==='desk'?'sbItemReviewDesk':'sbItemReviewMob');
+  if(!el) return;
+  const isOpen=el.classList.toggle('open');
+  if(item) item.classList.toggle('active',isOpen);
+  if(isOpen) renderReviewInline(which);
+}
+function toggleReviewYear(which,year){
+  const row=document.getElementById(`sbRvY-${which}-${year}`);
+  const sub=document.getElementById(`sbRvSub-${which}-${year}`);
+  if(!sub) return;
+  const open=sub.classList.toggle('open');
+  if(row) row.classList.toggle('expanded',open);
+}
+function runReview(type,year,month){
+  // sync into modal's (hidden) selects that generateReview reads
+  document.getElementById('rv-type').value=type;
+  const yrSel=document.getElementById('rv-year');
+  yrSel.innerHTML=`<option value="${year}">${year}</option>`;
+  yrSel.value=String(year);
+  const moSel=document.getElementById('rv-month');
+  if(!moSel.options.length) moSel.innerHTML=Array.from({length:12},(_,i)=>`<option value="${i+1}">${i+1}月</option>`).join('');
+  moSel.value=String(month||new Date().getMonth()+1);
+  // reset output + open modal + generate
+  document.getElementById('reviewOutput').classList.remove('show');
+  document.getElementById('rv-export-btn').style.display='none';
+  document.getElementById('reviewOverlay').classList.add('open');
+  generateReview();
+  if(window.innerWidth<=900) closeSidebar();
+}
+
 function openPanel(type){
   if(window.innerWidth<=900){
     openPanelMobile(type);
@@ -1527,23 +1651,8 @@ function openTagModal(){
 }
 
 // ── Review ────────────────────────────────────
-function openReviewModal(){
-  const years=[...new Set(books.map(b=>b.read_date?new Date(b.read_date).getFullYear():null).filter(Boolean))].sort((a,b)=>b-a);
-  const yrSel=document.getElementById('rv-year');
-  yrSel.innerHTML=years.map(y=>`<option value="${y}">${y}</option>`).join('');
-  const moSel=document.getElementById('rv-month');
-  moSel.innerHTML=Array.from({length:12},(_,i)=>`<option value="${i+1}">${i+1}月</option>`).join('');
-  moSel.value=new Date().getMonth()+1;
-  document.getElementById('rv-type').value='year';
-  onReviewTypeChange();
-  document.getElementById('reviewOutput').classList.remove('show');
-  document.getElementById('rv-export-btn').style.display='none';
-  document.getElementById('reviewOverlay').classList.add('open');
-}
-function onReviewTypeChange(){
-  const isMonth=document.getElementById('rv-type').value==='month';
-  document.getElementById('rv-month').style.display=isMonth?'':'none';
-}
+function fmtWords(n){return n%1===0?n.toLocaleString():n.toFixed(1);}
+
 function generateReview(){
   const type=document.getElementById('rv-type').value;
   const year=parseInt(document.getElementById('rv-year').value);
@@ -1555,58 +1664,105 @@ function generateReview(){
     if(month!==null&&d.getMonth()+1!==month) return false;
     return true;
   });
-  const subtitle=month?`${year} 年 ${month} 月 回顧`:`${year} 年度回顧`;
-  document.getElementById('rv-subtitle').textContent=subtitle;
-  const body=document.getElementById('rv-body');
-  const booklist=document.getElementById('rv-booklist');
-  const divider2=document.getElementById('rv-divider2');
+  const card=document.getElementById('reviewCard');
+
+  // ── head ──
+  let html;
+  if(month){
+    html=`<div class="rv2-head">
+      <div class="rv2-period-pre">${year} · ${MONTHS_EN[month-1]}</div>
+      <div class="rv2-period">本月菜單</div>
+    </div>`;
+  } else {
+    html=`<div class="rv2-head">
+      <div class="rv2-period">${year} 年度回顧</div>
+    </div>`;
+  }
+
   if(!filtered.length){
-    body.innerHTML=`<div class="review-empty">這段時間杏桃貝果什麼都沒有吃……</div>`;
-    divider2.style.display='none';booklist.innerHTML='';
+    html+=`<div class="rv2-empty">這段時間杏桃貝果<br>什麼都沒有吃……ᶻz ₍^_ ̫ _^₎</div>`;
+    card.innerHTML=html;
     document.getElementById('reviewOutput').classList.add('show');
     document.getElementById('rv-export-btn').style.display='inline-flex';
     return;
   }
-  const total=filtered.length;
-  const totalWords=filtered.reduce((s,b)=>s+(parseFloat(b.chapters)||0),0);
-  const r5=filtered.filter(b=>b.rating==='★★★★★').length;
-  const r4=filtered.filter(b=>b.rating==='★★★★☆').length;
-  const low=filtered.filter(b=>['★★☆☆☆','★☆☆☆☆','☆☆☆☆☆'].includes(b.rating)).length;
-  const excluded=new Set([...VIEW_TAGS,...TIME_TAGS]);
-  const freq={};
-  filtered.forEach(b=>(b.tags||[]).forEach(t=>{if(!excluded.has(t)) freq[t]=(freq[t]||0)+1;}));
-  const topTags=Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0]);
-  let html=`這段時間一共閱讀了 <span class="review-highlight">${total}</span> 本<br>共 <span class="review-highlight">${totalWords%1===0?totalWords.toLocaleString():totalWords.toFixed(1)}</span> 萬字${type==='year'?'<br><br>':''}`;
+
+  // ── hero: 本數 + 總字數（僅年度）──
   if(type==='year'){
-    html+=`有 <span class="review-highlight">${r5}</span> 本被評為 <span class="review-highlight">★★★★★</span><br><span class="review-highlight">${r4}</span> 本 <span class="review-highlight">★★★★☆</span><br>`;
-    if(low>0) html+=`還有 <span class="review-highlight">${low}</span> 本低於 <span class="review-highlight">★★★☆☆</span><br><br>`;
-    else html+=`<br>`;
-    if(topTags.length){
-      html+=`這段時間閱讀最多的種類是<br>`;
-      html+=topTags.map(t=>`<span class="review-tag">#${esc(t)}</span>`).join(' ');
-    } else {html+=`……咦？杏桃貝果到底閱讀了什麼？`;}
+    const total=filtered.length;
+    const totalWords=filtered.reduce((s,b)=>s+(parseFloat(b.chapters)||0),0);
+    html+=`<div class="rv2-hero">
+      <div class="rv2-hero-cell">
+        <div><span class="rv2-hero-num">${total}</span><span class="rv2-hero-unit">本</span></div>
+        <div class="rv2-hero-lbl">讀過的書</div>
+      </div>
+      <div class="rv2-hero-cell">
+        <div><span class="rv2-hero-num">${fmtWords(totalWords)}</span><span class="rv2-hero-unit">萬字</span></div>
+        <div class="rv2-hero-lbl">總字數</div>
+      </div>
+    </div>`;
   }
-  body.innerHTML=html;
+
+  // ── 評分分布（橫條，僅年度）──
+  if(type==='year'){
+    const counts=RATING_VALS.map(r=>filtered.filter(b=>b.rating===r).length);
+    const maxCount=Math.max(...counts,1);
+    let barsHtml='';
+    RATING_VALS.forEach((r,i)=>{
+      if(counts[i]===0) return;
+      const pct=Math.round(counts[i]/maxCount*100);
+      barsHtml+=`<div class="rv2-bar-row">
+        <div class="rv2-bar-stars ${RATING_CLS[i]}">${r}</div>
+        <div class="rv2-bar-track"><div class="rv2-bar-fill-wrap"><div class="rv2-bar-fill ${RATING_CLS[i]}" style="width:${pct}%;"></div></div></div>
+        <div class="rv2-bar-count">${counts[i]}</div>
+      </div>`;
+    });
+    html+=`<div class="rv2-section">
+      <div class="rv2-section-lbl">評分分布</div>
+      ${barsHtml}
+    </div>`;
+  }
+
+  // ── 常點菜色（標籤，不顯示數量；僅年度）──
+  if(type==='year'){
+    const excluded=new Set([...VIEW_TAGS,...TIME_TAGS]);
+    const freq={};
+    filtered.forEach(b=>(b.tags||[]).forEach(t=>{if(!excluded.has(t)) freq[t]=(freq[t]||0)+1;}));
+    const topTags=Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,3);
+    if(topTags.length){
+      const pills=topTags.map((e,i)=>`<span class="rv2-tag-pill"><span class="rv2-tag-rank">No.${i+1}</span>${esc(e[0])}</span>`).join('');
+      html+=`<div class="rv2-section">
+        <div class="rv2-section-lbl">最常點的菜色</div>
+        <div class="rv2-tags">${pills}</div>
+      </div>`;
+    }
+  }
+
   if(type==='month'){
-    divider2.style.display='block';
-    booklist.innerHTML=filtered.map(b=>{
+    // ── 月度：純文字書單（書名+作者+評分 / 標籤+字數）──
+    const listHtml=filtered.map(b=>{
       const rc=ratingCls(b.rating);
-      const persona=(b.gong||b.shou)?
-        `<div class="review-book-persona">${[b.gong?esc(b.gong):'',b.shou?esc(b.shou):''].filter(Boolean).join(' × ')}</div>`:'';
-      return `<div class="review-book-card">
-        <div>
-          <div class="review-book-title">${esc(b.title)}</div>
-          <div class="review-book-author">${esc(b.author)}</div>
-          ${persona}
-          <div class="review-book-meta">${(b.tags||[]).map(t=>`<span class="review-book-tag">${esc(t)}</span>`).join('')}</div>
+      const author=b.author?`<span class="rv2-bk-author">${esc(b.author)}</span>`:'';
+      const rating=b.rating?`<span class="rv2-bk-rating ${rc}">${b.rating}</span>`:'';
+      const chaps=b.chapters?`<span class="rv2-bk-chaps">${esc(b.chapters)} 萬字</span>`:'';
+      const tags=(b.tags||[]).length?`<span class="rv2-bk-tags">${(b.tags||[]).map(t=>esc(t)).join('・')}</span>`:'<span class="rv2-bk-tags"></span>';
+      return `<div class="rv2-bk">
+        <div class="rv2-bk-row rv2-bk-row1">
+          <span class="rv2-bk-left"><span class="rv2-bk-title">${esc(b.title)}</span>${author}</span>
+          ${rating}
         </div>
-        <div class="review-book-right">
-          <div class="review-book-rating ${rc}">${b.rating||''}</div>
-          ${b.chapters?`<div class="review-book-chaps">${esc(b.chapters)} 萬字</div>`:''}
+        <div class="rv2-bk-row rv2-bk-row2">
+          ${tags}
+          ${chaps}
         </div>
       </div>`;
     }).join('');
-  } else {divider2.style.display='none';booklist.innerHTML='';}
+    html+=`<div class="rv2-booklist rv2-booklist-month">
+      ${listHtml}
+    </div>`;
+  }
+
+  card.innerHTML=html;
   document.getElementById('reviewOutput').classList.add('show');
   document.getElementById('rv-export-btn').style.display='inline-flex';
 }
@@ -1623,7 +1779,7 @@ async function exportReviewImage(){
         document.head.appendChild(s);
       });
     }
-    const scale=650/card.offsetWidth;
+    const scale=600/card.offsetWidth;
     const canvas=await html2canvas(card,{
       scale:window.devicePixelRatio*scale,useCORS:true,
       backgroundColor:'#F8F1F1',logging:false,
@@ -1632,16 +1788,16 @@ async function exportReviewImage(){
         link.rel='stylesheet';
         link.href='https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700;900&family=Google+Sans:wght@400;500&display=swap';
         doc.head.appendChild(link);
-        doc.querySelectorAll('.review-divider').forEach(el=>{
-          el.style.fontFamily='"Google Sans","PingFang TC","Microsoft JhengHei",sans-serif';
-        });
-        doc.querySelectorAll('.review-card *:not(.review-divider)').forEach(el=>{
+        doc.querySelectorAll('.review-card *').forEach(el=>{
           el.style.fontFamily='"Noto Serif TC","PingFang TC","Microsoft JhengHei","蘋方-繁","微軟正黑體",serif';
         });
       }
     });
     const link=document.createElement('a');
-    const subtitle=document.getElementById('rv-subtitle').textContent.replace(/\s/g,'_');
+    const type=document.getElementById('rv-type').value;
+    const year=document.getElementById('rv-year').value;
+    const month=document.getElementById('rv-month').value;
+    const subtitle=type==='month'?`${year}_${month}月`:`${year}_年度回顧`;
     link.download=`Reading_List_${subtitle}.png`;
     link.href=canvas.toDataURL('image/png');
     link.click();
