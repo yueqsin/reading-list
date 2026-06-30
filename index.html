@@ -68,6 +68,8 @@ body::before{content:"";position:fixed;inset:0;background:
 /* ── REVIEW INLINE PICKER (sidebar text list) ──── */
 .sb-review-inline{max-height:0;overflow:hidden;transition:max-height .32s ease,padding .32s ease;padding:0 14px;}
 .sb-review-inline.open{max-height:640px;padding:4px 0 10px;overflow-y:auto;}
+.sb-filter-inline{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease;padding:0 14px;}
+.sb-filter-inline.open{max-height:1400px;padding:8px 14px 14px;overflow-y:auto;}
 .sb-rv-year{font-size:.86rem;color:var(--text);font-weight:600;padding:6px 14px;text-indent:8px;border-radius:8px;cursor:pointer;transition:background .14s,color .14s;user-select:none;line-height:1.5;}
 .sb-rv-year:hover{background:rgba(170,102,87,.08);color:var(--clay);}
 .sb-rv-year.expanded{color:var(--clay);font-weight:700;}
@@ -493,10 +495,11 @@ body::before{content:"";position:fixed;inset:0;background:
           <div class="sb-rating-row"><span class="stars r1">★☆☆☆☆</span><span class="rdesc">廚餘</span></div>
           <div class="sb-rating-row"><span class="stars r0">☆☆☆☆☆</span><span class="rdesc">不配上桌</span></div>
         </div>
-        <div class="sb-item" onclick="openPanel('filter')">
+        <div class="sb-item" id="sbItemFilterMob" onclick="toggleFilterInlineMobile()">
           篩選標籤
           <span class="sb-badge" id="sbFilterBadgeMob" style="display:none;"></span>
         </div>
+        <div class="sb-filter-inline" id="sbFilterInlineMob"></div>
       </nav>
       <div class="sb-gap"></div>
       <nav class="sb-nav sb-edit-nav" id="sbEditNavMob">
@@ -1262,6 +1265,25 @@ function toggleReviewInline(which){
   const isOpen=el.classList.toggle('open');
   if(item) item.classList.toggle('active',isOpen);
   if(isOpen) renderReviewInline(which);
+}
+function toggleFilterInlineMobile(){
+  const el=document.getElementById('sbFilterInlineMob');
+  const item=document.getElementById('sbItemFilterMob');
+  if(!el) return;
+  const willOpen=!el.classList.contains('open');
+  if(willOpen){
+    const fc=document.getElementById('filterPanelContent');
+    if(fc&&fc.parentNode!==el) el.appendChild(fc);
+    el.classList.add('open');
+    if(item) item.classList.add('active');
+  } else {
+    el.classList.remove('open');
+    if(item) item.classList.remove('active');
+    // 收合動畫結束後把內容還回 holder，避免與電腦版二級面板搶 DOM
+    setTimeout(()=>{
+      if(!el.classList.contains('open')) returnFilterContent();
+    },320);
+  }
 }
 function toggleReviewYear(which,year){
   const row=document.getElementById(`sbRvY-${which}-${year}`);
