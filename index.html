@@ -51,8 +51,8 @@ body::before{content:"";position:fixed;inset:0;background:
 
 /* ── SIDEBAR PAGES (mobile) ──────────────────── */
 .sb-main{display:flex;flex-direction:column;height:100%;overflow-y:auto;padding:44px 28px 32px;}
-.sb-page{display:none;flex-direction:column;height:100%;overflow-y:auto;padding:24px 42px 32px;}
-.sb-page.active{display:flex;}
+.sb-page{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;height:100%;overflow-y:auto;padding:24px 42px 32px;background:rgba(255,252,250,0.99);transform:translateX(-100%);opacity:0;pointer-events:none;transition:transform .26s ease,opacity .26s ease;z-index:2;}
+.sb-page.active{transform:translateX(0);opacity:1;pointer-events:auto;}
 .sb-back-row{display:flex;align-items:center;gap:12px;margin-bottom:22px;}
 .sb-back-btn{background:none;border:none;cursor:pointer;color:var(--clay);padding:4px;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:background .14s;}
 .sb-back-btn:hover{background:rgba(170,102,87,.08);}
@@ -199,11 +199,12 @@ body::before{content:"";position:fixed;inset:0;background:
 .filter-section:last-child{margin-bottom:0;}
 .filter-section-label{font-size:.72rem;font-weight:700;letter-spacing:.08em;color:var(--clay-lt);text-transform:uppercase;margin-bottom:9px;}
 .chip-row{display:flex;flex-wrap:wrap;gap:6px;}
-.chip{display:inline-flex;align-items:center;padding:5px 12px;border-radius:20px;font-size:.76rem;cursor:pointer;border:1.5px solid var(--border-md);background:white;color:var(--text-mid);transition:all .14s;user-select:none;font-family:"Noto Serif TC",serif;}
+.chip{display:inline-flex;align-items:center;padding:3px 10px;border-radius:14px;font-size:.72rem;cursor:pointer;border:1.5px solid var(--border-md);background:white;color:var(--text-mid);transition:all .14s;user-select:none;font-family:"Noto Serif TC",serif;}
 .chip:hover{border-color:var(--clay-lt);color:var(--clay);background:rgba(170,102,87,.05);}
 .chip.on{background:var(--clay);color:white;border-color:var(--clay);}
 .chip.ex{background:#f8e8e8;color:#c0392b;border-color:#e8a0a0;text-decoration:line-through;}
-.rating-chip{font-size:.75rem;min-width:88px;justify-content:center;}
+.rating-chip{justify-content:center;}
+.rating-grid{display:grid;grid-template-columns:repeat(3,auto);gap:6px;justify-content:start;}
 .rating-chip.r5.on{background:#b8460b;border-color:#b8460b;}
 .rating-chip.r4.on{background:var(--clay);border-color:var(--clay);}
 .rating-chip.r3.on{background:var(--clay-lt);border-color:var(--clay-lt);}
@@ -386,6 +387,7 @@ body::before{content:"";position:fixed;inset:0;background:
   .sp-backdrop{display:none !important;}
   .sb-inner{display:none;}
   .sb-main{display:flex;}
+  .sb-page{display:flex;}
   .sb-mobile-close{display:flex;}
 }
 </style>
@@ -585,7 +587,7 @@ body::before{content:"";position:fixed;inset:0;background:
   <div id="filterPanelContent">
     <div class="filter-section">
       <div class="filter-section-label">評分</div>
-      <div class="chip-row" id="ratingChips"></div>
+      <div class="chip-row rating-grid" id="ratingChips"></div>
     </div>
     <div class="filter-section">
       <div class="filter-section-label">視角</div>
@@ -623,30 +625,21 @@ body::before{content:"";position:fixed;inset:0;background:
     <div class="fi-wrap" style="margin-bottom:10px;">
       <span class="fi-lbl">作者</span><input class="fi" id="sp-n-author" autocomplete="off">
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
-      <div class="fi-wrap">
-        <span class="fi-lbl">評分</span>
-        <select class="fi" id="sp-n-rating">
-          <option>★★★★★</option><option selected>★★★★☆</option><option>★★★☆☆</option>
-          <option>★★☆☆☆</option><option>★☆☆☆☆</option><option>☆☆☆☆☆</option>
-        </select>
-      </div>
-      <div class="fi-wrap">
-        <span class="fi-lbl">字數（萬）</span>
-        <input class="fi" id="sp-n-chaps" type="number" min="0" step="0.1">
-      </div>
+    <div style="margin-bottom:10px;">
+      <div class="fi-lbl">評分</div>
+      <div class="chip-row rating-grid" id="sp-n-rating-chips" style="margin-top:2px;"></div>
+    </div>
+    <div class="fi-wrap" style="margin-bottom:10px;">
+      <span class="fi-lbl">字數（萬）</span>
+      <input class="fi" id="sp-n-chaps" type="number" min="0" step="0.1">
+    </div>
+    <div style="margin-bottom:10px;">
+      <div class="fi-lbl" style="margin-bottom:4px;">標籤</div>
+      <div class="tag-picker" style="margin-top:4px;border:none;padding:0;background:transparent;"><div id="sp-n-tp-content"></div></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
       <div class="fi-wrap"><span class="fi-lbl">攻</span><input class="fi" id="sp-n-gong" autocomplete="off"></div>
       <div class="fi-wrap"><span class="fi-lbl">受</span><input class="fi" id="sp-n-shou" autocomplete="off"></div>
-    </div>
-    <div style="margin-bottom:10px;">
-      <div class="fi-lbl" style="cursor:pointer;display:flex;align-items:center;gap:6px;margin-bottom:4px;" onclick="toggleTagPicker('sp-n')">
-        標籤 <span id="sp-n-tp-arrow" style="display:inline-block;transition:transform .2s;font-size:.7rem;">▼</span>
-      </div>
-      <div id="sp-n-tp-collapsible" style="display:none;">
-        <div class="tag-picker" style="margin-top:4px;"><div id="sp-n-tp-content"></div></div>
-      </div>
     </div>
     <div class="fi-wrap" style="margin-bottom:14px;">
       <span class="fi-lbl">心得</span>
@@ -1329,11 +1322,9 @@ function closePanel(){
 }
 
 function openPanelMobile(type){
-  document.getElementById('sbMain').style.display='none';
   document.querySelectorAll('.sb-page').forEach(p=>p.classList.remove('active'));
   const page=document.getElementById('sbPage'+type.charAt(0).toUpperCase()+type.slice(1));
   if(!page) return;
-  page.classList.add('active');
   if(type==='filter'){
     const fc=document.getElementById('filterPanelContent');
     const target=document.getElementById('sbFilterTarget');
@@ -1342,18 +1333,21 @@ function openPanelMobile(type){
     const ac=document.getElementById('addPanelContent');
     const target=document.getElementById('sbAddTarget');
     if(ac&&target){ target.appendChild(ac); spResetAddForm(); }
-    setTimeout(()=>{const el=document.getElementById('sp-n-title');if(el)el.focus();},80);
+    setTimeout(()=>{const el=document.getElementById('sp-n-title');if(el)el.focus();},320);
   } else if(type==='tags'){
     const tc=document.getElementById('tagsPanelContent');
     const target=document.getElementById('sbTagsTarget');
     if(tc&&target) target.appendChild(tc);
     spRenderTagManager();
   }
+  requestAnimationFrame(()=>page.classList.add('active'));
 }
 function closePanelMobile(){
-  returnFilterContent(); returnAddContent(); returnTagsContent();
-  document.getElementById('sbMain').style.display='';
   document.querySelectorAll('.sb-page').forEach(p=>p.classList.remove('active'));
+  // 等滑出動畫結束再把 teleport 內容還回 holder
+  setTimeout(()=>{
+    returnFilterContent(); returnAddContent(); returnTagsContent();
+  },300);
 }
 
 function openSecondPanel(type){
@@ -1416,14 +1410,27 @@ function returnTagsContent(){
   const holder=document.getElementById('tagsContentHolder');
   if(el&&holder&&el.parentNode!==holder) holder.appendChild(el);
 }
+let spSelectedRating='';
+function renderSpRatingChips(){
+  const wrap=document.getElementById('sp-n-rating-chips');
+  if(!wrap) return;
+  wrap.innerHTML=RATING_VALS.map((r,i)=>
+    `<span class="chip rating-chip ${RATING_CLS[i]}${r===spSelectedRating?' on':''}" onclick="selectSpRating('${r}',this)">${r}</span>`
+  ).join('');
+}
+function selectSpRating(r,el){
+  spSelectedRating=r;
+  const wrap=document.getElementById('sp-n-rating-chips');
+  if(wrap) wrap.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+  if(el) el.classList.add('on');
+}
 function spResetAddForm(){
   ['sp-n-title','sp-n-author','sp-n-chaps','sp-n-gong','sp-n-shou','sp-n-notes'].forEach(id=>{
     const el=document.getElementById(id); if(el) el.value='';
   });
-  const r=document.getElementById('sp-n-rating'); if(r) r.value='★★★★☆';
+  spSelectedRating='';
+  renderSpRatingChips();
   const tc=document.getElementById('sp-n-tp-content'); if(tc) tc.innerHTML=buildTagPickerHTML('sp-n',[]);
-  const co=document.getElementById('sp-n-tp-collapsible'); if(co) co.style.display='none';
-  const ar=document.getElementById('sp-n-tp-arrow'); if(ar) ar.style.transform='rotate(0deg)';
 }
 async function spAddBook(){
   const title=document.getElementById('sp-n-title').value.trim();
@@ -1438,7 +1445,7 @@ async function _spDoAddBook(title){
   if(!tags.some(t=>ALL_VIEW.has(t))) tags.unshift('主受');
   const book={
     title, author:document.getElementById('sp-n-author').value.trim(),
-    rating:document.getElementById('sp-n-rating').value,
+    rating:spSelectedRating,
     chapters:document.getElementById('sp-n-chaps').value.trim(),
     tags, gong:document.getElementById('sp-n-gong').value.trim(),
     shou:document.getElementById('sp-n-shou').value.trim(),
