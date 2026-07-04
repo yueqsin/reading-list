@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Maison Apricot</title>
+<title>Reading List</title>
 <link rel="icon" href="rose.gif" type="image/gif">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,8 +51,8 @@ body::before{content:"";position:fixed;inset:0;background:
 
 /* ── SIDEBAR PAGES (mobile) ──────────────────── */
 .sb-main{display:flex;flex-direction:column;height:100%;overflow-y:auto;padding:44px 28px 32px;}
-.sb-page{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;height:100%;overflow-y:auto;padding:24px 42px 32px;background:rgba(255,252,250,0.99);transform:translateX(-100%);opacity:0;pointer-events:none;transition:transform .26s ease,opacity .26s ease;z-index:2;}
-.sb-page.active{transform:translateX(0);opacity:1;pointer-events:auto;}
+.sb-page{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;height:100%;overflow-y:auto;padding:24px 42px 32px;background:rgba(255,252,250,0.99);transform:translateX(100%);pointer-events:none;transition:transform .28s ease;z-index:2;}
+.sb-page.active{transform:translateX(0);pointer-events:auto;}
 .sb-back-row{display:flex;align-items:center;gap:12px;margin-bottom:22px;}
 .sb-back-btn{background:none;border:none;cursor:pointer;color:var(--clay);padding:4px;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:background .14s;}
 .sb-back-btn:hover{background:rgba(170,102,87,.08);}
@@ -386,7 +386,8 @@ body::before{content:"";position:fixed;inset:0;background:
   .second-panel{display:none !important;}
   .sp-backdrop{display:none !important;}
   .sb-inner{display:none;}
-  .sb-main{display:flex;}
+  .sb-main{display:flex;position:absolute;top:0;left:0;right:0;bottom:0;height:100%;transform:translateX(0);transition:transform .28s ease;z-index:1;}
+  .sb-main.pushed{transform:translateX(-100%);}
   .sb-page{display:flex;}
   .sb-mobile-close{display:flex;}
 }
@@ -1340,10 +1341,16 @@ function openPanelMobile(type){
     if(tc&&target) target.appendChild(tc);
     spRenderTagManager();
   }
-  requestAnimationFrame(()=>page.classList.add('active'));
+  const main=document.getElementById('sbMain');
+  requestAnimationFrame(()=>{
+    page.classList.add('active');
+    if(main) main.classList.add('pushed');
+  });
 }
 function closePanelMobile(){
   document.querySelectorAll('.sb-page').forEach(p=>p.classList.remove('active'));
+  const main=document.getElementById('sbMain');
+  if(main) main.classList.remove('pushed');
   // 等滑出動畫結束再把 teleport 內容還回 holder
   setTimeout(()=>{
     returnFilterContent(); returnAddContent(); returnTagsContent();
