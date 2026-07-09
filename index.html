@@ -664,7 +664,7 @@ body::before{content:"";position:fixed;inset:0;background:
 <!-- LOGIN MODAL -->
 <div class="overlay" id="pwOverlay" onclick="overlayClick(event,'pwOverlay')">
   <div class="modal">
-    <h3>杏桃貝果正在登入……</h3>
+    <h3>登入帳號</h3>
     <p class="sub">請輸入帳號密碼</p>
     <div style="margin-bottom:10px;">
       <div class="fi-lbl" style="margin-bottom:4px;">Email</div>
@@ -674,7 +674,7 @@ body::before{content:"";position:fixed;inset:0;background:
       <div class="fi-lbl" style="margin-bottom:4px;">密碼</div>
       <input class="fi" type="password" id="loginPw" placeholder="••••••" style="letter-spacing:.15em;" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
-    <div id="loginError" style="font-size:.76rem;color:#e74c3c;text-align:center;margin-bottom:10px;display:none;">你又打錯帳號密碼了！</div>
+    <div id="loginError" style="font-size:.76rem;color:#e74c3c;text-align:center;margin-bottom:10px;display:none;">帳號或密碼輸入錯誤</div>
     <div class="modal-btns">
       <button class="btn btn-fill" id="loginBtn" onclick="doLogin()">登入</button>
       <button class="btn btn-ghost" onclick="closeOverlay('pwOverlay')">取消</button>
