@@ -51,12 +51,9 @@ body::before{content:"";position:fixed;inset:0;background:
 
 /* ── SIDEBAR PAGES (mobile) ──────────────────── */
 .sb-main{display:flex;flex-direction:column;height:100%;overflow-y:auto;padding:44px 28px 32px;}
-.sb-page{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;height:100%;overflow-y:auto;padding:24px 42px 32px;background:rgba(255,252,250,0.99);transform:translateX(100%);pointer-events:none;transition:transform .28s ease;z-index:2;}
-.sb-page.active{transform:translateX(0);pointer-events:auto;}
-.sb-back-row{display:flex;align-items:center;gap:12px;margin-bottom:22px;}
-.sb-back-btn{background:none;border:none;cursor:pointer;color:var(--clay);padding:4px;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:background .14s;}
-.sb-back-btn:hover{background:rgba(170,102,87,.08);}
-.sb-back-btn svg{display:block;}
+.sb-page{position:absolute;top:0;left:0;right:0;bottom:0;display:none;flex-direction:column;height:100%;overflow-y:auto;padding:24px 42px 32px;background:rgba(255,252,250,0.99);z-index:2;}
+.sb-page.active{display:flex;}
+.sb-back-row{display:flex;align-items:center;justify-content:center;margin-bottom:22px;}
 .sb-page-title{font-size:.85rem;font-weight:700;color:var(--clay);letter-spacing:.04em;}
 .sb-rating-inline{max-height:0;overflow:hidden;transition:max-height .26s ease,padding .26s ease;padding:0 14px;}
 .sb-rating-inline.open{max-height:260px;padding:6px 14px 14px;}
@@ -101,22 +98,22 @@ body::before{content:"";position:fixed;inset:0;background:
 .main-topbar{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
 .main-meta{margin-bottom:16px;}
 .icon-btn{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;border:none;background:transparent;color:var(--clay);cursor:pointer;transition:background .15s;flex-shrink:0;}
-.sb-mobile-close{display:none;position:absolute;top:18px;right:18px;width:38px;height:38px;border-radius:10px;border:none;background:transparent;color:var(--clay);cursor:pointer;align-items:center;justify-content:center;z-index:5;transition:background .15s;}
-.sb-mobile-close:hover{background:rgba(170,102,87,.08);}
 .icon-btn:hover{background:rgba(170,102,87,.1);}
 .icon-btn.active{background:rgba(170,102,87,.18);}
 
 /* ── MOBILE TOPBAR ───────────────────────────── */
 .mobile-topbar{display:none;position:sticky;top:0;z-index:150;background:rgba(248,241,241,.98);border-bottom:1.5px solid var(--border-md);}
-.mobile-row1{display:flex;align-items:center;gap:8px;padding:10px 14px;}
-.mobile-brand{flex:1;text-align:center;font-size:.95rem;font-weight:900;color:var(--clay);letter-spacing:.04em;font-family:"Noto Serif TC",serif;white-space:nowrap;}
-.mob-search-compact{flex:1;display:none;min-width:0;}
-.mobile-topbar.compact .mob-search-compact{display:flex;}
-.mobile-topbar.compact .mobile-brand{display:none;}
-.mobile-topbar.compact .mobile-row2{display:none;}
-.mob-hamburger{background:none;border:none;cursor:pointer;color:var(--clay);padding:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.mobile-actions{display:flex;align-items:center;gap:6px;flex-shrink:0;}
-.mobile-row2{padding:0 14px 10px;}
+.mobile-row1{display:flex;align-items:center;justify-content:center;padding:10px 14px;}
+.mtb-title-btn{display:flex;align-items:center;justify-content:center;gap:5px;margin:0 auto;background:none;border:none;cursor:pointer;padding:6px 14px;border-radius:10px;}
+.mtb-title-btn:active{background:rgba(170,102,87,.08);}
+.mobile-brand{font-size:.95rem;font-weight:900;color:var(--clay);letter-spacing:.04em;font-family:"Noto Serif TC",serif;white-space:nowrap;}
+.stats-drop{max-height:0;overflow:hidden;transition:max-height .32s ease;background:rgba(248,241,241,.98);}
+.stats-drop.open{max-height:420px;}
+.stats-drop-inner{padding:2px 24px 22px;text-align:center;}
+.stats-legend{display:inline-block;text-align:left;}
+.stats-drop-line{font-size:.86rem;color:var(--clay);font-weight:700;margin-bottom:14px;letter-spacing:.02em;}
+.stats-drop-line #sbStatsMob{color:var(--text-mid);font-weight:600;}
+.stats-drop-divider{height:1px;background:var(--border);margin-bottom:14px;}
 
 /* ── SHARED BUTTON + FORM STYLES ─────────────── */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:0 16px;height:36px;border-radius:8px;font-family:"Noto Serif TC",serif;font-size:.83rem;font-weight:500;cursor:pointer;transition:all .17s;border:1.5px solid transparent;white-space:nowrap;line-height:1;}
@@ -143,6 +140,67 @@ body::before{content:"";position:fixed;inset:0;background:
 .review-only{display:none;}
 .body-edit-mode .review-only{display:flex;}
 @media(max-width:900px){.sb-review-only{display:none !important;}}
+
+/* ── 登入後才顯示的項目（我的收藏）── */
+.logged-in-only{display:none;}
+.body-logged-in .logged-in-only{display:flex;}
+
+/* ── 愛心收藏按鈕 ── */
+.fav-btn{display:none;align-items:center;justify-content:center;width:30px;height:30px;padding:0;margin-top:2px;border:none;background:transparent;color:var(--clay-lt);cursor:pointer;border-radius:8px;transition:color .15s,transform .12s,background .15s;}
+.body-logged-in .fav-btn{display:inline-flex;}
+.fav-btn:hover{background:rgba(170,102,87,.1);color:var(--clay);}
+.fav-btn:active{transform:scale(.85);}
+.fav-btn .fav-fill{opacity:0;transition:opacity .15s;}
+.fav-btn.on{color:var(--clay);}
+.fav-btn.on .fav-fill{opacity:1;}
+.fav-btn.on .fav-outline{opacity:0;}
+
+/* ── 登入框兩顆按鈕尺寸統一 ── */
+.auth-btns .btn{font-size:.78rem;padding:0 14px;height:36px;}
+
+/* ── auth 登入/註冊切換 ── */
+.auth-switch{text-align:center;margin-top:16px;font-size:.78rem;color:var(--text-lt);}
+/* ── 手機版登入 modal：內容窄、邊距大 ── */
+.auth-modal{width:340px;padding:34px 42px;}
+.auth-modal h3{margin-bottom:22px;}
+.auth-switch-link{color:var(--clay);font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:2px;}
+.auth-switch-link:hover{color:var(--clay-dk);}
+
+/* ── 桌面版側欄底部使用者列 ── */
+.sb-user-wrap{margin-top:auto;padding-top:14px;border-top:1px solid var(--border);}
+.sb-user-expand{max-height:0;overflow:hidden;transition:max-height .28s ease;}
+.sb-user-expand.open{max-height:240px;}
+.sb-auth-input{margin-bottom:8px;font-size:.82rem;}
+.sb-auth-error{font-size:.72rem;color:#e74c3c;margin-bottom:8px;line-height:1.5;}
+.sb-auth-switch{text-align:left;margin-top:6px;margin-bottom:12px;font-size:.75rem;color:var(--text-lt);}
+.sb-user-bar{display:flex;align-items:center;gap:8px;}
+.sb-user-main{display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:12px;cursor:pointer;transition:background .15s;user-select:none;flex:1;min-width:0;}
+.sb-user-main:hover{background:rgba(170,102,87,.08);}
+.sb-user-icon{display:flex;align-items:center;justify-content:center;color:var(--clay);flex-shrink:0;}
+.sb-user-text{font-size:.82rem;color:var(--text-mid);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
+.sb-user-go{display:flex;align-items:center;justify-content:center;width:32px;height:32px;flex-shrink:0;border:1px solid var(--border);border-radius:50%;background:transparent;color:var(--clay);cursor:pointer;transition:background .15s,color .15s,border-color .15s,transform .12s;}
+.sb-user-go:hover{background:var(--clay);color:white;border-color:var(--clay);}
+.sb-user-go:active{transform:scale(.9);}
+
+/* ── 使用者資訊面板（右上角下拉）── */
+.up-backdrop{display:none;position:fixed;inset:0;z-index:200;}
+.up-backdrop.open{display:block;}
+.up-panel{position:fixed;top:74px;right:28px;width:270px;
+  background:rgba(248,241,241,0.78);border:1px solid rgba(255,255,255,0.4);border-radius:18px;
+  padding:20px 22px;
+  backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 12px 40px rgba(100,40,20,.16);
+  transform-origin:top right;transform:scale(.92) translateY(-8px);opacity:0;
+  transition:transform .2s ease,opacity .2s ease;pointer-events:none;}
+.up-backdrop.open .up-panel{transform:scale(1) translateY(0);opacity:1;pointer-events:auto;}
+.up-panel-title{font-size:.82rem;font-weight:700;color:var(--clay);letter-spacing:.06em;text-align:left;margin-bottom:14px;}
+.up-block{padding:6px 0;}
+.up-lbl{font-size:.7rem;color:var(--clay-lt);font-weight:700;letter-spacing:.06em;margin-bottom:3px;}
+.up-val{font-size:.85rem;color:var(--text);word-break:break-all;line-height:1.5;}
+.up-logout{display:block;margin-left:auto;margin-top:16px;font-size:.78rem;padding:0 14px;height:36px;}
+@media(max-width:900px){
+  .up-panel{top:60px;right:14px;}
+}
 
 /* ── REVIEW MODAL ─────────────────────────────── */
 .modal.review-modal{width:600px;}
@@ -275,6 +333,7 @@ body::before{content:"";position:fixed;inset:0;background:
 .wide-modal textarea.fi{min-height:54px;resize:vertical;}
 @media(max-width:600px){
   .modal,.wide-modal{padding:20px 16px;border-radius:14px;}
+  .auth-modal{padding:32px 36px;width:auto;max-width:320px;}
   .tag-picker{padding:0;border:none;background:transparent;margin-bottom:10px;}
   .tag-picker-lbl{padding:0 0 6px 0;}
   .tag-picker-section{margin-bottom:8px;}
@@ -283,6 +342,8 @@ body::before{content:"";position:fixed;inset:0;background:
   .wide-modal .modal-btns,.modal:not(.detail-modal) .modal-btns{justify-content:stretch;}
   .wide-modal .modal-btns .btn,.modal:not(.detail-modal) .modal-btns .btn{flex:1;justify-content:center;height:44px;font-size:.88rem;}
   .detail-modal .modal-btns .btn{flex:none;}
+  .auth-btns{justify-content:center !important;}
+  .modal:not(.detail-modal) .auth-btns .btn{flex:none;height:36px;font-size:.78rem;padding:0 14px;}
 }
 
 /* ── BOOK DETAIL MODAL ────────────────────────── */
@@ -365,6 +426,20 @@ body::before{content:"";position:fixed;inset:0;background:
 
 
 
+/* ── ACCOUNT PAGE（登入／收藏合併）─────────────── */
+.acct-login{padding-top:10px;}
+.acct-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.acct-user-row{display:flex;flex-direction:column;gap:3px;min-width:0;}
+.acct-role{font-size:.68rem;color:var(--clay-lt);font-weight:700;letter-spacing:.06em;}
+.acct-email{font-size:.86rem;color:var(--text);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.acct-logout-btn{flex-shrink:0;font-size:.76rem;padding:0 14px;height:34px;}
+.acct-fav-lbl{font-size:.72rem;color:var(--clay-lt);font-weight:700;letter-spacing:.06em;margin-bottom:10px;}
+.acct-fav-list{display:flex;flex-direction:column;gap:10px;}
+
+/* ── MOBILE BOTTOM LIQUID-GLASS NAV ───────────── */
+.bnav-wrap{display:none;}
+.bnav-owner-menu{display:none;}
+
 /* ── 桌面：隱藏手機專用的側邊欄頁面 ────────────── */
 .sb-main{display:none;}
 .sb-page{display:none;}
@@ -379,17 +454,39 @@ body::before{content:"";position:fixed;inset:0;background:
     border-radius:0;border:none;
     background:rgba(255,252,250,0.99);
     backdrop-filter:none;-webkit-backdrop-filter:none;
-    transform:translateX(-100%);transition:transform .26s ease;
+    opacity:0;pointer-events:none;transition:opacity .16s ease;
     box-shadow:none;
   }
-  .sidebar.open{transform:translateX(0);}
+  .sidebar.open{opacity:1;pointer-events:auto;}
   .second-panel{display:none !important;}
   .sp-backdrop{display:none !important;}
   .sb-inner{display:none;}
-  .sb-main{display:flex;position:absolute;top:0;left:0;right:0;bottom:0;height:100%;transform:translateX(0);transition:transform .28s ease;z-index:1;}
-  .sb-main.pushed{transform:translateX(-100%);}
-  .sb-page{display:flex;}
-  .sb-mobile-close{display:flex;}
+  .sb-main{display:flex;position:absolute;top:0;left:0;right:0;bottom:0;height:100%;z-index:1;}
+
+  .bnav-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;position:fixed;left:0;right:0;bottom:22px;z-index:170;pointer-events:none;}
+  .bnav-item.bnav-gear{display:none;}
+  .body-owner .bnav-item.bnav-gear{display:flex;}
+  .bnav-owner-menu{position:absolute;left:6px;bottom:calc(100% + 10px);display:flex;flex-direction:column;gap:6px;padding:6px;border-radius:999px;background:rgba(255,255,255,0.22);border:1px solid rgba(255,255,255,0.65);backdrop-filter:blur(30px) saturate(240%);-webkit-backdrop-filter:blur(30px) saturate(240%);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 0 0 1px rgba(255,255,255,.12),0 10px 30px rgba(100,40,20,.16);opacity:0;pointer-events:none;transform:translateY(8px) scale(.9);transform-origin:bottom left;transition:opacity .18s ease,transform .18s ease;}
+  .bnav-owner-menu.open{opacity:1;pointer-events:auto;transform:translateY(0) scale(1);}
+  .bnav-owner-btn{display:flex;align-items:center;justify-content:center;width:48px;height:48px;border:none;background:transparent;border-radius:50%;color:var(--clay);cursor:pointer;transition:background .15s;}
+  .bnav-owner-btn:active{background:rgba(170,102,87,.14);}
+  .bnav-owner-btn svg{display:block;}
+  .bnav-row{position:relative;display:flex;align-items:center;gap:10px;width:calc(100% - 28px);max-width:400px;pointer-events:none;}
+  .bnav-main-pill{display:flex;align-items:center;justify-content:space-around;flex:1 1 auto;min-width:0;height:60px;padding:0 6px;border-radius:30px;background:rgba(255,255,255,0.22);border:1px solid rgba(255,255,255,0.65);backdrop-filter:blur(30px) saturate(240%);-webkit-backdrop-filter:blur(30px) saturate(240%);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 0 0 1px rgba(255,255,255,.12),0 10px 30px rgba(100,40,20,.16);pointer-events:auto;opacity:1;overflow:hidden;transition:flex .24s ease,opacity .16s ease,padding .24s ease;}
+  .bnav-item{position:relative;display:flex;align-items:center;justify-content:center;width:46px;height:46px;border:none;background:transparent;border-radius:50%;color:var(--clay);cursor:pointer;transition:background .15s,color .15s;flex-shrink:0;}
+  .bnav-item:active{background:rgba(170,102,87,.14);}
+  .bnav-item.active{color:var(--clay-dk);background:rgba(170,102,87,.16);}
+  .bnav-item svg{display:block;}
+  .bnav-badge{position:absolute;top:2px;right:2px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--clay);color:white;font-size:.58rem;font-weight:700;align-items:center;justify-content:center;display:none;}
+  .bnav-search-btn{flex:0 0 60px;width:60px;height:60px;border-radius:50%;border:1px solid rgba(255,255,255,0.65);background:rgba(255,255,255,0.22);backdrop-filter:blur(30px) saturate(240%);-webkit-backdrop-filter:blur(30px) saturate(240%);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 0 0 1px rgba(255,255,255,.12),0 10px 30px rgba(100,40,20,.16);color:var(--clay);display:flex;align-items:center;justify-content:center;cursor:pointer;pointer-events:auto;opacity:1;overflow:hidden;transition:flex .24s ease,opacity .16s ease;}
+  .bnav-search-btn:active{background:rgba(170,102,87,.1);}
+  .bnav-search-pill{display:flex;align-items:center;gap:6px;flex:0 0 0;width:0;opacity:0;overflow:hidden;height:60px;padding:0;border-radius:30px;background:rgba(255,255,255,0.42);border:1px solid rgba(255,255,255,0.65);backdrop-filter:blur(30px) saturate(240%);-webkit-backdrop-filter:blur(30px) saturate(240%);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 0 0 1px rgba(255,255,255,.12),0 10px 30px rgba(100,40,20,.16);pointer-events:none;transition:flex .24s ease,opacity .18s ease .06s,padding .24s ease;}
+  .bnav-row.search-open .bnav-main-pill,.bnav-row.search-open .bnav-search-btn{flex:0 0 0;opacity:0;pointer-events:none;padding:0;}
+  .bnav-row.search-open .bnav-search-pill{flex:1 1 auto;width:auto;opacity:1;pointer-events:auto;padding:0 8px 0 22px;}
+  .bnav-search-pill input{flex:1;border:none;outline:none;background:transparent;font-family:inherit;font-size:.86rem;color:var(--text);min-width:0;}
+  .bnav-search-close{flex-shrink:0;width:34px;height:34px;border-radius:50%;border:none;background:transparent;color:var(--text-lt);font-size:1.05rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  .bnav-search-close:active{background:rgba(170,102,87,.1);}
+  .main-content{padding-bottom:130px;}
 }
 </style>
 </head>
@@ -398,31 +495,22 @@ body::before{content:"";position:fixed;inset:0;background:
 <!-- Mobile topbar -->
 <header class="mobile-topbar" id="mobileTopbar">
   <div class="mobile-row1">
-    <button class="mob-hamburger" onclick="toggleSidebar()" aria-label="選單">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="22" height="22">
-        <path d="M8 16h48M8 32h48M8 48h48" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"/>
-      </svg>
+    <button class="mtb-title-btn" onclick="toggleStatsCard()" aria-label="統計資訊">
+      <span class="mobile-brand">Reading List</span>
     </button>
-    <span class="mobile-brand">Reading List</span>
-    <div class="mob-search-compact">
-      <div class="search-box" style="margin:0;">
-        <span class="search-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14"><path d="m44.68,39.02c2.09-3.16,3.32-6.95,3.32-11.02,0-11.05-8.95-20-20-20S8,16.95,8,28s8.95,20,20,20c4.08,0,7.86-1.23,11.02-3.32l11.32,11.32,5.66-5.66-11.32-11.32Zm-16.68,2.98c-7.73,0-14-6.27-14-14s6.27-14,14-14,14,6.27,14,14-6.27,14-14,14Z" fill="#aa6657"/></svg></span>
-        <input type="text" id="searchQMobC" placeholder="搜尋書名、作者…" oninput="setSearch(this.value)">
-      </div>
-    </div>
-    <div class="mobile-actions">
-      <button class="icon-btn" onclick="randomPick()" aria-label="隨機點菜">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="18" height="18"><path d="m58,44c0,6.63-5.37,12-12,12s-12-5.37-12-12c0-4.23,2.2-7.95,5.51-10.08-.3-1.88-.51-4.18-.51-6.92,0-2.99.25-5.44.59-7.41-7.5,2.38-13.57,7.26-16.64,13.49,4.16,1.89,7.05,6.06,7.05,10.92,0,6.63-5.37,12-12,12s-12-5.37-12-12c0-6.23,4.76-11.36,10.84-11.94,2.86-6.86,8.5-12.52,15.69-16.06h-2.53c-4.94,0-8-3.06-8-8h13c3.72,0,6.37,1.74,7.46,4.71,2.44-.46,4.96-.71,7.54-.71v6c-1.34,0-2.67.08-3.97.23-.47,1.71-1.03,4.61-1.03,8.77,0,1.96.13,3.63.31,5.03.23-.01.46-.03.69-.03,6.63,0,12,5.37,12,12Z" fill="currentColor"/></svg>
-      </button>
-      <button class="icon-btn edit-btn" id="editBtnMob" onclick="toggleEdit()" aria-label="編輯模式">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="18" height="18"><path d="m32,8c-13.25,0-24,10.75-24,24s10.75,24,24,24,24-10.75,24-24-10.75-24-24-24Zm0,10c4.94,0,8,3.06,8,8s-3.06,8-8,8-8-3.06-8-8,3.06-8,8-8Zm0,32c-5.24,0-9.95-2.25-13.24-5.83,2.71-3.93,7.28-6.17,13.24-6.17s10.53,2.24,13.24,6.17c-3.29,3.58-7.99,5.83-13.24,5.83Z" fill="currentColor"/></svg>
-      </button>
-    </div>
   </div>
-  <div class="mobile-row2" id="mobileSearchRow">
-    <div class="search-box">
-      <span class="search-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14"><path d="m44.68,39.02c2.09-3.16,3.32-6.95,3.32-11.02,0-11.05-8.95-20-20-20S8,16.95,8,28s8.95,20,20,20c4.08,0,7.86-1.23,11.02-3.32l11.32,11.32,5.66-5.66-11.32-11.32Zm-16.68,2.98c-7.73,0-14-6.27-14-14s6.27-14,14-14,14,6.27,14,14-6.27,14-14,14Z" fill="#aa6657"/></svg></span>
-      <input type="text" id="searchQMob" placeholder="搜尋書名、作者…" oninput="setSearch(this.value)">
+  <div class="stats-drop" id="statsDrop">
+    <div class="stats-drop-inner">
+      <div class="stats-drop-line"><span id="totalWordsDisplay">—</span> 萬字 ｜ <span id="sbStatsMob">連線中…</span></div>
+      <div class="stats-drop-divider"></div>
+      <div class="stats-legend">
+      <div class="sb-rating-row"><span class="stars r5">★★★★★</span><span class="rdesc">珍饈佳餚</span></div>
+      <div class="sb-rating-row"><span class="stars r4">★★★★☆</span><span class="rdesc">好吃</span></div>
+      <div class="sb-rating-row"><span class="stars r3">★★★☆☆</span><span class="rdesc">餓了才吃</span></div>
+      <div class="sb-rating-row"><span class="stars r2">★★☆☆☆</span><span class="rdesc">難吃</span></div>
+      <div class="sb-rating-row"><span class="stars r1">★☆☆☆☆</span><span class="rdesc">廚餘</span></div>
+      <div class="sb-rating-row"><span class="stars r0">☆☆☆☆☆</span><span class="rdesc">不配上桌</span></div>
+      </div>
     </div>
   </div>
 </header>
@@ -434,12 +522,6 @@ body::before{content:"";position:fixed;inset:0;background:
 
   <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
-
-    <button class="sb-mobile-close" onclick="closeSidebar()" aria-label="關閉選單">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="22" height="22">
-        <path d="m36.24,32l15.76,15.76-4.24,4.24-15.76-15.76-15.76,15.76-4.24-4.24,15.76-15.76-15.76-15.76,4.24-4.24,15.76,15.76,15.76-15.76,4.24,4.24-15.76,15.76Z" fill="currentColor"/>
-      </svg>
-    </button>
 
     <!-- Desktop: sidebar inner wrapper -->
     <div class="sb-inner">
@@ -469,6 +551,7 @@ body::before{content:"";position:fixed;inset:0;background:
           <span class="sb-badge" id="sbFilterBadgeDesk" style="display:none;"></span>
         </div>
         <div class="sb-item" onclick="randomPick()">隨機點菜</div>
+        <div class="sb-item sb-item-fav logged-in-only" onclick="toggleFavView()">我的收藏</div>
       </nav>
       <div class="sb-gap"></div>
       <nav class="sb-nav sb-edit-nav" id="sbEditNavDesk">
@@ -477,84 +560,65 @@ body::before{content:"";position:fixed;inset:0;background:
         <div class="sb-item review-only" id="sbItemReviewDesk" onclick="toggleReviewInline('desk')">閱讀回顧</div>
         <div class="sb-review-inline" id="sbReviewInlineDesk"></div>
       </nav>
+
+      <!-- 使用者列（釘在側欄底部）-->
+      <div class="sb-user-wrap">
+        <!-- 向上展開的內容（僅未登入時的帳密表單）-->
+        <div class="sb-user-expand" id="sbUserExpand">
+          <div id="sbAuthForm">
+            <input class="fi sb-auth-input" type="email" id="sbLoginEmail" placeholder="your@email.com" autocomplete="off" onkeydown="if(event.key==='Enter')document.getElementById('sbLoginPw').focus()">
+            <input class="fi sb-auth-input" type="password" id="sbLoginPw" placeholder="••••••" onkeydown="if(event.key==='Enter')sbDoAuth()">
+            <div id="sbLoginError" class="sb-auth-error" style="display:none;"></div>
+            <div class="sb-auth-switch" id="sbAuthSwitchText">還沒有帳號？<span class="auth-switch-link" onclick="sbSetAuthMode('signup')">註冊一個</span></div>
+          </div>
+        </div>
+        <!-- 使用者列本體 -->
+        <div class="sb-user-bar">
+          <div class="sb-user-main" id="sbUserBar" onclick="toggleUserBar()">
+            <span class="sb-user-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="22" height="22"><path d="m32,8c-13.25,0-24,10.75-24,24s10.75,24,24,24,24-10.75,24-24-10.75-24-24-24Zm0,10c4.94,0,8,3.06,8,8s-3.06,8-8,8-8-3.06-8-8,3.06-8,8-8Zm0,32c-5.24,0-9.95-2.25-13.24-5.83,2.71-3.93,7.28-6.17,13.24-6.17s10.53,2.24,13.24,6.17c-3.29,3.58-7.99,5.83-13.24,5.83Z" fill="currentColor"/></svg>
+            </span>
+            <span class="sb-user-text" id="sbUserText">尚未登入</span>
+          </div>
+          <button class="sb-user-go" id="sbUserGo" onclick="sbUserGoClick()" aria-label="確認">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="16" height="16"><path d="m26,16 20,16 -20,16" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
     </div>
 
-    <!-- Mobile: main page -->
-    <div class="sb-main" id="sbMain">
-      <div class="sb-heading">
-        <div class="sb-sub">杏桃貝果的</div>
-        <div class="sb-title">Reading List</div>
-      </div>
-      <div class="sb-stats">
-        <div class="sb-stats-label">目前已閱讀</div>
-        <div class="sb-stats-row">
-          <span id="totalWordsDisplay" class="sb-stats-num">—</span><span class="sb-stats-unit"> 萬字</span>
-        </div>
-      </div>
-      <div class="sb-count" id="sbStatsMob">連線中…</div>
-      <nav class="sb-nav">
-        <div class="sb-item" id="sbItemRatingMob" onclick="toggleRatingInline('mob')">評分標準</div>
-        <div class="sb-rating-inline" id="sbRatingInlineMob">
-          <div class="sb-rating-row"><span class="stars r5">★★★★★</span><span class="rdesc">珍饈佳餚</span></div>
-          <div class="sb-rating-row"><span class="stars r4">★★★★☆</span><span class="rdesc">好吃</span></div>
-          <div class="sb-rating-row"><span class="stars r3">★★★☆☆</span><span class="rdesc">餓了才吃</span></div>
-          <div class="sb-rating-row"><span class="stars r2">★★☆☆☆</span><span class="rdesc">難吃</span></div>
-          <div class="sb-rating-row"><span class="stars r1">★☆☆☆☆</span><span class="rdesc">廚餘</span></div>
-          <div class="sb-rating-row"><span class="stars r0">☆☆☆☆☆</span><span class="rdesc">不配上桌</span></div>
-        </div>
-        <div class="sb-item" id="sbItemFilterMob" onclick="toggleFilterInlineMobile()">
-          篩選標籤
-          <span class="sb-badge" id="sbFilterBadgeMob" style="display:none;"></span>
-        </div>
-        <div class="sb-filter-inline" id="sbFilterInlineMob"></div>
-      </nav>
-      <div class="sb-gap"></div>
-      <nav class="sb-nav sb-edit-nav" id="sbEditNavMob">
-        <div class="sb-item" onclick="openPanel('add')">新增書目</div>
-        <div class="sb-item" onclick="openPanel('tags')">管理標籤</div>
-        <div class="sb-item review-only" id="sbItemReviewMob" onclick="toggleReviewInline('mob')">閱讀回顧</div>
-        <div class="sb-review-inline" id="sbReviewInlineMob"></div>
-      </nav>
-    </div>
+    <!-- Mobile: sb-main kept as empty structural placeholder (no longer shown as its own screen; bottom nav opens sb-page directly) -->
+    <div class="sb-main" id="sbMain"></div>
 
     <!-- Mobile: 新增書目 page -->
     <div class="sb-page" id="sbPageAdd">
-      <div class="sb-back-row">
-        <button class="sb-back-btn" onclick="closePanel()" aria-label="返回">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="20" height="20">
-          <path d="m40,12-20,20,20,20" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-        <span class="sb-page-title">新增書目</span>
-      </div>
+      <div class="sb-back-row"><span class="sb-page-title">新增書目</span></div>
       <div id="sbAddTarget" style="overflow-y:auto;flex:1;"></div>
     </div>
 
     <!-- Mobile: 管理標籤 page -->
     <div class="sb-page" id="sbPageTags">
-      <div class="sb-back-row">
-        <button class="sb-back-btn" onclick="closePanel()" aria-label="返回">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="20" height="20">
-          <path d="m40,12-20,20,20,20" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-        <span class="sb-page-title">管理標籤</span>
-      </div>
+      <div class="sb-back-row"><span class="sb-page-title">管理標籤</span></div>
       <div id="sbTagsTarget" style="overflow-y:auto;flex:1;"></div>
     </div>
 
     <!-- Mobile: filter page (also holds chip DOM for desktop via teleport) -->
     <div class="sb-page" id="sbPageFilter">
-      <div class="sb-back-row">
-        <button class="sb-back-btn" onclick="closePanel()" aria-label="返回">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="20" height="20">
-          <path d="m40,12-20,20,20,20" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-        <span class="sb-page-title">篩選標籤</span>
-      </div>
+      <div class="sb-back-row"><span class="sb-page-title">篩選標籤</span></div>
       <!-- filterPanelContent teleports here on mobile -->
       <div id="sbFilterTarget"></div>
+    </div>
+
+    <!-- Mobile: 帳號／收藏 page（合併登入與收藏）-->
+    <div class="sb-page" id="sbPageAccount">
+      <div class="sb-back-row"><span class="sb-page-title" id="sbAccountPageTitle">Member Login</span></div>
+      <div id="sbAccountTarget" style="overflow-y:auto;flex:1;"></div>
+    </div>
+
+    <!-- Mobile: 閱讀回顧 picker page（店長限定）-->
+    <div class="sb-page" id="sbPageReview">
+      <div class="sb-back-row"><span class="sb-page-title">閱讀回顧</span></div>
+      <div id="sbReviewMobTarget" style="overflow-y:auto;flex:1;"></div>
     </div>
 
   </aside>
@@ -572,7 +636,7 @@ body::before{content:"";position:fixed;inset:0;background:
         <span class="search-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="14" height="14"><path d="m44.68,39.02c2.09-3.16,3.32-6.95,3.32-11.02,0-11.05-8.95-20-20-20S8,16.95,8,28s8.95,20,20,20c4.08,0,7.86-1.23,11.02-3.32l11.32,11.32,5.66-5.66-11.32-11.32Zm-16.68,2.98c-7.73,0-14-6.27-14-14s6.27-14,14-14,14,6.27,14,14-6.27,14-14,14Z" fill="#aa6657"/></svg></span>
         <input type="text" id="searchQ" placeholder="搜尋書名、作者…" oninput="setSearch(this.value)">
       </div>
-      <button class="icon-btn edit-btn" id="editBtn" onclick="toggleEdit()" aria-label="編輯模式">
+      <button class="icon-btn edit-btn" id="editBtn" onclick="toggleEdit()" aria-label="編輯模式" style="display:none;">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="18" height="18"><path d="m32,8c-13.25,0-24,10.75-24,24s10.75,24,24,24,24-10.75,24-24-10.75-24-24-24Zm0,10c4.94,0,8,3.06,8,8s-3.06,8-8,8-8-3.06-8-8,3.06-8,8-8Zm0,32c-5.24,0-9.95-2.25-13.24-5.83,2.71-3.93,7.28-6.17,13.24-6.17s10.53,2.24,13.24,6.17c-3.29,3.58-7.99,5.83-13.24,5.83Z" fill="currentColor"/></svg>
       </button>
     </div>
@@ -582,6 +646,48 @@ body::before{content:"";position:fixed;inset:0;background:
   </main>
 
 </div><!-- .app-layout -->
+
+<!-- Mobile: bottom liquid-glass floating nav -->
+<div class="bnav-wrap" id="bnavWrap">
+  <div class="bnav-row" id="bnavRow">
+    <div class="bnav-owner-menu" id="bnavOwnerMenu">
+      <button class="bnav-owner-btn" onclick="ownerMenuAction('add')" aria-label="新增書目">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="19" height="19"><path d="M32,8v48M8,32h48" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/></svg>
+      </button>
+      <button class="bnav-owner-btn" onclick="ownerMenuAction('tags')" aria-label="管理標籤">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="19" height="19"><path d="m56,30-24-24H12v20l24,24 20,-20Z" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linejoin="round"/><circle cx="21" cy="21" r="3.5" fill="currentColor"/></svg>
+      </button>
+      <button class="bnav-owner-btn" onclick="ownerMenuAction('review')" aria-label="閱讀回顧">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="19" height="19"><rect x="12" y="8" width="40" height="48" rx="4" fill="none" stroke="currentColor" stroke-width="4.5"/><path d="M20,20h24M20,30h24M20,40h16" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="bnav-main-pill" id="bnavMainPill">
+      <button class="bnav-item bnav-gear" id="bnavGear" onclick="toggleOwnerMenu()" aria-label="店長工具">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="19" height="19"><path d="m58,34v-4l-6.34-1.58c-.2-1.08-.48-2.13-.84-3.14l4.7-4.54-2-3.46-6.28,1.8c-.7-.83-1.47-1.6-2.3-2.3l1.8-6.28-3.46-2-4.54,4.7c-1.01-.36-2.06-.65-3.14-.84l-1.58-6.34h-4l-1.58,6.34c-1.08.2-2.13.48-3.14.84l-4.54-4.7-3.46,2,1.8,6.28c-.83.7-1.6,1.47-2.3,2.3l-6.28-1.8-2,3.46,4.7,4.54c-.36,1.01-.65,2.06-.84,3.14l-6.34,1.58v4l6.34,1.58c.2,1.08.48,2.13.84,3.14l-4.7,4.54,2,3.46,6.28-1.8c.7.83,1.47,1.6,2.3,2.3l-1.8,6.28,3.46,2,4.54-4.7c1.01.36,2.06.65,3.14.84l1.58,6.34h4l1.58-6.34c1.08-.2,2.13-.48,3.14-.84l4.54,4.7,3.46-2-1.8-6.28c.83-.7,1.6-1.47,2.3-2.3l6.28,1.8,2-3.46-4.7-4.54c.36-1.01.65-2.06.84-3.14l6.34-1.58Zm-40-2c0-4.1,1.77-7.77,4.57-10.33l5.96,10.33-5.96,10.33c-2.8-2.56-4.57-6.23-4.57-10.33Zm15.73-3l-5.97-10.34c1.34-.42,2.76-.66,4.24-.66,6.7,0,12.3,4.71,13.67,11h-11.94Zm0,6h11.94c-1.37,6.29-6.97,11-13.67,11-1.48,0-2.9-.23-4.24-.66l5.97-10.34Z" fill="currentColor"/></svg>
+      </button>
+      <button class="bnav-item active" id="bnavHome" onclick="bnavHome()" aria-label="首頁">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="21" height="21"><path d="m56,34h-7v20h-12v-16h-10v16h-12v-20h-7v-4L32,6l9,9v-7h8v15l7,7v4Z" fill="currentColor"/></svg>
+      </button>
+      <button class="bnav-item" id="bnavFilter" onclick="bnavToggle('filter')" aria-label="篩選標籤">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="20" height="20"><path d="m21,23c-3.92,0-7.24,2.51-8.48,6h-4.52v6h4.52c1.24,3.49,4.56,6,8.48,6s7.24-2.51,8.48-6h26.52v-6h-26.52c-1.24-3.49-4.56-6-8.48-6Zm0,12c-1.66,0-3-1.34-3-3s1.34-3,3-3,3,1.34,3,3-1.34,3-3,3Zm14,6c-3.92,0-7.24,2.51-8.48,6H8v6h18.52c1.24,3.49,4.56,6,8.48,6s7.24-2.51,8.48-6h12.52v-6h-12.52c-1.24-3.49-4.56-6-8.48-6Zm0,12c-1.66,0-3-1.34-3-3s1.34-3,3-3,3,1.34,3,3-1.34,3-3,3ZM51.48,11c-1.24-3.49-4.56-6-8.48-6s-7.24,2.51-8.48,6H8v6h26.52c1.24,3.49,4.56,6,8.48,6s7.24-2.51,8.48-6h4.52v-6h-4.52Zm-8.48,6c-1.66,0-3-1.34-3-3s1.34-3,3-3,3,1.34,3,3-1.34,3-3,3Z" fill="currentColor"/></svg>
+        <span class="bnav-badge" id="bnavFilterBadge"></span>
+      </button>
+      <button class="bnav-item" onclick="randomPick()" aria-label="隨機點菜">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="20" height="20"><path d="m58,44c0,6.63-5.37,12-12,12s-12-5.37-12-12c0-4.23,2.2-7.95,5.51-10.08-.3-1.88-.51-4.18-.51-6.92,0-2.99.25-5.44.59-7.41-7.5,2.38-13.57,7.26-16.64,13.49,4.16,1.89,7.05,6.06,7.05,10.92,0,6.63-5.37,12-12,12s-12-5.37-12-12c0-6.23,4.76-11.36,10.84-11.94,2.86-6.86,8.5-12.52,15.69-16.06h-2.53c-4.94,0-8-3.06-8-8h13c3.72,0,6.37,1.74,7.46,4.71,2.44-.46,4.96-.71,7.54-.71v6c-1.34,0-2.67.08-3.97.23-.47,1.71-1.03,4.61-1.03,8.77,0,1.96.13,3.63.31,5.03.23-.01.46-.03.69-.03,6.63,0,12,5.37,12,12Z" fill="currentColor"/></svg>
+      </button>
+      <button class="bnav-item" id="bnavAccount" onclick="bnavToggle('account')" aria-label="帳號">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="21" height="21"><path d="m32,8c-13.25,0-24,10.75-24,24s10.75,24,24,24,24-10.75,24-24-10.75-24-24-24Zm0,10c4.94,0,8,3.06,8,8s-3.06,8-8,8-8-3.06-8-8,3.06-8,8-8Zm0,32c-5.24,0-9.95-2.25-13.24-5.83,2.71-3.93,7.28-6.17,13.24-6.17s10.53,2.24,13.24,6.17c-3.29,3.58-7.99,5.83-13.24,5.83Z" fill="currentColor"/></svg>
+      </button>
+    </div>
+    <button class="bnav-search-btn" id="bnavSearchBtn" onclick="toggleBottomSearch()" aria-label="搜尋">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="19" height="19"><path d="m44.68,39.02c2.09-3.16,3.32-6.95,3.32-11.02,0-11.05-8.95-20-20-20S8,16.95,8,28s8.95,20,20,20c4.08,0,7.86-1.23,11.02-3.32l11.32,11.32,5.66-5.66-11.32-11.32Zm-16.68,2.98c-7.73,0-14-6.27-14-14s6.27-14,14-14,14,6.27,14,14-6.27,14-14,14Z" fill="currentColor"/></svg>
+    </button>
+    <div class="bnav-search-pill" id="bnavSearchPill">
+      <input type="text" id="searchQMobBottom" placeholder="搜尋書名、作者…" oninput="setSearch(this.value)">
+      <button class="bnav-search-close" onclick="toggleBottomSearch(false)" aria-label="關閉搜尋">✕</button>
+    </div>
+  </div>
+</div>
 
 <!-- Hidden holder for filter panel DOM (teleport source) -->
 <div id="filterContentHolder" style="display:none;">
@@ -663,9 +769,8 @@ body::before{content:"";position:fixed;inset:0;background:
 
 <!-- LOGIN MODAL -->
 <div class="overlay" id="pwOverlay" onclick="overlayClick(event,'pwOverlay')">
-  <div class="modal">
-    <h3>登入帳號</h3>
-    <p class="sub">請輸入帳號密碼</p>
+  <div class="modal auth-modal">
+    <h3 id="authTitle" style="text-align:center;">Member Login</h3>
     <div style="margin-bottom:10px;">
       <div class="fi-lbl" style="margin-bottom:4px;">Email</div>
       <input class="fi" type="email" id="loginEmail" placeholder="your@email.com" style="letter-spacing:normal;text-align:center;font-family:inherit;font-size:.88rem;" onkeydown="if(event.key==='Enter')document.getElementById('loginPw').focus()">
@@ -674,11 +779,27 @@ body::before{content:"";position:fixed;inset:0;background:
       <div class="fi-lbl" style="margin-bottom:4px;">密碼</div>
       <input class="fi" type="password" id="loginPw" placeholder="••••••" style="letter-spacing:.15em;" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
-    <div id="loginError" style="font-size:.76rem;color:#e74c3c;text-align:center;margin-bottom:10px;display:none;">帳號或密碼輸入錯誤</div>
-    <div class="modal-btns">
+    <div id="loginError" style="font-size:.76rem;color:#e74c3c;text-align:center;margin-bottom:10px;display:none;">你又打錯帳號密碼了！</div>
+    <div class="modal-btns auth-btns">
       <button class="btn btn-fill" id="loginBtn" onclick="doLogin()">登入</button>
-      <button class="btn btn-ghost" onclick="closeOverlay('pwOverlay')">取消</button>
     </div>
+    <div class="auth-switch" id="authSwitchText">還沒有帳號？<span class="auth-switch-link" onclick="setAuthMode('signup')">註冊一個</span></div>
+  </div>
+</div>
+
+<!-- USER INFO PANEL (右上角下拉) -->
+<div class="up-backdrop" id="userPanelOverlay" onclick="overlayClick(event,'userPanelOverlay')">
+  <div class="up-panel">
+    <div class="up-panel-title">常客資訊</div>
+    <div class="up-block">
+      <div class="up-lbl">身分</div>
+      <div class="up-val" id="upRole"></div>
+    </div>
+    <div class="up-block">
+      <div class="up-lbl">E-mail</div>
+      <div class="up-val" id="upEmail"></div>
+    </div>
+    <button class="btn btn-fill up-logout" onclick="doLogoutFromPanel()">登出</button>
   </div>
 </div>
 
@@ -841,7 +962,11 @@ const SUPABASE_KEY='sb_publishable_9UBbONOpY9h1O7H9tobF5g_5_y1pBtU';
 const BASE=`${SUPABASE_URL}/rest/v1/books`;
 const SBASE=`${SUPABASE_URL}/rest/v1/settings`;
 const HEADERS={'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':'return=representation'};
+const OWNER_UID='74e6f6ff-a0f5-4d33-8b5c-1b69c02d3dca';
 let _authToken=null;
+let _currentUser=null;   // {id,email} 登入者資訊，未登入為 null
+let _isOwner=false;      // 是否為站主
+let favoriteIds=new Set();// 目前使用者收藏的 book_id（字串）
 function authHeaders(extra){
   const h={...HEADERS};
   if(_authToken) h['Authorization']=`Bearer ${_authToken}`;
@@ -849,30 +974,153 @@ function authHeaders(extra){
 }
 
 // ── Auth ──────────────────────────────────────
+let authMode='login';   // 'login' | 'signup'（手機 modal 用）
+
+// 共用的認證核心：回傳 {ok:true} 或 {ok:false,error:'...'}
+async function authRequest(email,pw,mode){
+  if(mode==='signup'){
+    const okChars=/^[\x20-\x7E]+$/;
+    if(!email||!pw) return {ok:false,error:'請填寫 Email 和密碼'};
+    if(!okChars.test(email)||!okChars.test(pw)) return {ok:false,error:'只能使用英文、數字與符號喔'};
+    if(pw.length<6) return {ok:false,error:'密碼至少 6 個字'};
+    try{
+      const res=await fetch(`${SUPABASE_URL}/auth/v1/signup`,{
+        method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY},
+        body:JSON.stringify({email,password:pw})
+      });
+      const data=await res.json();
+      if(!res.ok) throw new Error(data.msg||data.error_description||'註冊失敗');
+      if(data.access_token){
+        _authToken=data.access_token;
+        _currentUser={id:data.user?.id,email:data.user?.email||email};
+        await enterSession();
+        return {ok:true};
+      } else {
+        // 沒直接給 token 時改用登入
+        return await authRequest(email,pw,'login');
+      }
+    }catch(e){
+      return {ok:false,error:/registered|already/i.test(e.message)?'這個 Email 已經註冊過了':('註冊失敗：'+e.message)};
+    }
+  } else {
+    try{
+      const res=await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`,{
+        method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY},
+        body:JSON.stringify({email,password:pw})
+      });
+      const data=await res.json();
+      if(!res.ok||!data.access_token) throw new Error(data.error_description||'登入失敗');
+      _authToken=data.access_token;
+      _currentUser={id:data.user?.id,email:data.user?.email||email};
+      await enterSession();
+      return {ok:true};
+    }catch(e){
+      return {ok:false,error:'你又打錯帳號密碼了！'};
+    }
+  }
+}
+
+// ── 手機版 modal ──
+function setAuthMode(mode){
+  authMode=mode;
+  const isSignup=mode==='signup';
+  document.getElementById('authTitle').textContent=isSignup?'Register':'Member Login';
+  document.getElementById('loginBtn').textContent=isSignup?'註冊':'登入';
+  document.getElementById('authSwitchText').innerHTML=isSignup
+    ?'已經有帳號了？<span class="auth-switch-link" onclick="setAuthMode(\'login\')">前往登入</span>'
+    :'還沒有帳號？<span class="auth-switch-link" onclick="setAuthMode(\'signup\')">註冊一個</span>';
+  document.getElementById('loginError').style.display='none';
+}
 async function doLogin(){
   const email=document.getElementById('loginEmail').value.trim();
   const pw=document.getElementById('loginPw').value;
   const btn=document.getElementById('loginBtn');
   const err=document.getElementById('loginError');
   err.style.display='none';
-  btn.disabled=true; btn.textContent='登入中…';
-  try{
-    const res=await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`,{
-      method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY},
-      body:JSON.stringify({email,password:pw})
-    });
-    const data=await res.json();
-    if(!res.ok||!data.access_token) throw new Error(data.error_description||'登入失敗');
-    _authToken=data.access_token;
-    closeOverlay('pwOverlay');
-    enterEdit();
-  }catch(e){
-    err.style.display='block';
+  btn.disabled=true; btn.textContent=authMode==='signup'?'註冊中…':'登入中…';
+  const r=await authRequest(email,pw,authMode);
+  if(r.ok){ closeOverlay('pwOverlay'); }
+  else{
+    err.textContent=r.error; err.style.display='block';
     document.getElementById('loginPw').value='';
     document.getElementById('loginPw').focus();
   }
-  btn.disabled=false; btn.textContent='登入';
+  btn.disabled=false; btn.textContent=authMode==='signup'?'註冊':'登入';
 }
+// 手機仍呼叫 doSignup（相容）；實際交給 doLogin 依 authMode 分流
+async function doSignup(){ return doLogin(); }
+
+// ── 桌面版側欄使用者列 ──
+let sbAuthMode='login';
+let userBarOpen=false;
+function toggleUserBar(){
+  // 已登入：列上沒有可展開的內容（登出在箭頭鈕），不展開
+  if(_currentUser) return;
+  userBarOpen=!userBarOpen;
+  const exp=document.getElementById('sbUserExpand');
+  exp.classList.toggle('open',userBarOpen);
+  if(userBarOpen){
+    sbSetAuthMode('login');
+    setTimeout(()=>{const el=document.getElementById('sbLoginEmail');if(el)el.focus();},80);
+  }
+}
+function sbSetAuthMode(mode){
+  sbAuthMode=mode;
+  const isSignup=mode==='signup';
+  document.getElementById('sbAuthSwitchText').innerHTML=isSignup
+    ?'已經有帳號了？<span class="auth-switch-link" onclick="sbSetAuthMode(\'login\')">前往登入</span>'
+    :'還沒有帳號？<span class="auth-switch-link" onclick="sbSetAuthMode(\'signup\')">註冊一個</span>';
+  document.getElementById('sbLoginError').style.display='none';
+}
+async function sbDoAuth(){
+  const email=document.getElementById('sbLoginEmail').value.trim();
+  const pw=document.getElementById('sbLoginPw').value;
+  const go=document.getElementById('sbUserGo');
+  const err=document.getElementById('sbLoginError');
+  err.style.display='none';
+  if(go) go.disabled=true;
+  const r=await authRequest(email,pw,sbAuthMode);
+  if(r.ok){
+    // 收合展開區（enterSession 已更新使用者列）
+    userBarOpen=false;
+    document.getElementById('sbUserExpand').classList.remove('open');
+  } else {
+    err.textContent=r.error; err.style.display='block';
+    document.getElementById('sbLoginPw').value='';
+    document.getElementById('sbLoginPw').focus();
+  }
+  if(go) go.disabled=false;
+}
+// 箭頭確認鈕：已登入→登出；未登入→送出登入/註冊
+function sbUserGoClick(){
+  if(_currentUser){
+    doLogout();
+  } else {
+    // 未登入：若尚未展開，先展開讓使用者填帳密
+    if(!userBarOpen){ toggleUserBar(); return; }
+    sbDoAuth();
+  }
+}
+// 更新側欄使用者列的顯示（登入/登出後呼叫）
+function updateUserBar(){
+  const text=document.getElementById('sbUserText');
+  const authForm=document.getElementById('sbAuthForm');
+  if(!text) return;
+  if(_currentUser){
+    text.textContent=_currentUser.email||'已登入';
+    text.title=_currentUser.email||'';
+    if(authForm) authForm.style.display='none';
+  } else {
+    text.textContent='尚未登入';
+    text.title='';
+    if(authForm) authForm.style.display='block';
+    // 清空輸入框
+    const e=document.getElementById('sbLoginEmail'),p=document.getElementById('sbLoginPw');
+    if(e) e.value=''; if(p) p.value='';
+    const err=document.getElementById('sbLoginError'); if(err) err.style.display='none';
+  }
+}
+
 async function doLogout(){
   try{
     await fetch(`${SUPABASE_URL}/auth/v1/logout`,{
@@ -880,7 +1128,140 @@ async function doLogout(){
     });
   }catch(e){}
   _authToken=null;
-  exitEdit();
+  _currentUser=null;
+  _isOwner=false;
+  favoriteIds=new Set();
+  // 收合側欄展開區
+  userBarOpen=false;
+  const exp=document.getElementById('sbUserExpand'); if(exp) exp.classList.remove('open');
+  exitSession();
+}
+
+// ── Mobile: 帳號／收藏合併頁面 ──────────────────
+let acctMode='login';
+function renderAccountPage(){
+  const target=document.getElementById('sbAccountTarget');
+  const title=document.getElementById('sbAccountPageTitle');
+  if(!target) return;
+  if(!_currentUser){
+    if(title) title.textContent='Member Login';
+    acctMode='login';
+    target.innerHTML=`
+      <div class="acct-login">
+        <div class="fi-wrap" style="margin-bottom:10px;">
+          <span class="fi-lbl">Email</span>
+          <input class="fi" type="email" id="acctEmail" placeholder="your@email.com" autocomplete="off" onkeydown="if(event.key==='Enter')document.getElementById('acctPw').focus()">
+        </div>
+        <div class="fi-wrap" style="margin-bottom:14px;">
+          <span class="fi-lbl">密碼</span>
+          <input class="fi" type="password" id="acctPw" placeholder="••••••" onkeydown="if(event.key==='Enter')acctDoAuth()">
+        </div>
+        <div id="acctError" class="sb-auth-error" style="display:none;"></div>
+        <button class="btn btn-fill" style="width:100%;" id="acctSubmitBtn" onclick="acctDoAuth()">登入</button>
+        <div class="auth-switch" id="acctSwitchText" style="margin-top:16px;">還沒有帳號？<span class="auth-switch-link" onclick="acctSetMode('signup')">註冊一個</span></div>
+      </div>`;
+  } else {
+    if(title) title.textContent='我的收藏';
+    const favs=books.filter(b=>favoriteIds.has(String(b.id)));
+    target.innerHTML=`
+      <div class="acct-header">
+        <div class="acct-user-row">
+          <span class="acct-role">${_isOwner?'店長':'常客'}</span>
+          <span class="acct-email">${esc(_currentUser.email||'')}</span>
+        </div>
+        <button class="btn btn-ghost acct-logout-btn" onclick="doLogout()">登出</button>
+      </div>
+      <div class="acct-fav-lbl">我的收藏 · ${favs.length}</div>
+      <div class="acct-fav-list">
+        ${favs.length?favs.map(b=>bookCardHTML(b)).join(''):'<div class="sb-rv-empty">還沒有收藏的書喔</div>'}
+      </div>`;
+  }
+}
+function acctSetMode(mode){
+  acctMode=mode;
+  const btn=document.getElementById('acctSubmitBtn');
+  const sw=document.getElementById('acctSwitchText');
+  const err=document.getElementById('acctError');
+  if(btn) btn.textContent=mode==='signup'?'註冊':'登入';
+  if(sw) sw.innerHTML=mode==='signup'
+    ?'已經有帳號了？<span class="auth-switch-link" onclick="acctSetMode(\'login\')">前往登入</span>'
+    :'還沒有帳號？<span class="auth-switch-link" onclick="acctSetMode(\'signup\')">註冊一個</span>';
+  if(err) err.style.display='none';
+}
+async function acctDoAuth(){
+  const email=document.getElementById('acctEmail').value.trim();
+  const pw=document.getElementById('acctPw').value;
+  const btn=document.getElementById('acctSubmitBtn');
+  const err=document.getElementById('acctError');
+  err.style.display='none';
+  btn.disabled=true; btn.textContent=acctMode==='signup'?'註冊中…':'登入中…';
+  const r=await authRequest(email,pw,acctMode);
+  if(r.ok){
+    renderAccountPage();
+  } else {
+    err.textContent=r.error; err.style.display='block';
+    const pwEl=document.getElementById('acctPw'); if(pwEl) pwEl.value='';
+    btn.disabled=false; btn.textContent=acctMode==='signup'?'註冊':'登入';
+  }
+}
+
+// ── 收藏（favorites）───────────────────────────
+const FBASE=`${SUPABASE_URL}/rest/v1/favorites`;
+async function loadFavorites(){
+  favoriteIds=new Set();
+  if(!_currentUser) return;
+  try{
+    const res=await fetch(`${FBASE}?select=book_id&user_id=eq.${_currentUser.id}`,{headers:authHeaders()});
+    if(!res.ok) return;
+    const rows=await res.json();
+    rows.forEach(r=>favoriteIds.add(String(r.book_id)));
+  }catch(e){}
+}
+async function toggleFavorite(bookId,el){
+  if(!_currentUser) return;
+  const id=String(bookId);
+  const wasFav=favoriteIds.has(id);
+  // 樂觀更新畫面
+  if(wasFav) favoriteIds.delete(id); else favoriteIds.add(id);
+  if(el) el.classList.toggle('on',!wasFav);
+  try{
+    if(wasFav){
+      const res=await fetch(`${FBASE}?user_id=eq.${_currentUser.id}&book_id=eq.${id}`,
+        {method:'DELETE',headers:authHeaders({'Prefer':'return=minimal'})});
+      if(!res.ok) throw new Error();
+    } else {
+      const res=await fetch(FBASE,{method:'POST',headers:authHeaders({'Prefer':'return=minimal'}),
+        body:JSON.stringify({user_id:_currentUser.id,book_id:parseInt(id)})});
+      if(!res.ok) throw new Error();
+    }
+    // 若正在看「我的收藏」，取消收藏後需即時移除
+    if(favOnly) render();
+  }catch(e){
+    // 失敗則還原
+    if(wasFav) favoriteIds.add(id); else favoriteIds.delete(id);
+    if(el) el.classList.toggle('on',wasFav);
+    alert('收藏操作失敗，請稍後再試');
+  }
+}
+
+// ── 我的收藏篩選 ──────────────────────────────
+let favOnly=false;
+function toggleFavView(){
+  favOnly=!favOnly;
+  document.querySelectorAll('.sb-item-fav').forEach(el=>el.classList.toggle('active',favOnly));
+  go();
+  if(window.innerWidth<=900) closeSidebar();
+}
+
+// ── 使用者資訊面板 ────────────────────────────
+function openUserPanel(){
+  document.getElementById('upEmail').textContent=_currentUser?_currentUser.email:'';
+  document.getElementById('upRole').textContent=_isOwner?'店長':'常客';
+  document.getElementById('userPanelOverlay').classList.add('open');
+}
+function doLogoutFromPanel(){
+  closeOverlay('userPanelOverlay');
+  doLogout();
 }
 
 const VIEW_TAGS=['主受','主攻','互攻','反攻','第一人稱','第二人稱'];
@@ -908,7 +1289,7 @@ const PER=40;
 // ── Search sync ───────────────────────────────
 function setSearch(q){
   searchQuery=q;
-  ['searchQ','searchQMob','searchQMobC'].forEach(id=>{
+  ['searchQ','searchQMobBottom'].forEach(id=>{
     const el=document.getElementById(id);
     if(el&&el.value!==q) el.value=q;
   });
@@ -1035,10 +1416,12 @@ function clearFilters(){
 }
 function updateFilterBadge(){
   const total=Object.values(activeFilters).reduce((s,v)=>s+v.inc.size+v.exc.size,0);
-  ['sbFilterBadgeDesk','sbFilterBadgeMob'].forEach(id=>{
+  ['sbFilterBadgeDesk'].forEach(id=>{
     const el=document.getElementById(id);
     if(el){el.textContent=total||'';el.style.display=total?'inline-flex':'none';}
   });
+  const bb=document.getElementById('bnavFilterBadge');
+  if(bb){bb.textContent=total||'';bb.style.display=total?'flex':'none';}
 }
 
 // ── Tag manager ───────────────────────────────
@@ -1090,6 +1473,7 @@ function toggleTpChip(el){el.classList.toggle('on');}
 function getFiltered(){
   const q=searchQuery.toLowerCase().trim();
   let list=[...books];
+  if(favOnly) list=list.filter(b=>favoriteIds.has(String(b.id)));
   if(q) list=list.filter(b=>b.title?.toLowerCase().includes(q)||b.author?.toLowerCase().includes(q));
   const f=activeFilters;
   if(f.ratings.inc.size) list=list.filter(b=>f.ratings.inc.has(b.rating));
@@ -1154,28 +1538,32 @@ function render(){
   if(!slice.length){
     bl.innerHTML=`<div class="empty">沒有符合條件的書目ᶻz ₍^_   ̫ _^₎</div>`;
   } else {
-    bl.innerHTML=slice.map(b=>{
-      const rc=ratingCls(b.rating);
-      const persona=(b.gong||b.shou)?
-        `<div class="book-persona">
-          ${b.gong?`<span class="persona-item"><span class="persona-label">攻</span> ${esc(b.gong)}</span>`:''}
-          ${b.shou?`<span class="persona-item"><span class="persona-label">受</span> ${esc(b.shou)}</span>`:''}
-        </div>`:'';
-      return `<div class="book-card" onclick="openDetail('${b.id}')">
-        <div class="book-main">
-          <div class="book-title">${esc(b.title)}${b.notes?'<svg class="note-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" title="有心得"><path d="m32,8c-14.81,0-24,8.43-24,22,0,6.92,2.4,12.49,6.7,16.3l-6.7,6.7,2,3c5.42,0,10.43-1.8,14.45-4.84,2.32.55,4.84.84,7.55.84,14.81,0,24-8.43,24-22s-9.19-22-24-22Zm-12,26c-2.21,0-4-1.79-4-4s1.79-4,4-4,4,1.79,4,4-1.79,4-4,4Zm12,0c-2.21,0-4-1.79-4-4s1.79-4,4-4,4,1.79,4,4-1.79,4-4,4Zm12,0c-2.21,0-4-1.79-4-4s1.79-4,4-4,4,1.79,4,4-1.79,4-4,4Z" fill="#ddb8ac"/></svg>':''}</div>
-          <div class="book-author">${esc(b.author)}</div>
-          ${persona}
-          <div class="book-meta">${tagHtml(b.tags)}</div>
-        </div>
-        <div class="book-right">
-          <div class="book-rating ${rc}">${b.rating||''}</div>
-          ${b.chapters?`<div class="book-chaps">${esc(b.chapters)} 萬字</div>`:''}
-        </div>
-      </div>`;
-    }).join('');
+    bl.innerHTML=slice.map(b=>bookCardHTML(b)).join('');
   }
   renderPager(pages);
+}
+function bookCardHTML(b){
+  const rc=ratingCls(b.rating);
+  const persona=(b.gong||b.shou)?
+    `<div class="book-persona">
+      ${b.gong?`<span class="persona-item"><span class="persona-label">攻</span> ${esc(b.gong)}</span>`:''}
+      ${b.shou?`<span class="persona-item"><span class="persona-label">受</span> ${esc(b.shou)}</span>`:''}
+    </div>`:'';
+  return `<div class="book-card" onclick="openDetail('${b.id}')">
+    <div class="book-main">
+      <div class="book-title">${esc(b.title)}${b.notes?'<svg class="note-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" title="有心得"><path d="m32,8c-14.81,0-24,8.43-24,22,0,6.92,2.4,12.49,6.7,16.3l-6.7,6.7,2,3c5.42,0,10.43-1.8,14.45-4.84,2.32.55,4.84.84,7.55.84,14.81,0,24-8.43,24-22s-9.19-22-24-22Zm-12,26c-2.21,0-4-1.79-4-4s1.79-4,4-4,4,1.79,4,4-1.79,4-4,4Zm12,0c-2.21,0-4-1.79-4-4s1.79-4,4-4,4,1.79,4,4-1.79,4-4,4Zm12,0c-2.21,0-4-1.79-4-4s1.79-4,4-4,4,1.79,4,4-1.79,4-4,4Z" fill="#ddb8ac"/></svg>':''}</div>
+      <div class="book-author">${esc(b.author)}</div>
+      ${persona}
+      <div class="book-meta">${tagHtml(b.tags)}</div>
+    </div>
+    <div class="book-right">
+      <div class="book-rating ${rc}">${b.rating||''}</div>
+      ${b.chapters?`<div class="book-chaps">${esc(b.chapters)} 萬字</div>`:''}
+      <button class="fav-btn${favoriteIds.has(String(b.id))?' on':''}" onclick="event.stopPropagation();toggleFavorite('${b.id}',this)" aria-label="收藏">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="20" height="20"><path d="M32,54.6 L27.4,50.4 C15.2,39.4 8,32.9 8,24.8 C8,18.3 13.1,13.2 19.6,13.2 C23.3,13.2 26.8,14.9 32,19.6 C37.2,14.9 40.7,13.2 44.4,13.2 C50.9,13.2 56,18.3 56,24.8 C56,32.9 48.8,39.4 36.6,50.4 L32,54.6 Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round" class="fav-outline"/><path d="M32,54.6 L27.4,50.4 C15.2,39.4 8,32.9 8,24.8 C8,18.3 13.1,13.2 19.6,13.2 C23.3,13.2 26.8,14.9 32,19.6 C37.2,14.9 40.7,13.2 44.4,13.2 C50.9,13.2 56,18.3 56,24.8 C56,32.9 48.8,39.4 36.6,50.4 L32,54.6 Z" fill="currentColor" class="fav-fill"/></svg>
+      </button>
+    </div>
+  </div>`;
 }
 
 function renderPager(pages){
@@ -1214,8 +1602,61 @@ function toggleSidebar(){
 }
 function closeSidebar(){
   document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebarBackdrop').classList.remove('show');
   closePanel();
+}
+
+// ── Mobile: 標題下拉統計卡 ─────────────────────
+function toggleStatsCard(){
+  const el=document.getElementById('statsDrop');
+  if(!el) return;
+  el.classList.toggle('open');
+}
+
+// ── Mobile: 底部搜尋膠囊展開 ───────────────────
+function toggleBottomSearch(forceState){
+  const row=document.getElementById('bnavRow');
+  if(!row) return;
+  const open=forceState!==undefined?forceState:!row.classList.contains('search-open');
+  if(open) closeOwnerMenu();
+  row.classList.toggle('search-open',open);
+  if(open){
+    setTimeout(()=>{const el=document.getElementById('searchQMobBottom');if(el)el.focus();},240);
+  } else {
+    const el=document.getElementById('searchQMobBottom');
+    if(el) el.value='';
+    setSearch('');
+  }
+}
+function closeOwnerMenu(){
+  const el=document.getElementById('bnavOwnerMenu');
+  if(el) el.classList.remove('open');
+}
+function toggleOwnerMenu(){
+  const el=document.getElementById('bnavOwnerMenu');
+  if(!el) return;
+  el.classList.toggle('open');
+}
+function ownerMenuAction(type){
+  closeOwnerMenu();
+  bnavToggle(type);
+}
+let mobPageOpen=null;
+function bnavToggle(type){
+  closeOwnerMenu();
+  if(mobPageOpen===type){ closePanelMobile(); return; }
+  openPanelMobile(type);
+  mobPageOpen=type;
+}
+function bnavHome(){
+  closeOwnerMenu();
+  if(document.getElementById('sidebar').classList.contains('open')) closeSidebar();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function updateBnavActive(type){
+  document.querySelectorAll('.bnav-item').forEach(b=>b.classList.remove('active'));
+  const map={home:'bnavHome',filter:'bnavFilter',account:'bnavAccount'};
+  const id=map[type];
+  if(id){const el=document.getElementById(id);if(el)el.classList.add('active');}
 }
 
 function toggleRatingInline(which){
@@ -1256,6 +1697,21 @@ function renderReviewInline(which){
       ${reviewMonthsForYear(y).map(m=>`<div class="sb-rv-opt" onclick="event.stopPropagation();runReview('month',${y},${m})">${MONTHS_EN[m-1]}</div>`).join('')}
     </div>`).join('');
 }
+function renderReviewMobilePage(){
+  const el=document.getElementById('sbReviewMobTarget');
+  if(!el) return;
+  const years=reviewYears();
+  if(!years.length){
+    el.innerHTML='<div class="sb-rv-empty">還沒有可以回顧的書目</div>';
+    return;
+  }
+  el.innerHTML=years.map(y=>`
+    <div class="sb-rv-year" id="sbRvY-mobpage-${y}" onclick="toggleReviewYear('mobpage',${y})">${y}</div>
+    <div class="sb-rv-sub" id="sbRvSub-mobpage-${y}">
+      <div class="sb-rv-opt all" onclick="event.stopPropagation();runReview('year',${y},null)">Year</div>
+      ${reviewMonthsForYear(y).map(m=>`<div class="sb-rv-opt" onclick="event.stopPropagation();runReview('month',${y},${m})">${MONTHS_EN[m-1]}</div>`).join('')}
+    </div>`).join('');
+}
 function toggleReviewInline(which){
   const el=document.getElementById(which==='desk'?'sbReviewInlineDesk':'sbReviewInlineMob');
   const item=document.getElementById(which==='desk'?'sbItemReviewDesk':'sbItemReviewMob');
@@ -1263,25 +1719,6 @@ function toggleReviewInline(which){
   const isOpen=el.classList.toggle('open');
   if(item) item.classList.toggle('active',isOpen);
   if(isOpen) renderReviewInline(which);
-}
-function toggleFilterInlineMobile(){
-  const el=document.getElementById('sbFilterInlineMob');
-  const item=document.getElementById('sbItemFilterMob');
-  if(!el) return;
-  const willOpen=!el.classList.contains('open');
-  if(willOpen){
-    const fc=document.getElementById('filterPanelContent');
-    if(fc&&fc.parentNode!==el) el.appendChild(fc);
-    el.classList.add('open');
-    if(item) item.classList.add('active');
-  } else {
-    el.classList.remove('open');
-    if(item) item.classList.remove('active');
-    // 收合動畫結束後把內容還回 holder，避免與電腦版二級面板搶 DOM
-    setTimeout(()=>{
-      if(!el.classList.contains('open')) returnFilterContent();
-    },320);
-  }
 }
 function toggleReviewYear(which,year){
   const row=document.getElementById(`sbRvY-${which}-${year}`);
@@ -1340,21 +1777,25 @@ function openPanelMobile(type){
     const target=document.getElementById('sbTagsTarget');
     if(tc&&target) target.appendChild(tc);
     spRenderTagManager();
+  } else if(type==='account'){
+    renderAccountPage();
+  } else if(type==='review'){
+    renderReviewMobilePage();
   }
-  const main=document.getElementById('sbMain');
-  requestAnimationFrame(()=>{
-    page.classList.add('active');
-    if(main) main.classList.add('pushed');
-  });
+  // 手機版底部導覽列取代了原本的漢堡選單，這裡直接把 sidebar 打開
+  document.getElementById('sidebar').classList.add('open');
+  page.classList.add('active');
+  updateBnavActive(type);
 }
 function closePanelMobile(){
   document.querySelectorAll('.sb-page').forEach(p=>p.classList.remove('active'));
-  const main=document.getElementById('sbMain');
-  if(main) main.classList.remove('pushed');
-  // 等滑出動畫結束再把 teleport 內容還回 holder
+  document.getElementById('sidebar').classList.remove('open');
+  // 等淡出動畫結束再把 teleport 內容還回 holder
   setTimeout(()=>{
     returnFilterContent(); returnAddContent(); returnTagsContent();
-  },300);
+  },200);
+  updateBnavActive('home');
+  mobPageOpen=null;
 }
 
 function openSecondPanel(type){
@@ -1486,37 +1927,44 @@ async function spAddCustomTag(){
   try{await dbSetSetting('custom_tags',JSON.stringify(customTags));}catch(e){}
 }
 
-// ── Mobile scroll collapse（只在狀態真正改變時更新 DOM，避免閃爍）──
-let _sbCompact=false;
-window.addEventListener('scroll',()=>{
-  if(window.innerWidth>900) return;
-  const shouldCompact=window.scrollY>60;
-  if(shouldCompact===_sbCompact) return;
-  _sbCompact=shouldCompact;
-  document.getElementById('mobileTopbar').classList.toggle('compact',shouldCompact);
-},{passive:true});
-
 // ── Edit mode ─────────────────────────────────
 function toggleEdit(){
-  if(!editMode){
+  if(!_currentUser){
+    // 尚未登入 → 開登入 modal
+    setAuthMode('login');
     document.getElementById('loginEmail').value='';
     document.getElementById('loginPw').value='';
     document.getElementById('loginError').style.display='none';
     document.getElementById('pwOverlay').classList.add('open');
     setTimeout(()=>document.getElementById('loginEmail').focus(),80);
-  } else { doLogout(); }
+  } else {
+    // 已登入 → 直接登出
+    doLogout();
+  }
 }
-function enterEdit(){
-  editMode=true;
-  document.body.classList.add('edit-mode','body-edit-mode');
+async function enterSession(){
+  _isOwner=(_currentUser && _currentUser.id===OWNER_UID);
+  document.body.classList.add('body-logged-in');
+  document.body.classList.toggle('body-owner',_isOwner);
   document.querySelectorAll('.edit-btn').forEach(btn=>btn.classList.add('active'));
+  if(_isOwner){
+    editMode=true;
+    document.body.classList.add('edit-mode','body-edit-mode');
+  }
+  await loadFavorites();
+  updateUserBar();
   render();
+  if(document.getElementById('sbPageAccount')?.classList.contains('active')) renderAccountPage();
 }
-function exitEdit(){
+function exitSession(){
   editMode=false;
-  document.body.classList.remove('edit-mode','body-edit-mode');
+  document.body.classList.remove('edit-mode','body-edit-mode','body-logged-in','body-owner');
   document.querySelectorAll('.edit-btn').forEach(btn=>btn.classList.remove('active'));
+  // 若正在看「我的收藏」，切回全部
+  if(favOnly){favOnly=false;go();}
+  updateUserBar();
   render();
+  if(document.getElementById('sbPageAccount')?.classList.contains('active')) renderAccountPage();
 }
 
 // ── Book detail modal ─────────────────────────
