@@ -146,7 +146,7 @@ body::before{content:"";position:fixed;inset:0;background:
 .body-logged-in .logged-in-only{display:flex;}
 
 /* ── 愛心收藏按鈕 ── */
-.fav-btn{display:none;align-items:center;justify-content:center;width:30px;height:30px;padding:0;margin-top:2px;border:none;background:transparent;color:var(--clay-lt);cursor:pointer;border-radius:8px;transition:color .15s,transform .12s,background .15s;}
+.fav-btn{display:none;position:absolute;right:12px;bottom:10px;align-items:center;justify-content:center;width:30px;height:30px;padding:0;border:none;background:transparent;color:var(--clay-lt);cursor:pointer;border-radius:8px;transition:color .15s,transform .12s,background .15s;}
 .body-logged-in .fav-btn{display:inline-flex;}
 .fav-btn:hover{background:rgba(170,102,87,.1);color:var(--clay);}
 .fav-btn:active{transform:scale(.85);}
@@ -276,7 +276,7 @@ body::before{content:"";position:fixed;inset:0;background:
 /* ── BOOK LIST ────────────────────────────────── */
 .book-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 @media(max-width:750px){.book-list{grid-template-columns:1fr;}}
-.book-card{background:var(--card);border:none;border-radius:var(--r);padding:14px 18px;box-shadow:var(--shadow-sm);display:grid;grid-template-columns:1fr auto;gap:6px 16px;align-items:start;transition:box-shadow .17s,transform .17s;cursor:pointer;}
+.book-card{position:relative;background:var(--card);border:none;border-radius:var(--r);padding:14px 18px;box-shadow:var(--shadow-sm);display:grid;grid-template-columns:1fr auto;gap:6px 16px;align-items:start;transition:box-shadow .17s,transform .17s;cursor:pointer;}
 .book-card:hover{box-shadow:var(--shadow);transform:translateY(-1px);}
 .book-main{display:flex;flex-direction:column;gap:5px;}
 .book-title{font-size:.95rem;font-weight:600;color:var(--text);line-height:1.4;}
@@ -435,6 +435,7 @@ body::before{content:"";position:fixed;inset:0;background:
 .acct-logout-btn{flex-shrink:0;font-size:.76rem;padding:0 14px;height:34px;}
 .acct-fav-lbl{font-size:.72rem;color:var(--clay-lt);font-weight:700;letter-spacing:.06em;margin-bottom:10px;}
 .acct-fav-list{display:flex;flex-direction:column;gap:10px;}
+.acct-fav-empty{font-size:.82rem;color:var(--text-lt);}
 
 /* ── MOBILE BOTTOM LIQUID-GLASS NAV ───────────── */
 .bnav-wrap{display:none;}
@@ -491,6 +492,7 @@ body::before{content:"";position:fixed;inset:0;background:
 </style>
 </head>
 <body>
+
 
 <!-- Mobile topbar -->
 <header class="mobile-topbar" id="mobileTopbar">
@@ -975,6 +977,42 @@ function authHeaders(extra){
 
 // ── Auth ──────────────────────────────────────
 let authMode='login';   // 'login' | 'signup'（手機 modal 用）
+const SESSION_KEY='rl_session';
+function persistSession(data){
+  try{
+    localStorage.setItem(SESSION_KEY,JSON.stringify({
+      refresh_token:data.refresh_token,
+      user:{id:data.user?.id,email:data.user?.email}
+    }));
+  }catch(e){}
+}
+function clearPersistedSession(){
+  try{localStorage.removeItem(SESSION_KEY);}catch(e){}
+}
+// 重新整理頁面時，用存起來的 refresh_token 換一組新的 access_token，恢復登入狀態
+async function restoreSession(){
+  let saved;
+  try{
+    const raw=localStorage.getItem(SESSION_KEY);
+    if(!raw) return;
+    saved=JSON.parse(raw);
+  }catch(e){clearPersistedSession();return;}
+  if(!saved||!saved.refresh_token) return;
+  try{
+    const res=await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`,{
+      method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY},
+      body:JSON.stringify({refresh_token:saved.refresh_token})
+    });
+    const data=await res.json();
+    if(!res.ok||!data.access_token) throw new Error();
+    _authToken=data.access_token;
+    _currentUser={id:data.user?.id,email:data.user?.email||saved.user?.email};
+    persistSession(data);
+    await enterSession();
+  }catch(e){
+    clearPersistedSession();
+  }
+}
 
 // 共用的認證核心：回傳 {ok:true} 或 {ok:false,error:'...'}
 async function authRequest(email,pw,mode){
@@ -993,6 +1031,7 @@ async function authRequest(email,pw,mode){
       if(data.access_token){
         _authToken=data.access_token;
         _currentUser={id:data.user?.id,email:data.user?.email||email};
+        persistSession(data);
         await enterSession();
         return {ok:true};
       } else {
@@ -1012,6 +1051,7 @@ async function authRequest(email,pw,mode){
       if(!res.ok||!data.access_token) throw new Error(data.error_description||'登入失敗');
       _authToken=data.access_token;
       _currentUser={id:data.user?.id,email:data.user?.email||email};
+      persistSession(data);
       await enterSession();
       return {ok:true};
     }catch(e){
@@ -1127,6 +1167,7 @@ async function doLogout(){
       method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${_authToken}`}
     });
   }catch(e){}
+  clearPersistedSession();
   _authToken=null;
   _currentUser=null;
   _isOwner=false;
@@ -1173,7 +1214,7 @@ function renderAccountPage(){
       </div>
       <div class="acct-fav-lbl">我的收藏 · ${favs.length}</div>
       <div class="acct-fav-list">
-        ${favs.length?favs.map(b=>bookCardHTML(b)).join(''):'<div class="sb-rv-empty">還沒有收藏的書喔</div>'}
+        ${favs.length?favs.map(b=>bookCardHTML(b)).join(''):'<div class="acct-fav-empty">還沒有收藏的書喔</div>'}
       </div>`;
   }
 }
@@ -2418,6 +2459,7 @@ function showEasterEgg(){
 function closeOverlay(id){document.getElementById(id).classList.remove('open');}
 function overlayClick(e,id){if(e.target===document.getElementById(id)) closeOverlay(id);}
 
+restoreSession();
 init();
 </script>
 </body>
