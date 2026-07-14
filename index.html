@@ -19,6 +19,7 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 body{background:var(--cream);font-family:"Noto Serif TC",serif;color:var(--text);min-height:100vh;}
+body.body-scroll-lock{overflow:hidden;height:100vh;}
 body::before{content:"";position:fixed;inset:0;background:
   radial-gradient(ellipse 70% 40% at 15% 5%,rgba(227,191,181,.35) 0%,transparent 55%),
   radial-gradient(ellipse 50% 35% at 85% 90%,rgba(170,102,87,.12) 0%,transparent 55%),
@@ -51,7 +52,7 @@ body::before{content:"";position:fixed;inset:0;background:
 
 /* ── SIDEBAR PAGES (mobile) ──────────────────── */
 .sb-main{display:flex;flex-direction:column;height:100%;overflow-y:auto;padding:44px 28px 32px;}
-.sb-page{position:absolute;top:0;left:0;right:0;bottom:0;display:none;flex-direction:column;height:100%;overflow-y:auto;padding:24px 42px 32px;background:rgba(255,252,250,0.99);z-index:2;}
+.sb-page{position:absolute;top:0;left:0;right:0;bottom:0;display:none;flex-direction:column;height:100%;overflow-y:auto;padding:24px 42px 32px;background:var(--cream);z-index:2;}
 .sb-page.active{display:flex;}
 .sb-back-row{display:flex;align-items:center;justify-content:center;margin-bottom:22px;}
 .sb-page-title{font-size:.85rem;font-weight:700;color:var(--clay);letter-spacing:.04em;}
@@ -102,18 +103,19 @@ body::before{content:"";position:fixed;inset:0;background:
 .icon-btn.active{background:rgba(170,102,87,.18);}
 
 /* ── MOBILE TOPBAR ───────────────────────────── */
-.mobile-topbar{display:none;position:sticky;top:0;z-index:150;background:rgba(248,241,241,.98);border-bottom:1.5px solid var(--border-md);}
+.mobile-topbar{display:none;position:sticky;top:0;z-index:150;background:var(--clay-xlt);}
 .mobile-row1{display:flex;align-items:center;justify-content:center;padding:10px 14px;}
 .mtb-title-btn{display:flex;align-items:center;justify-content:center;gap:5px;margin:0 auto;background:none;border:none;cursor:pointer;padding:6px 14px;border-radius:10px;}
-.mtb-title-btn:active{background:rgba(170,102,87,.08);}
-.mobile-brand{font-size:.95rem;font-weight:900;color:var(--clay);letter-spacing:.04em;font-family:"Noto Serif TC",serif;white-space:nowrap;}
-.stats-drop{max-height:0;overflow:hidden;transition:max-height .32s ease;background:rgba(248,241,241,.98);}
+.mtb-title-btn:active{background:rgba(255,255,255,.18);}
+.mobile-brand{font-size:.95rem;font-weight:900;color:var(--cream);letter-spacing:.04em;font-family:"Noto Serif TC",serif;white-space:nowrap;}
+.stats-drop{max-height:0;overflow:hidden;transition:max-height .32s ease;background:var(--clay-xlt);}
 .stats-drop.open{max-height:420px;}
 .stats-drop-inner{padding:2px 24px 22px;text-align:center;}
 .stats-legend{display:inline-block;text-align:left;}
-.stats-drop-line{font-size:.86rem;color:var(--clay);font-weight:700;margin-bottom:14px;letter-spacing:.02em;}
-.stats-drop-line #sbStatsMob{color:var(--text-mid);font-weight:600;}
-.stats-drop-divider{height:1px;background:var(--border);margin-bottom:14px;}
+.stats-drop-line{font-size:.86rem;color:var(--cream);font-weight:700;margin-bottom:14px;letter-spacing:.02em;}
+.stats-drop-line #sbStatsMob{color:rgba(248,241,241,.85);font-weight:600;}
+.stats-drop-divider{height:1px;background:rgba(248,241,241,.4);margin-bottom:14px;}
+.stats-drop .rdesc{color:rgba(248,241,241,.9);}
 
 /* ── SHARED BUTTON + FORM STYLES ─────────────── */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:0 16px;height:36px;border-radius:8px;font-family:"Noto Serif TC",serif;font-size:.83rem;font-weight:500;cursor:pointer;transition:all .17s;border:1.5px solid transparent;white-space:nowrap;line-height:1;}
@@ -453,7 +455,7 @@ body::before{content:"";position:fixed;inset:0;background:
   .sidebar{
     left:0;top:0;bottom:auto;width:100%;height:100vh;
     border-radius:0;border:none;
-    background:rgba(255,252,250,0.99);
+    background:var(--cream);
     backdrop-filter:none;-webkit-backdrop-filter:none;
     opacity:0;pointer-events:none;transition:opacity .16s ease;
     box-shadow:none;
@@ -1825,12 +1827,14 @@ function openPanelMobile(type){
   }
   // 手機版底部導覽列取代了原本的漢堡選單，這裡直接把 sidebar 打開
   document.getElementById('sidebar').classList.add('open');
+  document.body.classList.add('body-scroll-lock');
   page.classList.add('active');
   updateBnavActive(type);
 }
 function closePanelMobile(){
   document.querySelectorAll('.sb-page').forEach(p=>p.classList.remove('active'));
   document.getElementById('sidebar').classList.remove('open');
+  document.body.classList.remove('body-scroll-lock');
   // 等淡出動畫結束再把 teleport 內容還回 holder
   setTimeout(()=>{
     returnFilterContent(); returnAddContent(); returnTagsContent();
