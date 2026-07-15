@@ -19,7 +19,7 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 body{background:var(--cream);font-family:"Noto Serif TC",serif;color:var(--text);min-height:100vh;}
-body.body-scroll-lock{overflow:hidden;height:100vh;}
+body.body-scroll-lock{overflow:hidden;height:100vh;height:100dvh;}
 body::before{content:"";position:fixed;inset:0;background:
   radial-gradient(ellipse 70% 40% at 15% 5%,rgba(227,191,181,.35) 0%,transparent 55%),
   radial-gradient(ellipse 50% 35% at 85% 90%,rgba(170,102,87,.12) 0%,transparent 55%),
@@ -453,7 +453,7 @@ body::before{content:"";position:fixed;inset:0;background:
   .main-content{margin-left:0;padding:16px 14px 80px;}
   .main-topbar{display:none;}
   .sidebar{
-    left:0;top:0;bottom:auto;width:100%;height:100vh;
+    left:0;top:0;bottom:auto;width:100%;height:100vh;height:100dvh;
     border-radius:0;border:none;
     background:var(--cream);
     backdrop-filter:none;-webkit-backdrop-filter:none;
