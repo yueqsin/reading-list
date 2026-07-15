@@ -784,7 +784,7 @@ body::before{content:"";position:fixed;inset:0;background:
       <div class="fi-lbl" style="margin-bottom:4px;">密碼</div>
       <input class="fi" type="password" id="loginPw" placeholder="••••••" style="letter-spacing:.15em;" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
-    <div id="loginError" style="font-size:.76rem;color:#e74c3c;text-align:center;margin-bottom:10px;display:none;">你又打錯帳號密碼了！</div>
+    <div id="loginError" style="font-size:.76rem;color:#e74c3c;text-align:center;margin-bottom:10px;display:none;">帳號密碼輸入錯誤</div>
     <div class="modal-btns auth-btns">
       <button class="btn btn-fill" id="loginBtn" onclick="doLogin()">登入</button>
     </div>
@@ -1058,7 +1058,7 @@ async function authRequest(email,pw,mode){
       await enterSession();
       return {ok:true};
     }catch(e){
-      return {ok:false,error:'你又打錯帳號密碼了！'};
+      return {ok:false,error:'帳號密碼輸入錯誤'};
     }
   }
 }
