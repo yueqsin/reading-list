@@ -119,6 +119,7 @@ body::before{content:"";position:fixed;inset:0;background:
 .stats-drop-line #sbStatsMob{color:rgba(248,241,241,.85);font-weight:600;}
 .stats-drop-divider{height:1px;background:rgba(248,241,241,.4);margin-bottom:14px;}
 .stats-drop .rdesc{color:rgba(248,241,241,.9);}
+.stats-drop .stars{color:rgba(248,241,241,.9);}
 
 /* ── SHARED BUTTON + FORM STYLES ─────────────── */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:0 16px;height:36px;border-radius:8px;font-family:"Noto Serif TC",serif;font-size:.83rem;font-weight:500;cursor:pointer;transition:all .17s;border:1.5px solid transparent;white-space:nowrap;line-height:1;}
@@ -469,11 +470,15 @@ body::before{content:"";position:fixed;inset:0;background:
 
 /* ── ACCOUNT PAGE（登入／收藏合併）─────────────── */
 .acct-login{padding-top:10px;}
-.acct-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.acct-header{margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.acct-header-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .acct-user-row{display:flex;flex-direction:column;gap:3px;min-width:0;}
 .acct-nick{font-size:1rem;color:var(--text);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .acct-email{font-size:.86rem;color:var(--text-lt);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .acct-logout-btn{flex-shrink:0;font-size:.76rem;padding:0 14px;height:34px;}
+.acct-edit-row{display:flex;gap:8px;margin-top:12px;}
+.acct-edit-btn{flex:1;font-size:.82rem;color:var(--clay);font-weight:600;background:transparent;border:1px solid var(--border-md);border-radius:8px;padding:5px 0;line-height:1.4;cursor:pointer;transition:background .15s;font-family:"Noto Serif TC",serif;}
+.acct-edit-btn:active{background:rgba(170,102,87,.08);}
 .acct-fav-lbl{font-size:.72rem;color:var(--clay-lt);font-weight:700;letter-spacing:.06em;margin-bottom:10px;}
 .acct-fav-list{display:flex;flex-direction:column;gap:10px;}
 .acct-fav-empty{font-size:.82rem;color:var(--text-lt);}
@@ -669,6 +674,20 @@ body::before{content:"";position:fixed;inset:0;background:
     <div class="sb-page" id="sbPageReview">
       <div class="sb-back-row"><span class="sb-page-title">閱讀回顧</span></div>
       <div id="sbReviewMobTarget" style="overflow-y:auto;flex:1;"></div>
+    </div>
+
+    <!-- Mobile: 變更暱稱 page -->
+    <div class="sb-page" id="sbPageNick">
+      <div class="sb-back-row"><span class="sb-page-title">變更暱稱</span></div>
+      <div id="sbNickTarget" style="overflow-y:auto;flex:1;"></div>
+      <button class="btn btn-ghost" style="width:100%;margin-top:8px;" onclick="closePanel()">取消</button>
+    </div>
+
+    <!-- Mobile: 變更密碼 page -->
+    <div class="sb-page" id="sbPagePw">
+      <div class="sb-back-row"><span class="sb-page-title">變更密碼</span></div>
+      <div id="sbPwTarget" style="overflow-y:auto;flex:1;"></div>
+      <button class="btn btn-ghost" style="width:100%;margin-top:8px;" onclick="closePanel()">取消</button>
     </div>
 
   </aside>
@@ -1329,11 +1348,17 @@ function renderAccountPage(){
     const nick=(_myNickname&&_myNickname.trim())?_myNickname.trim():emailPrefix(_currentUser.email);
     target.innerHTML=`
       <div class="acct-header">
-        <div class="acct-user-row">
-          <span class="acct-nick">${esc(nick)}</span>
-          <span class="acct-email">${esc(_currentUser.email||'')}</span>
+        <div class="acct-header-top">
+          <div class="acct-user-row">
+            <span class="acct-nick">${esc(nick)}</span>
+            <span class="acct-email">${esc(_currentUser.email||'')}</span>
+          </div>
+          <button class="btn btn-ghost acct-logout-btn" onclick="doLogout()">登出</button>
         </div>
-        <button class="btn btn-ghost acct-logout-btn" onclick="doLogout()">登出</button>
+        <div class="acct-edit-row">
+          <button class="acct-edit-btn" onclick="openPanel('nick')">變更暱稱</button>
+          <button class="acct-edit-btn" onclick="openPanel('pw')">變更密碼</button>
+        </div>
       </div>
       <div class="acct-fav-lbl">我的收藏 · ${favs.length}</div>
       <div class="acct-fav-list">
@@ -2065,7 +2090,7 @@ function bnavHome(){
 }
 function updateBnavActive(type){
   document.querySelectorAll('.bnav-item').forEach(b=>b.classList.remove('active'));
-  const map={home:'bnavHome',filter:'bnavFilter',account:'bnavAccount'};
+  const map={home:'bnavHome',filter:'bnavFilter',account:'bnavAccount',nick:'bnavAccount',pw:'bnavAccount'};
   const id=map[type];
   if(id){const el=document.getElementById(id);if(el)el.classList.add('active');}
 }
@@ -2192,6 +2217,23 @@ function openPanelMobile(type){
     renderAccountPage();
   } else if(type==='review'){
     renderReviewMobilePage();
+  } else if(type==='nick'){
+    const nc=document.getElementById('nickPanelContent');
+    const target=document.getElementById('sbNickTarget');
+    if(nc&&target){ target.appendChild(nc);
+      const inp=document.getElementById('sp-nick-input');
+      if(inp) inp.value=_myNickname||'';
+      const err=document.getElementById('sp-nick-error'); if(err) err.style.display='none';
+    }
+    setTimeout(()=>{const el=document.getElementById('sp-nick-input');if(el)el.focus();},320);
+  } else if(type==='pw'){
+    const pc=document.getElementById('pwPanelContent');
+    const target=document.getElementById('sbPwTarget');
+    if(pc&&target){ target.appendChild(pc);
+      document.getElementById('sp-pw-1').value='';
+      document.getElementById('sp-pw-2').value='';
+      const err=document.getElementById('sp-pw-error'); if(err) err.style.display='none';
+    }
   }
   // 手機版底部導覽列取代了原本的漢堡選單，這裡直接把 sidebar 打開
   document.getElementById('sidebar').classList.add('open');
